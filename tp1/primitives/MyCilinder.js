@@ -79,7 +79,10 @@ export class MyCylinder extends CGFobject {
 					i * (this.slices + 1) + j
 				);
 			}
-		}		
+		}
+
+		this.primitiveType = this.scene.gl.TRIANGLES;
+		this.initGLBuffers();		
 	}
 	
 	updateTexCoords(s, t) {
