@@ -1,10 +1,10 @@
 # SGI 2022/2023
 
-## Group T0xG0y
+## Group T06G09
 | Name             | Number    | E-Mail             |
 | ---------------- | --------- | ------------------ |
-| John Doe         | 201801010 | ...                |
-| Jane Doe         | 201801011 | ...                |
+| Luís Guimarães   | 202204188 | up202204188@up.pt  |
+| Ricardo Nunes    | 202109480 | up202109480@up.pt  |
 
 ----
 
