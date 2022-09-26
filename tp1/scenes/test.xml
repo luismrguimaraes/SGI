@@ -48,7 +48,7 @@
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive> -->
 		<primitive id="demoCylinder">
-            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="10" slices="10" layerTop="1" layerBottom="1" />
+            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="20" layerTop="1" layerBottom="1" />
         </primitive>
     </primitives>
 
