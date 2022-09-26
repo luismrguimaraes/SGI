@@ -4,7 +4,7 @@ import { CGFobject } from '../lib/CGF.js';
  * @constructor
  */
 export class MyCylinder extends CGFobject {
-	constructor(scene, height, radiusBottom, radiusTop, stacks, slices, layerTop, layerBottom) {
+	constructor(scene, id, height, radiusBottom, radiusTop, stacks, slices, layerTop, layerBottom) {
 		super(scene);
 		this.height = height;
 		this.radiusBottom = radiusBottom;
