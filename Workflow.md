@@ -17,6 +17,6 @@
 - develop
   - Intermediate branch that contains all of the finished features
   - Should be merged back to master whenever merged features are deemed complete and are throughly tested
-- feature-<featureName>
+- feature-"featureName"
   - Branch used for feature development (primitives, graph scenes, others)
 
