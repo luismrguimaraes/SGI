@@ -1,4 +1,5 @@
 import { CGFobject } from '../../lib/CGF.js';
+import { MyCircle } from './MyCircle.js';
 /**
  * MyCylinder
  * @constructor
