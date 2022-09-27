@@ -51,7 +51,7 @@
             <rectangle x1="-0.25" x2="0.25" y1="-0.25" y2="0.25"  />
         </primitive>
 		<primitive id="demoCylinder">
-            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="20" layerTop="1" layerBottom="1" />
+            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="20" />
         </primitive>
     </primitives>
 
