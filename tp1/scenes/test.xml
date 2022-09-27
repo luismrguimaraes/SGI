@@ -82,7 +82,7 @@
         </component>    
          <component id="demoTest2"> 
             <transformation>
-                <transformationref id="demoTransform2"/>
+                <transformationref id="demoTransform"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />

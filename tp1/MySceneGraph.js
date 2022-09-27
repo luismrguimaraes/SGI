@@ -809,7 +809,9 @@ export class MySceneGraph {
 
                     switch (child.nodeName) {
                         case 'transformationref':
-                            var ID = this.reader.getString(child, 'id');                            
+                            var ID = this.reader.getString(child, 'id');
+                            if (this.transformations[ID] == null) 
+                                return "Invalid transformationref.";
                             mat4.multiply(transfMatrix, this.transformations[ID], transfMatrix);
                             break;
                         case 'translate':
