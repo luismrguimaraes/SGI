@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="demoRoot" axis_length="5"/>
+    <scene root="root" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -36,61 +36,137 @@
     </materials>
 
     <transformations>
-        <transformation id="demoTransform">
-            <scale x="1" y="1" z="1" />
+        <transformation id="z_translate">
+            <translate x="0" y="0" z="6" />
         </transformation>
-        <transformation id="demoTransform2">
-            <rotate axis="z" angle="-45" />
-            <translate  x="1" y="1" z="1" />
-            <translate  x="1" y="1" z="1" />
+        <transformation id="z_translate_inverse">
+            <translate x="0" y="0" z="-6" />
         </transformation>
+        <transformation id="y_rotate">
+            <rotate axis="y" angle="45" />
+        </transformation>
+        <transformation id="y_rotate_inverse">
+            <rotate axis="y" angle="-45" />
+        </transformation>
+        <transformation id="x_rotate">
+            <rotate axis="x" angle="90" />
+        </transformation>        
+        <transformation id="x_rotate_inverse">
+            <rotate axis="x" angle="-90" />
+        </transformation>        
     </transformations>
 
     <primitives>
-        <primitive id="demoRectangle">
-            <rectangle x1="-0.25" x2="0.25" y1="-0.25" y2="0.25"  />
+        <primitive id="Rectangle">
+            <rectangle x1="-500" x2="500" y1="-500" y2="500"  />
         </primitive>
-		<primitive id="demoCylinder">
-            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="20" />
+		<primitive id="Cylinder">
+            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="30" />
         </primitive>
     </primitives>
 
     <components>
-        <component id="demoRoot">
+        <component id="root">
             <transformation>
-                <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
-            <children>                
-                <componentref id="demoTest" />
+            <children>
+                <componentref id="terrain" />                
+                
             </children>
         </component>
-        <component id="demoTest"> 
+        <component id="base"> 
             <transformation>
-                <rotate axis="y" angle="90" />
+                <transformationref id="x_rotate_inverse"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
             <children>                
-                <componentref id="demoTest2" />
+                <primitiveref id="Rectangle" />
             </children>
         </component>    
-         <component id="demoTest2"> 
+        <component id="terrain"> 
             <transformation>
-                <transformationref id="demoTransform"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>            
+                <componentref id="base" />
+                <!-- componentref id="cylinder1" /-->
+                <!-- componentref id="cylinder2" /-->
+                <componentref id="cylinder3" />
+                <componentref id="cylinder4" />
+            </children>
+        </component> 
+        <component id="cylinder1"> 
+            <transformation>
+                <transformationref id="z_translate"/>
+                <scale x="2" y="2" z="5" />
+                <transformationref id="y_rotate"/>
+                <transformationref id="y_rotate"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
             <children>                
-                <primitiveref id="demoCylinder" />
+                <primitiveref id="Cylinder" />
+            </children>
+        </component>  
+        <component id="cylinder2"> 
+            <transformation>
+                <transformationref id="y_rotate" />
+                <transformationref id="z_translate"/>
+                <scale x="1" y="2" z="6" />
+                <transformationref id="y_rotate"/>
+
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>                
+                <primitiveref id="Cylinder" />
+            </children>
+        </component>  
+        <component id="cylinder3"> 
+            <transformation>
+                <transformationref id="y_rotate_inverse" />
+                <transformationref id="z_translate"/>
+                <scale x="2" y="2" z="6" />
+
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>                
+                <primitiveref id="Cylinder" />
             </children>
         </component> 
+        <component id="cylinder4"> 
+            <transformation>
+                <transformationref id="y_rotate" />
+                <transformationref id="z_translate"/>
+                <scale x="2" y="3" z="9" />
+                
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>                
+                <primitiveref id="Cylinder" />
+            </children>
+        </component> 
+
+        
     </components>
 </sxs>
