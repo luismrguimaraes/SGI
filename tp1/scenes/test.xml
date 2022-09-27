@@ -37,16 +37,19 @@
 
     <transformations>
         <transformation id="demoTransform">
-            <scale x="5" y="1" z="5" />
-            <rotate axis="x" angle="-45" />
+            <scale x="1" y="1" z="1" />
+        </transformation>
+        <transformation id="demoTransform2">
             <rotate axis="z" angle="-45" />
+            <translate  x="1" y="1" z="1" />
+            <translate  x="1" y="1" z="1" />
         </transformation>
     </transformations>
 
     <primitives>
-        <!-- <primitive id="demoRectangle">
-            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
-        </primitive> -->
+        <primitive id="demoRectangle">
+            <rectangle x1="-0.25" x2="0.25" y1="-0.25" y2="0.25"  />
+        </primitive>
 		<primitive id="demoCylinder">
             <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="20" layerTop="1" layerBottom="1" />
         </primitive>
@@ -55,16 +58,39 @@
     <components>
         <component id="demoRoot">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture"/>
-            <children>
-                <primitiveref id="demoCylinder" />
+            <children>                
+                <componentref id="demoTest" />
             </children>
         </component>
+        <component id="demoTest"> 
+            <transformation>
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>                
+                <componentref id="demoTest2" />
+            </children>
+        </component>    
+         <component id="demoTest2"> 
+            <transformation>
+                <transformationref id="demoTransform2"/>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>                
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component> 
     </components>
 </sxs>
