@@ -5,15 +5,13 @@ import { MyCircle } from './MyCircle.js';
  * @constructor
  */
 export class MyCylinder extends CGFobject {
-	constructor(scene, id, height, radiusBottom, radiusTop, stacks, slices, layerTop, layerBottom) {
+	constructor(scene, id, radiusBottom, radiusTop, height, slices, stacks) {
 		super(scene);
-		this.height = height;
 		this.radiusBottom = radiusBottom;
 		this.radiusTop = radiusTop;
-		this.stacks = stacks;
+		this.height = height;
 		this.slices = slices;
-		this.layerTop = layerTop;
-		this.layerBottom = layerBottom;	
+		this.stacks = stacks;	
 		this.layer = new MyCircle(scene, this.slices);
 
 		this.initBuffers();

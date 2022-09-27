@@ -709,11 +709,6 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = triangle;
 			}
             else if(primitiveType == 'cylinder'){
-                // height
-                var height = this.reader.getFloat(grandChildren[0], 'height');
-                if (!(height != null && !isNaN(height)))
-                    return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
-
                 // radiusBottom
                 var radiusBottom = this.reader.getFloat(grandChildren[0], 'radiusBottom');
                 if (!(radiusBottom != null && !isNaN(radiusBottom)))
@@ -723,28 +718,23 @@ export class MySceneGraph {
                 var radiusTop = this.reader.getFloat(grandChildren[0], 'radiusTop');
                 if (!(radiusTop != null && !isNaN(radiusTop)))
                     return "unable to parse radiusTop of the primitive coordinates for ID = " + primitiveId;
-
-                // stacks
-                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
-                if (!(stacks != null && !isNaN(stacks)))
-                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
+				
+				// height
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                if (!(height != null && !isNaN(height)))
+                    return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(grandChildren[0], 'slices');
                 if (!(slices != null && !isNaN(slices)))
                     return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
 
-                // layerTop
-                var layerTop = this.reader.getFloat(grandChildren[0], 'layerTop');
-                if (!(layerTop != null && !isNaN(layerTop)))
-                    return "unable to parse layerTop of the primitive coordinates for ID = " + primitiveId;
-                
-                // layerBottom
-                var layerBottom = this.reader.getFloat(grandChildren[0], 'layerBottom');
-                if (!(layerBottom != null && !isNaN(layerBottom)))
-                    return "unable to parse layerBottom of the primitive coordinates for ID = " + primitiveId;
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
-                var cylinder = new MyCylinder(this.scene, primitiveId, height, radiusBottom, radiusTop, stacks, slices, layerTop, layerBottom);
+                var cylinder = new MyCylinder(this.scene, primitiveId, radiusBottom, radiusTop, height, slices, stacks);
 
                 this.primitives[primitiveId] = cylinder;
             }
