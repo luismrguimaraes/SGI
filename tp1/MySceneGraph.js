@@ -2,6 +2,7 @@ import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
+import { MyTorus } from './primitives/MyTorus.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -747,6 +748,31 @@ export class MySceneGraph {
                 var cylinder = new MyCylinder(this.scene, primitiveId, height, radiusBottom, radiusTop, stacks, slices, layerTop, layerBottom);
 
                 this.primitives[primitiveId] = cylinder;
+            }
+			else if(primitiveType == 'torus'){
+                // radiusInner
+                var radiusInner = this.reader.getFloat(grandChildren[0], 'radiusInner');
+                if (!(radiusInner != null && !isNaN(radiusInner)))
+                    return "unable to parse radiusInner of the primitive coordinates for ID = " + primitiveId;
+
+                // radiusOutter
+                var radiusOutter = this.reader.getFloat(grandChildren[0], 'radiusOutter');
+                if (!(radiusOutter != null && !isNaN(radiusOutter)))
+                    return "unable to parse radiusOutter of the primitive coordinates for ID = " + primitiveId;
+
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
+
+                // loops
+                var loops = this.reader.getFloat(grandChildren[0], 'loops');
+                if (!(loops != null && !isNaN(loops)))
+                    return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
+
+                var torus = new MyTorus(this.scene, primitiveId, radiusInner, radiusOutter, slices, loops);
+
+                this.primitives[primitiveId] = torus;
             }
             else {
                 console.warn("To do: Parse other primitives.");
