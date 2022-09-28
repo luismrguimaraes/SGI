@@ -45,6 +45,9 @@
 		<primitive id="Cylinder">
             <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="30" />
         </primitive>
+		<primitive id="demoTorus">
+            <torus radiusInner="1" radiusOutter="2" slices="20" loops="10" />
+        </primitive>
     </primitives>
 
     <components>
