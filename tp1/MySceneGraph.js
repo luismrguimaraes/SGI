@@ -895,7 +895,7 @@ export class MySceneGraph {
                         case 'primitiveref':
                             var primitiveID = this.reader.getString(child, 'id');
                             if (!(primitiveID in this.primitives))
-                                return "unable to parse primitiveref of " + primitiveID;
+                                return "unable to parse primitiveref " + primitiveID + " of " + componentID;
                             this.graph.addNode(primitiveID, this.primitives[primitiveID]);
                             this.graph.addChild(componentID, primitiveID);
                             break;
@@ -1054,7 +1054,9 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
         this.scene.setDiffuse(1, 0.65, 0, 1);
 		this.scene.setSpecular(1, 0.65, 0, 1);
+
         this.displayGraph(this.idRoot);
+
 
         //To test the parsing/creation of the primitives, call the display function directly
 		//this.primitives['demoCylinder'].display();

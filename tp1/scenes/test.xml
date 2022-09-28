@@ -10,7 +10,7 @@
 
     <ambient>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+        <background r="0.7" g="0.8" b="1" a="1.0" />
     </ambient>
 
     <lights>
@@ -43,10 +43,13 @@
             <rectangle x1="-2" x2="2" y1="-2" y2="2"  />
         </primitive>
 		<primitive id="Cylinder">
-            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="20" slices="30" />
+            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="40" slices="40" />
         </primitive>
-		<primitive id="demoTorus">
+		<primitive id="Torus">
             <torus radiusInner="1" radiusOutter="2" slices="20" loops="10" />
+        </primitive>
+        <primitive id="Triangle">
+            <triangle  x2="1" y2="0" z2="0" x3="0" y3="0" z3="1" x1="0" y1="0" z1="0"/>
         </primitive>
     </primitives>
 
@@ -59,47 +62,147 @@
             </materials>
             <texture id="demoTexture"/>
             <children>
-                <componentref id="composedTerrain1"/>
-                <componentref id="composedTerrain2"/>
-                <componentref id="composedTerrain3"/>
-                <componentref id="composedTerrain4"/>
+                <componentref id="cactusSets"/>
+                <componentref id="compositeTerrain1"/>
+                <componentref id="compositeTerrain2"/>
+                <componentref id="compositeTerrain3"/>
+                <componentref id="compositeTerrain4"/>
             </children>
         </component> 
-        <component id="composedTerrain1"> 
+        <component id="cactusSets">
+            <transformation>
+            </transformation>
+            <children>            
+                <componentref id="cactusSet1"/>
+                <componentref id="cactusSet2"/>
+                <componentref id="cactusSet3"/>
+                <componentref id="cactusSet4"/>
+            </children>
+        </component>
+        <component id="cactusSet1">
+            <transformation>
+                <translate x="20" y="0" z="0"/>
+            </transformation>
+            <children>            
+                <componentref id="cactusSet"/>
+            </children>
+        </component>
+        <component id="cactusSet2">
+            <transformation>
+                <translate x="15" y="0" z="17"/>
+                <rotate axis="y" angle="57"/>
+            </transformation>
+            <children>            
+                <componentref id="cactusSet"/>
+            </children>
+        </component>
+        <component id="cactusSet3">
+            <transformation>
+                <translate x="0" y="0" z="-27"/>
+                <rotate axis="y" angle="-57"/>
+            </transformation>
+            <children>            
+                <componentref id="cactusSet"/>
+            </children>
+        </component>
+        <component id="cactusSet4">
+            <transformation>
+                <translate x="-22" y="0" z="-13"/>
+                <rotate axis="y" angle="167"/>
+            </transformation>
+            <children>            
+                <componentref id="cactusSet"/>
+            </children>
+        </component>
+        <component id="cactusSet">
+            <transformation>
+            </transformation>
+            <children>            
+                <componentref id="cactus1"/>
+                <componentref id="cactus2"/>
+                <componentref id="cactus3"/>
+                <componentref id="cactus4"/>
+                <componentref id="cactus5"/>
+            </children>
+        </component>
+        <component id="cactus1">
+            <transformation>
+                <translate x="0.4" y="0.8" z="-0.2"/>
+                <scale x="0.5" y="0.5" z="0.5"/>
+            </transformation>
+            <children>            
+                <componentref id="cactus"/>
+            </children>
+        </component>
+        <component id="cactus2">
+            <transformation>
+                <translate x="-2" y="0.4" z="0.4"/>
+                <scale x="0.5" y="0.5" z="0.5"/>
+            </transformation>
+            <children>            
+                <componentref id="cactus"/>
+            </children>
+        </component>
+        <component id="cactus3">
+            <transformation>
+                <translate x="1" y="0" z="1.7"/>
+            </transformation>
+            <children>            
+                <componentref id="cactus"/>
+            </children>
+        </component>
+        <component id="cactus4">
+            <transformation>
+                <translate x="-1" y="0" z="-2"/>
+            </transformation>
+            <children>            
+                <componentref id="cactus"/>
+            </children>
+        </component>
+        <component id="cactus5">
+            <transformation>
+                <translate x="0" y="0.6" z="-4"/>
+                <scale x="0.8" y="0.8" z="0.8"/>
+            </transformation>
+            <children>            
+                <componentref id="cactus"/>
+            </children>
+        </component>
+        <component id="compositeTerrain1"> 
             <transformation>
                 <translate x="35" y="0" z="-35"/>
             </transformation>
             <children>            
-                <componentref id="composedTerrain"/>
+                <componentref id="compositeTerrain"/>
             </children>
         </component>
-        <component id="composedTerrain2"> 
+        <component id="compositeTerrain2"> 
             <transformation>
                 <translate x="-35" y="0" z="35"/>
                 <rotate axis="y" angle="90"/>
             </transformation>
             <children>            
-                <componentref id="composedTerrain"/>
+                <componentref id="compositeTerrain"/>
             </children>
         </component>
-        <component id="composedTerrain3"> 
+        <component id="compositeTerrain3"> 
             <transformation>
                 <translate x="35" y="0" z="35"/>
                 <rotate axis="y" angle="-90"/>
             </transformation>
             <children>            
-                <componentref id="composedTerrain"/>
+                <componentref id="compositeTerrain"/>
             </children>
         </component>
-        <component id="composedTerrain4"> 
+        <component id="compositeTerrain4"> 
             <transformation>
                 <translate x="-35" y="0" z="-35"/>
             </transformation>
             <children>            
-                <componentref id="composedTerrain"/>
+                <componentref id="compositeTerrain"/>
             </children>
         </component>
-        <component id="composedTerrain">
+        <component id="compositeTerrain">
             <transformation>
             </transformation>
             <children>            
@@ -150,6 +253,7 @@
                 <componentref id="bigCylinder3"/>                
             </children>
         </component> 
+
         <component id="bigCylinder1"> 
             <transformation>
                 <translate x="0" y="0" z="10" />
@@ -200,29 +304,76 @@
                 <primitiveref id="Cylinder" />
             </children>
         </component>
+
+
         <component id="cactus">
             <transformation>
             </transformation>
             <children>                
                 <componentref id="cactus_body"/>
-                <componentref id="cactus_head"/>
+                <componentref id="composite_cactus_head"/>
+                <componentref id="composite_cactus_head_rotated"/>
             </children>
         </component>
-        <!-- ToDo cactus -->
-        <component id="cactus_head">
+        <component id="composite_cactus_head_rotated">
             <transformation>
-                <scale x="0.5" y="2" z="10"/>
+                <translate x="0" y="2.72" z="0"/>
+                <rotate axis="y" angle ="90"/>
             </transformation>
             <children>                
-                <primitiveref id="Cylinder"/>
+                <componentref id="cactus_head_1"/>
+                <componentref id="cactus_head_2"/>
+                <componentref id="cactus_head_3"/>
+            </children>
+        </component>
+        <component id="composite_cactus_head">
+            <transformation>
+                <translate x="0" y="2.72" z="0"/>
+            </transformation>
+            <children>                
+                <componentref id="cactus_head_1"/>
+                <componentref id="cactus_head_2"/>
+                <componentref id="cactus_head_3"/>
+            </children>
+        </component>
+        <component id="cactus_head_1">
+            <transformation>
+            </transformation>
+            <children>                
+                <componentref id="cactus_head_aux"/>
+            </children>
+        </component>
+        <component id="cactus_head_2">
+            <transformation>
+                <rotate axis="y" angle="60"/>
+            </transformation>
+            <children>                
+                <componentref id="cactus_head_aux"/>
+            </children>
+        </component>
+        <component id="cactus_head_3">
+            <transformation>
+                <rotate axis="y" angle="120"/>
+            </transformation>
+            <children>                
+                <componentref id="cactus_head_aux"/>
+            </children>
+        </component>
+        <component id="cactus_head_aux">
+            <transformation>
+                <scale x="0.45" y="0.4" z="0.4"/>
+            </transformation>
+            <children>                
+                <primitiveref id="Torus"/>
             </children>
         </component>
         <component id="cactus_body">
             <transformation> 
-                <translate x="0" y="7" z="0"/>
+                <rotate axis="x" angle="-90"/>
+                <scale x="0.17" y="0.2" z="1.1"/>
             </transformation>
             <children>                
-                <primitiveref id="Rectangle"/>
+                <primitiveref id="Cylinder"/>
             </children>
         </component>
     </components>
