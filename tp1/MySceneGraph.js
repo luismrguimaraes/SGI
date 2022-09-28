@@ -799,7 +799,7 @@ export class MySceneGraph {
                             var ID = this.reader.getString(child, 'id');
                             if (this.transformations[ID] == null) 
                                 return "Invalid transformationref with ID " + ID;
-                            mat4.multiply(transfMatrix, this.transformations[ID], transfMatrix);
+                            mat4.multiply(transfMatrix, transfMatrix, this.transformations[ID]);
                             break;
                         case 'translate':
                             var coordinates = this.parseCoordinates3D(child, "translate transformation for component " + componentID);
