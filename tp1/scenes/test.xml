@@ -43,10 +43,10 @@
             <rectangle x1="-2" x2="2" y1="-2" y2="2"  />
         </primitive>
 		<primitive id="Cylinder">
-            <cylinder height="2" radiusBottom="1" radiusTop="1" stacks="40" slices="40" />
+            <cylinder height="2" base="1" top="1" stacks="40" slices="40" />
         </primitive>
 		<primitive id="Torus">
-            <torus radiusInner="1" radiusOutter="2" slices="20" loops="10" />
+            <torus inner="1" outer="2" slices="20" loops="10" />
         </primitive>
         <primitive id="Triangle">
             <triangle  x2="1" y2="0" z2="0" x3="0" y3="0" z3="1" x1="0" y1="0" z1="0"/>

@@ -709,15 +709,15 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = triangle;
 			}
             else if(primitiveType == 'cylinder'){
-                // radiusBottom
-                var radiusBottom = this.reader.getFloat(grandChildren[0], 'radiusBottom');
-                if (!(radiusBottom != null && !isNaN(radiusBottom)))
-                    return "unable to parse radiusBottom of the primitive coordinates for ID = " + primitiveId;
+                // base
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base)))
+                    return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
 
-                // radiusTop
-                var radiusTop = this.reader.getFloat(grandChildren[0], 'radiusTop');
-                if (!(radiusTop != null && !isNaN(radiusTop)))
-                    return "unable to parse radiusTop of the primitive coordinates for ID = " + primitiveId;
+                // top
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
 				
 				// height
                 var height = this.reader.getFloat(grandChildren[0], 'height');
@@ -734,20 +734,20 @@ export class MySceneGraph {
                 if (!(stacks != null && !isNaN(stacks)))
                     return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
-                var cylinder = new MyCylinder(this.scene, primitiveId, radiusBottom, radiusTop, height, slices, stacks);
+                var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
 
                 this.primitives[primitiveId] = cylinder;
             }
 			else if(primitiveType == 'torus'){
-                // radiusInner
-                var radiusInner = this.reader.getFloat(grandChildren[0], 'radiusInner');
-                if (!(radiusInner != null && !isNaN(radiusInner)))
-                    return "unable to parse radiusInner of the primitive coordinates for ID = " + primitiveId;
+                // inner
+                var inner = this.reader.getFloat(grandChildren[0], 'inner');
+                if (!(inner != null && !isNaN(inner)))
+                    return "unable to parse inner of the primitive coordinates for ID = " + primitiveId;
 
-                // radiusOutter
-                var radiusOutter = this.reader.getFloat(grandChildren[0], 'radiusOutter');
-                if (!(radiusOutter != null && !isNaN(radiusOutter)))
-                    return "unable to parse radiusOutter of the primitive coordinates for ID = " + primitiveId;
+                // outer
+                var outer = this.reader.getFloat(grandChildren[0], 'outer');
+                if (!(outer != null && !isNaN(outer)))
+                    return "unable to parse outer of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(grandChildren[0], 'slices');
@@ -759,7 +759,7 @@ export class MySceneGraph {
                 if (!(loops != null && !isNaN(loops)))
                     return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
 
-                var torus = new MyTorus(this.scene, primitiveId, radiusInner, radiusOutter, slices, loops);
+                var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
 
                 this.primitives[primitiveId] = torus;
             }
