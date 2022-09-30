@@ -911,7 +911,7 @@ export class MySceneGraph {
         if (integrityCheck_result != true) //check if dependencies have been satisfied(?)
             return integrityCheck_result;
 
-        this.graph.print(this.idRoot);
+        //this.graph.print(this.idRoot);
     }
 
 

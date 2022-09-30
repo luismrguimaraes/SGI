@@ -10,7 +10,7 @@
 
     <ambient>
         <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
-        <background r="0.7" g="0.8" b="1" a="1.0" />
+        <background r="0.7" g="0.8" b="1" a="1" />
     </ambient>
 
     <lights>
@@ -23,15 +23,15 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="demoTexture" file="images/vidral.jpg" />
     </textures>
 
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
-            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
+            <diffuse r="1" g="0.65" b="0.0" a="1.0" />
+            <specular r="1" g="0.65" b="0.0" a="1.0" />
         </material>
     </materials>
 
@@ -60,7 +60,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
                 <componentref id="cactusSets"/>
                 <componentref id="compositeTerrain1"/>
@@ -72,6 +72,10 @@
         <component id="cactusSets">
             <transformation>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactusSet1"/>
                 <componentref id="cactusSet2"/>
@@ -83,7 +87,11 @@
             <transformation>
                 <translate x="20" y="0" z="0"/>
             </transformation>
-            <children>            
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>          
                 <componentref id="cactusSet"/>
             </children>
         </component>
@@ -92,7 +100,11 @@
                 <translate x="15" y="0" z="17"/>
                 <rotate axis="y" angle="57"/>
             </transformation>
-            <children>            
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>             
                 <componentref id="cactusSet"/>
             </children>
         </component>
@@ -101,6 +113,10 @@
                 <translate x="0" y="0" z="-27"/>
                 <rotate axis="y" angle="-57"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactusSet"/>
             </children>
@@ -110,6 +126,10 @@
                 <translate x="-22" y="0" z="-13"/>
                 <rotate axis="y" angle="167"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactusSet"/>
             </children>
@@ -117,6 +137,10 @@
         <component id="cactusSet">
             <transformation>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactus1"/>
                 <componentref id="cactus2"/>
@@ -130,6 +154,10 @@
                 <translate x="0.4" y="0.8" z="-0.2"/>
                 <scale x="0.5" y="0.5" z="0.5"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactus"/>
             </children>
@@ -139,6 +167,10 @@
                 <translate x="-2" y="0.4" z="0.4"/>
                 <scale x="0.5" y="0.5" z="0.5"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactus"/>
             </children>
@@ -147,6 +179,10 @@
             <transformation>
                 <translate x="1" y="0" z="1.7"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactus"/>
             </children>
@@ -155,6 +191,10 @@
             <transformation>
                 <translate x="-1" y="0" z="-2"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactus"/>
             </children>
@@ -164,6 +204,10 @@
                 <translate x="0" y="0.6" z="-4"/>
                 <scale x="0.8" y="0.8" z="0.8"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="cactus"/>
             </children>
@@ -172,6 +216,10 @@
             <transformation>
                 <translate x="35" y="0" z="-35"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="compositeTerrain"/>
             </children>
@@ -181,6 +229,10 @@
                 <translate x="-35" y="0" z="35"/>
                 <rotate axis="y" angle="90"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="compositeTerrain"/>
             </children>
@@ -190,6 +242,10 @@
                 <translate x="35" y="0" z="35"/>
                 <rotate axis="y" angle="-90"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="compositeTerrain"/>
             </children>
@@ -198,6 +254,10 @@
             <transformation>
                 <translate x="-35" y="0" z="-35"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="compositeTerrain"/>
             </children>
@@ -205,6 +265,10 @@
         <component id="compositeTerrain">
             <transformation>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="terrain1"/>
                 <componentref id="terrain2"/>
@@ -216,6 +280,10 @@
             <transformation>
                 <translate x="20" y="0" z="-20"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="terrain"/>
             </children>
@@ -224,6 +292,10 @@
             <transformation>
                 <translate x="-20" y="0" z="20"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="terrain"/>
             </children>
@@ -232,6 +304,10 @@
             <transformation>
                 <translate x="20" y="0" z="20"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="terrain"/>
             </children>
@@ -240,6 +316,10 @@
             <transformation>
                 <translate x="-20" y="0" z="-20"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="terrain"/>
             </children>
@@ -247,6 +327,10 @@
         <component id="terrain"> 
             <transformation>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="bigCylinder1"/>                
                 <componentref id="bigCylinder2"/>                
@@ -260,9 +344,9 @@
                 <rotate axis="y" angle="33"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="bigCylinder" />
             </children>
@@ -274,9 +358,9 @@
                 <rotate axis="y" angle="33"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="bigCylinder" />
             </children>
@@ -288,9 +372,9 @@
                 <rotate axis="y" angle="112"/>
             </transformation>
             <materials>
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="bigCylinder" />
             </children>
@@ -300,15 +384,22 @@
                 <scale x="13" y="1.2" z="40"/>
                 <translate x="0" y="0" z="-1"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <primitiveref id="Cylinder" />
             </children>
         </component>
 
-
         <component id="cactus">
             <transformation>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="cactus_body"/>
                 <componentref id="composite_cactus_head"/>
@@ -320,6 +411,10 @@
                 <translate x="0" y="2.72" z="0"/>
                 <rotate axis="y" angle ="90"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="cactus_head_1"/>
                 <componentref id="cactus_head_2"/>
@@ -330,6 +425,10 @@
             <transformation>
                 <translate x="0" y="2.72" z="0"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="cactus_head_1"/>
                 <componentref id="cactus_head_2"/>
@@ -339,6 +438,10 @@
         <component id="cactus_head_1">
             <transformation>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="cactus_head_aux"/>
             </children>
@@ -347,6 +450,10 @@
             <transformation>
                 <rotate axis="y" angle="60"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="cactus_head_aux"/>
             </children>
@@ -355,6 +462,10 @@
             <transformation>
                 <rotate axis="y" angle="120"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="cactus_head_aux"/>
             </children>
@@ -363,6 +474,10 @@
             <transformation>
                 <scale x="0.45" y="0.4" z="0.4"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <primitiveref id="Torus"/>
             </children>
@@ -372,6 +487,10 @@
                 <rotate axis="x" angle="-90"/>
                 <scale x="0.17" y="0.2" z="1.1"/>
             </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
             <children>                
                 <primitiveref id="Cylinder"/>
             </children>
