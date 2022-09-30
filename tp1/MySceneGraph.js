@@ -40,19 +40,11 @@ class Graph {
         this.children[parentID].push(childID);
     }
     addNode(nodeID, node) {
-        /*
-          if (nodeID in this.nodes) {
-              var newID = nodeID + '(' + this.copy_index + ')';
-              this.nodes[newID] = node;
-              console.log(newID);
-              this.copy_index++;
-              return newID;
-          }*/
         if (!(nodeID in this.nodes)){
             this.nodes[nodeID] = node;
             console.log("Node " + nodeID + " added.");
         } 
-        else console.log('node already exists');
+        //else console.log('node already exists');
         return nodeID;
     }
 
@@ -60,11 +52,20 @@ class Graph {
         this.dependencies.push(nodeID);
     }
 
-    nodeCheck(){
+    integrityCheck(idRoot, primitives){
+        if (this.children[idRoot] == null && !(idRoot in primitives))
+            return "Invalid root " + idRoot;
+        
+        // Check dependencies
         for (var nodeID of this.dependencies){
             if (!(nodeID in this.nodes)){
-                return false;
+                return nodeID + " missing";
             }
+        }
+        // Check if all leaves are primitives
+        for (var nodeID in this.nodes){
+            if (this.children[nodeID] == null && !(nodeID in primitives))
+                return nodeID + " is an invalid leaf";
         }
         return true;
     }
@@ -555,7 +556,6 @@ export class MySceneGraph {
                             return coordinates;
 
                         mat4.scale(transfMatrix, transfMatrix, coordinates);
-                        //this.onXMLMinorError("To do: Parse scale transformations.");
                         break;
                     case 'rotate':
                         // axis
@@ -579,7 +579,6 @@ export class MySceneGraph {
                         if (!(angle != null && !isNaN(angle)))
                             return "unable to parse angle of the rotation for ID " + transformationID;
                             
-                        console.log(angle);
                         mat4.rotate(transfMatrix, transfMatrix, angle, axis);
                         //this.onXMLMinorError("To do: Parse rotate transformations.");
                         break;
@@ -710,15 +709,15 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = triangle;
 			}
             else if(primitiveType == 'cylinder'){
-                // radiusBottom
-                var radiusBottom = this.reader.getFloat(grandChildren[0], 'radiusBottom');
-                if (!(radiusBottom != null && !isNaN(radiusBottom)))
-                    return "unable to parse radiusBottom of the primitive coordinates for ID = " + primitiveId;
+                // base
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base)))
+                    return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
 
-                // radiusTop
-                var radiusTop = this.reader.getFloat(grandChildren[0], 'radiusTop');
-                if (!(radiusTop != null && !isNaN(radiusTop)))
-                    return "unable to parse radiusTop of the primitive coordinates for ID = " + primitiveId;
+                // top
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
 				
 				// height
                 var height = this.reader.getFloat(grandChildren[0], 'height');
@@ -735,20 +734,20 @@ export class MySceneGraph {
                 if (!(stacks != null && !isNaN(stacks)))
                     return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
 
-                var cylinder = new MyCylinder(this.scene, primitiveId, radiusBottom, radiusTop, height, slices, stacks);
+                var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
 
                 this.primitives[primitiveId] = cylinder;
             }
 			else if(primitiveType == 'torus'){
-                // radiusInner
-                var radiusInner = this.reader.getFloat(grandChildren[0], 'radiusInner');
-                if (!(radiusInner != null && !isNaN(radiusInner)))
-                    return "unable to parse radiusInner of the primitive coordinates for ID = " + primitiveId;
+                // inner
+                var inner = this.reader.getFloat(grandChildren[0], 'inner');
+                if (!(inner != null && !isNaN(inner)))
+                    return "unable to parse inner of the primitive coordinates for ID = " + primitiveId;
 
-                // radiusOutter
-                var radiusOutter = this.reader.getFloat(grandChildren[0], 'radiusOutter');
-                if (!(radiusOutter != null && !isNaN(radiusOutter)))
-                    return "unable to parse radiusOutter of the primitive coordinates for ID = " + primitiveId;
+                // outer
+                var outer = this.reader.getFloat(grandChildren[0], 'outer');
+                if (!(outer != null && !isNaN(outer)))
+                    return "unable to parse outer of the primitive coordinates for ID = " + primitiveId;
 
                 // slices
                 var slices = this.reader.getFloat(grandChildren[0], 'slices');
@@ -760,7 +759,7 @@ export class MySceneGraph {
                 if (!(loops != null && !isNaN(loops)))
                     return "unable to parse loops of the primitive coordinates for ID = " + primitiveId;
 
-                var torus = new MyTorus(this.scene, primitiveId, radiusInner, radiusOutter, slices, loops);
+                var torus = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);
 
                 this.primitives[primitiveId] = torus;
             }
@@ -818,20 +817,17 @@ export class MySceneGraph {
 
             // Transformations
             var transfMatrix = mat4.create();
-            if(grandChildren[transformationIndex].children.length != 0){
+            if(transformationIndex >= 0 && grandChildren[transformationIndex] != null){
                 grandgrandChildren[transformationIndex] = grandChildren[transformationIndex].children;
                 for (var child of grandgrandChildren[transformationIndex]){
-                    console.log(child.nodeName);
-
                     switch (child.nodeName) {
                         case 'transformationref':
                             var ID = this.reader.getString(child, 'id');
                             if (this.transformations[ID] == null) 
-                                return "Invalid transformationref.";
-                            mat4.multiply(transfMatrix, this.transformations[ID], transfMatrix);
+                                return "Invalid transformationref with ID " + ID;
+                            mat4.multiply(transfMatrix, transfMatrix, this.transformations[ID]);
                             break;
                         case 'translate':
-                            console.log("T");
                             var coordinates = this.parseCoordinates3D(child, "translate transformation for component " + componentID);
                             if (!Array.isArray(coordinates))
                                 return coordinates;
@@ -839,16 +835,14 @@ export class MySceneGraph {
                             mat4.translate(transfMatrix, transfMatrix, coordinates);
                             break;
                         case 'scale':
-                            console.log("S");
                             var coordinates = this.parseCoordinates3D(child, "scale transformation for component " + componentID);
                             if (!Array.isArray(coordinates))
                                 return coordinates;
     
                             mat4.scale(transfMatrix, transfMatrix, coordinates);
-                            //this.onXMLMinorError("To do: Parse scale transformations.");
+                            
                             break;
                         case 'rotate':
-                            console.log("R");
                             // axis
                             var axisString = this.reader.getString(child, 'axis');
                             if (!(axisString != null))
@@ -871,7 +865,7 @@ export class MySceneGraph {
                                 return "unable to parse angle of the rotation for component " + componentID;
 
                             mat4.rotate(transfMatrix, transfMatrix, angle, axis);
-                            //this.onXMLMinorError("To do: Parse rotate transformations.");
+                        
                             break;
                     }
                 }
@@ -886,12 +880,14 @@ export class MySceneGraph {
             this.graph.addNode(componentID, componentObject);
 
             // Children            
-            if(grandChildren[childrenIndex].children.length != 0){
+            if(childrenIndex >= 0 && grandChildren[childrenIndex] != null){
                 grandgrandChildren[childrenIndex] = grandChildren[childrenIndex].children;
                 for (var child of grandgrandChildren[childrenIndex]){
                     switch (child.nodeName) {
                         case 'componentref':
                             var childID = this.reader.getString(child, 'id');
+                            if (childID in this.primitives)
+                                return "componentref " + childID + " in component " + componentID + " refers to a primitive";
                             if (!(childID in this.components))
                                 this.graph.addDependency(childID);
                             this.graph.addChild(componentID, childID);
@@ -899,7 +895,7 @@ export class MySceneGraph {
                         case 'primitiveref':
                             var primitiveID = this.reader.getString(child, 'id');
                             if (!(primitiveID in this.primitives))
-                                return "unable to parse primitiveref of " + primitiveID;
+                                return "unable to parse primitiveref " + primitiveID + " of " + componentID;
                             this.graph.addNode(primitiveID, this.primitives[primitiveID]);
                             this.graph.addChild(componentID, primitiveID);
                             break;
@@ -911,8 +907,11 @@ export class MySceneGraph {
             this.components[componentID] = componentObject;
         }
 
-        if (!this.graph.nodeCheck()) //check if dependencies have been satisfied(?)
-            return "Dependencies not satisfied";
+        var integrityCheck_result = this.graph.integrityCheck(this.idRoot, this.primitives);
+        if (integrityCheck_result != true) //check if dependencies have been satisfied(?)
+            return integrityCheck_result;
+
+        //this.graph.print(this.idRoot);
     }
 
 
@@ -1053,10 +1052,11 @@ export class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-        //this.graph.display(this.idRoot);
+        this.scene.setDiffuse(1, 0.65, 0, 1);
+		this.scene.setSpecular(1, 0.65, 0, 1);
 
         this.displayGraph(this.idRoot);
-        //this.scene.pushMatrix();
+
 
         //To test the parsing/creation of the primitives, call the display function directly
 		//this.primitives['demoCylinder'].display();

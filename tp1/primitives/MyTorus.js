@@ -4,10 +4,10 @@ import { CGFobject } from '../../lib/CGF.js';
  * @constructor
  */
 export class MyTorus extends CGFobject {
-	constructor(scene, id, radiusInner, radiusOutter, slices, loops) {
+	constructor(scene, id, inner, outer, slices, loops) {
 		super(scene);
-		this.smallRadius = (radiusOutter - radiusInner)/2;
-		this.bigRadius = radiusInner + this.smallRadius;
+		this.smallRadius = (outer - inner)/2;
+		this.bigRadius = inner + this.smallRadius;
 		this.slices = slices;
 		this.loops = loops;
 		
