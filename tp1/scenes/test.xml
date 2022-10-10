@@ -30,8 +30,15 @@
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
-            <diffuse r="1" g="0.65" b="0.0" a="1.0" />
+            <diffuse r="0.8" g="0.65" b="0.0" a="1.0" />
             <specular r="1" g="0.65" b="0.0" a="1.0" />
+        </material>
+
+        <material id="demoMaterial2" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
+            <diffuse r="0.33" g="0.55" b="0.0" a="1.0" />
+            <specular r="0.65" g="0.65" b="0.0" a="0.7" />
         </material>
     </materials>
 
@@ -73,9 +80,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="demoMaterial2" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="demoMaterial2"/>
             <children>            
                 <componentref id="cactusSet1"/>
                 <componentref id="cactusSet2"/>

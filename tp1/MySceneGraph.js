@@ -1,4 +1,4 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
@@ -17,12 +17,17 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
-class Graph {
-    constructor() {
+class ComponentsGraph {
+    constructor(scene, appearance, texture) {
         this.children = {};
         this.nodes = {}; //objects (make sure that leaves are primitives only)
         this.dependencies = [] //nodes that are expected to be added
-        //this.copy_index = 0;
+        this.materialsStack = []
+        this.texturesStack = []
+
+        this.scene = scene
+        this.appearance = appearance
+        this.texture = texture
     }
     addChild(parentID, childID) {
         if (
@@ -81,6 +86,70 @@ class Graph {
             this._printGraphAux(child);
         }
     }
+
+    pushMaterial(){
+        this.materialsStack.push(this.appearance)
+    }
+    popMaterial(){
+        this.appearance = this.materialsStack.pop()
+        this.appearance.apply()
+    }
+
+    pushTexture(){
+        this.texturesStack.push(this.texture)
+    }
+    popTexture(){
+        this.texture = this.texturesStack.pop()
+        if (this.texture != "inherit"){
+            if (this.texture != "none")
+                this.texture.bind()
+        }
+    }
+
+    display(currentNode){
+        //console.log(currentNode);
+        if (this.children[currentNode] == null){
+            // Primitive
+            this.nodes[currentNode].display();
+            return;
+        }
+        else{
+            // Not Primitive
+            
+            this.pushMaterial();
+            if (this.nodes[currentNode]["Material"] != "inherit"){
+                this.appearance = this.nodes[currentNode]["Material"]
+                //console.log(this.appearance.ambient)
+                this.appearance.apply()
+            }
+
+            /*
+            this.pushTexture();
+            if (this.nodes[currentNode]["Texture"] != "inherit")
+                if (this.nodes[currentNode]["Texture"] == "none")
+                    if (this.texture != "none") 
+                        this.texture.unbind()
+                        this.texture = "none"
+                else{
+                    this.texture = this.nodes[currentNode]["Texture"]
+                    this.texture.bind()
+                }
+            */
+
+            this.scene.pushMatrix();
+            this.scene.multMatrix(this.nodes[currentNode]["Tm"]);
+
+            for (var child of this.children[currentNode]) {
+                //console.log( this.nodes[child]);
+                //console.log(this.nodes[currentNode]["Tm"]);
+                //console.log(currentNode + ' -> ' + child);
+                this.display(child);
+            }
+            this.popMaterial();
+            //this.popTexture();
+            this.scene.popMatrix();
+        } 
+    }
 }
 
 /**
@@ -101,7 +170,10 @@ export class MySceneGraph {
 
         this.idRoot = null;                    // The id of the root element.
 
-        this.graph = new Graph();
+        this.appearance = new CGFappearance(this.scene)
+        this.texture = new CGFtexture(this.scene)
+
+        this.components_graph = new ComponentsGraph(this.scene, this.appearance, this.texture);
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -498,10 +570,100 @@ export class MySceneGraph {
 
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+                return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
             //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            var s = this.reader.getFloat(children[i], 'shininess');
+            if (!(s != null && !isNaN(s)))
+                return "unable to parse shininess of the material for ID = " + materialID;
+            
+            grandChildren = children[i].children
+            var appearance = new CGFappearance(this.scene)
+
+            for (var j = 0; j < grandChildren.length; j++){
+                switch (grandChildren[j].nodeName) {
+                    case 'emission':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        
+                        appearance.setEmission(r,g,b,a)
+                        break;
+
+                    case 'ambient':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+                            
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        appearance.setAmbient(r,g,b,a)
+                        break;
+
+                    case 'diffuse':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+                            
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        appearance.setDiffuse(r,g,b,a)                        
+                        break;
+
+                    case 'specular':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+                            
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        appearance.setSpecular(r,g,b,a)
+                        break;
+                    
+                    default:
+                        return "unable to parse material component of the material for ID = " + materialID;
+                }
+            }
+            this.materials[materialID] = appearance
         }
 
         //this.log("Parsed materials");
@@ -873,11 +1035,26 @@ export class MySceneGraph {
             componentObject["Tm"] = transfMatrix;
 
             // Materials
-
+            if(materialsIndex >= 0 && grandChildren[materialsIndex] != null){
+                grandgrandChildren[materialsIndex] = grandChildren[materialsIndex].children;
+                for (var child of grandgrandChildren[materialsIndex]){
+                    if (child.nodeName != "material")
+                        return "Invalid node name"
+                    
+                    var ID = this.reader.getString(child, 'id');
+                    if (ID == "inherit")
+                        componentObject["Material"] = "inherit"
+                    else if (this.materials[ID] == null)
+                        return "Invalid material with ID null";
+                    else componentObject["Material"] = this.materials[ID];
+                    
+                }
+            }
             // Texture
 
-            // Add to Graph
-            this.graph.addNode(componentID, componentObject);
+
+            // Add to ComponentsGraph
+            this.components_graph.addNode(componentID, componentObject);
 
             // Children            
             if(childrenIndex >= 0 && grandChildren[childrenIndex] != null){
@@ -889,15 +1066,15 @@ export class MySceneGraph {
                             if (childID in this.primitives)
                                 return "componentref " + childID + " in component " + componentID + " refers to a primitive";
                             if (!(childID in this.components))
-                                this.graph.addDependency(childID);
-                            this.graph.addChild(componentID, childID);
+                                this.components_graph.addDependency(childID);
+                            this.components_graph.addChild(componentID, childID);
                             break;
                         case 'primitiveref':
                             var primitiveID = this.reader.getString(child, 'id');
                             if (!(primitiveID in this.primitives))
                                 return "unable to parse primitiveref " + primitiveID + " of " + componentID;
-                            this.graph.addNode(primitiveID, this.primitives[primitiveID]);
-                            this.graph.addChild(componentID, primitiveID);
+                            this.components_graph.addNode(primitiveID, this.primitives[primitiveID]);
+                            this.components_graph.addChild(componentID, primitiveID);
                             break;
                     }
                 }
@@ -907,11 +1084,11 @@ export class MySceneGraph {
             this.components[componentID] = componentObject;
         }
 
-        var integrityCheck_result = this.graph.integrityCheck(this.idRoot, this.primitives);
+        var integrityCheck_result = this.components_graph.integrityCheck(this.idRoot, this.primitives);
         if (integrityCheck_result != true) //check if dependencies have been satisfied(?)
             return integrityCheck_result;
 
-        //this.graph.print(this.idRoot);
+        //this.components_graph.print(this.idRoot);
     }
 
 
@@ -1027,25 +1204,7 @@ export class MySceneGraph {
     }
 
 
-    displayGraph(currentNode){
-        //console.log(currentNode);
-        if (this.graph.children[currentNode] == null){
-            // Primitive
-            this.graph.nodes[currentNode].display();
-            return;
-        }
-        else{
-            this.scene.pushMatrix();
-            this.scene.multMatrix(this.graph.nodes[currentNode]["Tm"]);
-            for (var child of this.graph.children[currentNode]) {
-                //console.log( this.graph.nodes[child]);
-                //console.log(this.graph.nodes[currentNode]["Tm"]);
-                //console.log(currentNode + ' -> ' + child);
-                this.displayGraph(child);
-            }    
-            this.scene.popMatrix();
-        } 
-    }
+    
 
     /**
      * Displays the scene, processing each node, starting in the root node.
@@ -1055,7 +1214,8 @@ export class MySceneGraph {
         this.scene.setDiffuse(1, 0.65, 0, 1);
 		this.scene.setSpecular(1, 0.65, 0, 1);
 
-        this.displayGraph(this.idRoot);
+        //this.displayComponentsGraph(this.idRoot);
+        this.components_graph.display(this.idRoot);
 
 
         //To test the parsing/creation of the primitives, call the display function directly
