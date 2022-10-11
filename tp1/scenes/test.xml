@@ -9,7 +9,7 @@
     </views>
 
     <ambient>
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <ambient r="0.25" g="0.2" b="0.2" a="1.0" />
         <background r="0.7" g="0.8" b="1" a="1" />
     </ambient>
 
@@ -23,7 +23,7 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="images/vidral.jpg" />
+        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
     </textures>
 
     <materials>
@@ -82,7 +82,7 @@
             <materials>
                 <material id="demoMaterial2" />
             </materials>
-            <texture id="demoMaterial2"/>
+            <texture id="demoTexture"/>
             <children>            
                 <componentref id="cactusSet1"/>
                 <componentref id="cactusSet2"/>
@@ -97,7 +97,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="demoTexture"/>
             <children>          
                 <componentref id="cactusSet"/>
             </children>
@@ -110,7 +110,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="none"/>
             <children>             
                 <componentref id="cactusSet"/>
             </children>

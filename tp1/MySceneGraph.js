@@ -17,17 +17,31 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
+/* ToDo:
+    Change logic of material and texture objects to ids, and get 
+    a single this.appearance for the graph, that is constantly
+    changing
+*/
+
 class ComponentsGraph {
-    constructor(scene, appearance, texture) {
+    constructor(scene) {
         this.children = {};
         this.nodes = {}; //objects (make sure that leaves are primitives only)
         this.dependencies = [] //nodes that are expected to be added
-        this.materialsStack = []
-        this.texturesStack = []
 
         this.scene = scene
-        this.appearance = appearance
-        this.texture = texture
+        this.material_ids_stack = []
+        this.materialIDs = []
+        for (let m in this.scene.graph.materials) {
+            this.materialIDs.push(m)
+        }
+        this.materialIndex = 0  // this is expected to only increase and eventually overflow
+
+        this.texture_ids_stack = []
+        this.textureID = "none"
+
+        // set first material as default
+        this.appearance = this.scene.graph.materials[this.materialIDs[0]]
     }
     addChild(parentID, childID) {
         if (
@@ -47,7 +61,7 @@ class ComponentsGraph {
     addNode(nodeID, node) {
         if (!(nodeID in this.nodes)){
             this.nodes[nodeID] = node;
-            console.log("Node " + nodeID + " added.");
+            //console.log("Node " + nodeID + " added.");
         } 
         //else console.log('node already exists');
         return nodeID;
@@ -88,23 +102,28 @@ class ComponentsGraph {
     }
 
     pushMaterial(){
-        this.materialsStack.push(this.appearance)
+        this.material_ids_stack.push(this.materialIDs)
     }
     popMaterial(){
-        this.appearance = this.materialsStack.pop()
-        this.appearance.apply()
+        this.materialIDs = this.material_ids_stack.pop()
+        var new_material_index = this.materialIndex % this.materialIDs.length
+        this.appearance = this.scene.graph.materials[this.materialIDs[new_material_index]]
+        //this.appearance.apply()
     }
 
     pushTexture(){
-        this.texturesStack.push(this.texture)
+        this.texture_ids_stack.push(this.textureID)
     }
     popTexture(){
-        this.texture = this.texturesStack.pop()
-        if (this.texture != "inherit"){
-            if (this.texture != "none")
-                this.texture.bind()
+        this.textureID = this.texture_ids_stack.pop()
+        if (this.textureID == "none")
+            this.appearance.setTexture(null)
+        else{
+            var next_texture = this.scene.graph.textures[this.textureID]
+            this.appearance.setTexture(next_texture)
         }
     }
+     
 
     display(currentNode){
         //console.log(currentNode);
@@ -116,25 +135,28 @@ class ComponentsGraph {
         else{
             // Not Primitive
             
-            this.pushMaterial();
-            if (this.nodes[currentNode]["Material"] != "inherit"){
-                this.appearance = this.nodes[currentNode]["Material"]
-                //console.log(this.appearance.ambient)
-                this.appearance.apply()
+            this.pushMaterial();            
+            if (this.nodes[currentNode]["MaterialIDs"][this.materialIndex] != "inherit"){
+                this.materialIDs = this.nodes[currentNode]["MaterialIDs"]
+
+                var new_material_index = this.materialIndex % this.materialIDs.length
+                var new_materialID = this.materialIDs[new_material_index]
+                
+                this.appearance = this.scene.graph.materials[new_materialID]                
+                //this.appearance.apply()
+            }
+            
+            this.pushTexture();
+            if (this.nodes[currentNode]["TextureID"] != "inherit"){
+                this.textureID = this.nodes[currentNode]["TextureID"]
+                if (this.textureID == "none"){
+                    // clears texture
+                    this.appearance.setTexture(null)
+                }else
+                    this.appearance.setTexture(this.scene.graph.textures[this.textureID])
             }
 
-            /*
-            this.pushTexture();
-            if (this.nodes[currentNode]["Texture"] != "inherit")
-                if (this.nodes[currentNode]["Texture"] == "none")
-                    if (this.texture != "none") 
-                        this.texture.unbind()
-                        this.texture = "none"
-                else{
-                    this.texture = this.nodes[currentNode]["Texture"]
-                    this.texture.bind()
-                }
-            */
+            this.appearance.apply()
 
             this.scene.pushMatrix();
             this.scene.multMatrix(this.nodes[currentNode]["Tm"]);
@@ -146,7 +168,8 @@ class ComponentsGraph {
                 this.display(child);
             }
             this.popMaterial();
-            //this.popTexture();
+            this.popTexture();
+            this.appearance.apply();
             this.scene.popMatrix();
         } 
     }
@@ -169,11 +192,6 @@ export class MySceneGraph {
         this.nodes = [];
 
         this.idRoot = null;                    // The id of the root element.
-
-        this.appearance = new CGFappearance(this.scene)
-        this.texture = new CGFtexture(this.scene)
-
-        this.components_graph = new ComponentsGraph(this.scene, this.appearance, this.texture);
 
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
@@ -539,7 +557,38 @@ export class MySceneGraph {
     parseTextures(texturesNode) {
 
         //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        var children = texturesNode.children;
+
+        this.textures = [];
+
+        // Any number of materials.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "texture") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current texture.
+            var textureID = this.reader.getString(children[i], 'id');
+            if (textureID == null)
+                return "no ID defined for material";
+
+            // Checks for repeated IDs.
+            if (this.textures[textureID] != null)
+                return "ID must be unique for each material (conflict: ID = " + textureID + ")";
+            
+            // Get url of the current texture
+            var textureUrl = this.reader.getString(children[i], 'file');
+            if (textureUrl == null)
+                return "no file defined for texture";
+            
+            var texture = new CGFtexture(this.scene, textureUrl)
+
+            this.textures[textureID] = texture
+        }
+        
+        
         return null;
     }
 
@@ -947,6 +996,8 @@ export class MySceneGraph {
         var grandgrandChildren = [];
         var nodeNames = [];
 
+        this.components_graph = new ComponentsGraph(this.scene);
+
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
 
@@ -1036,23 +1087,41 @@ export class MySceneGraph {
 
             // Materials
             if(materialsIndex >= 0 && grandChildren[materialsIndex] != null){
+                componentObject["MaterialIDs"] = []
                 grandgrandChildren[materialsIndex] = grandChildren[materialsIndex].children;
                 for (var child of grandgrandChildren[materialsIndex]){
                     if (child.nodeName != "material")
                         return "Invalid node name"
                     
                     var ID = this.reader.getString(child, 'id');
+                    
                     if (ID == "inherit")
-                        componentObject["Material"] = "inherit"
+                        componentObject["MaterialIDs"].push("inherit")
                     else if (this.materials[ID] == null)
-                        return "Invalid material with ID null";
-                    else componentObject["Material"] = this.materials[ID];
+                        return "Invalid material with ID " + ID;
+                    else componentObject["MaterialIDs"].push(ID);
                     
                 }
             }
-            // Texture
-
-
+            // Texture            
+            if(textureIndex >= 0 && grandChildren[textureIndex] != null){
+                var child = grandChildren[textureIndex]
+                // I don't think this conditional actually makes sense/is relevant
+                if (child.nodeName != "texture")
+                    return "Invalid node name"
+                
+                var ID = this.reader.getString(child, 'id');
+                
+                if (ID == "inherit")
+                    componentObject["TextureID"] = "inherit"
+                else if (ID == "none")
+                    componentObject["TextureID"] = "none"
+                else if (this.textures[ID] == null)
+                    return "Invalid texture with ID " + ID;
+                else componentObject["TextureID"] = ID
+                                
+            }
+            
             // Add to ComponentsGraph
             this.components_graph.addNode(componentID, componentObject);
 
@@ -1085,10 +1154,8 @@ export class MySceneGraph {
         }
 
         var integrityCheck_result = this.components_graph.integrityCheck(this.idRoot, this.primitives);
-        if (integrityCheck_result != true) //check if dependencies have been satisfied(?)
+        if (integrityCheck_result != true) //check if dependencies have been satisfied
             return integrityCheck_result;
-
-        //this.components_graph.print(this.idRoot);
     }
 
 
@@ -1214,7 +1281,6 @@ export class MySceneGraph {
         this.scene.setDiffuse(1, 0.65, 0, 1);
 		this.scene.setSpecular(1, 0.65, 0, 1);
 
-        //this.displayComponentsGraph(this.idRoot);
         this.components_graph.display(this.idRoot);
 
 
