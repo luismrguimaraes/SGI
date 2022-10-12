@@ -23,7 +23,8 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="trunk" file="scenes/images/trunk-image.jpg" />
+        <texture id="leaves" file="scenes/images/leaves.jpg" />
     </textures>
 
     <materials>
@@ -82,7 +83,7 @@
             <materials>
                 <material id="demoMaterial2" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>            
                 <componentref id="cactusSet1"/>
                 <componentref id="cactusSet2"/>
@@ -97,7 +98,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>          
                 <componentref id="cactusSet"/>
             </children>
@@ -110,7 +111,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>             
                 <componentref id="cactusSet"/>
             </children>
@@ -421,7 +422,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="leaves"/>
             <children>                
                 <componentref id="cactus_head_1"/>
                 <componentref id="cactus_head_2"/>
@@ -435,7 +436,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="leaves"/>
             <children>                
                 <componentref id="cactus_head_1"/>
                 <componentref id="cactus_head_2"/>
@@ -497,7 +498,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="trunk"/>
             <children>                
                 <primitiveref id="Cylinder"/>
             </children>

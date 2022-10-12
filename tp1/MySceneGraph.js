@@ -37,8 +37,10 @@ class ComponentsGraph {
         }
         this.materialIndex = 0  // this is expected to only increase and eventually overflow
 
-        this.texture_ids_stack = []
+        this.texture_id_s_t_stack = []
         this.textureID = "none"
+        this.s = 1
+        this.t = 1
 
         // set first material as default
         this.appearance = this.scene.graph.materials[this.materialIDs[0]]
@@ -112,14 +114,16 @@ class ComponentsGraph {
     }
 
     pushTexture(){
-        this.texture_ids_stack.push(this.textureID)
+        this.texture_id_s_t_stack.push([this.textureID, this.s, this.t])
     }
     popTexture(){
-        this.textureID = this.texture_ids_stack.pop()
-        if (this.textureID == "none")
+        this.textureID_s_t = this.texture_id_s_t_stack.pop()
+        if (this.textureID_s_t[0] == "none")
             this.appearance.setTexture(null)
         else{
-            var next_texture = this.scene.graph.textures[this.textureID]
+            this.s = this.textureID_s_t[1]
+            this.t = this.textureID_s_t[2]
+            var next_texture = this.scene.graph.textures[this.textureID[0]]
             this.appearance.setTexture(next_texture)
         }
     }
@@ -129,6 +133,8 @@ class ComponentsGraph {
         //console.log(currentNode);
         if (this.children[currentNode] == null){
             // Primitive
+            console.log(this.s, this.t)
+            this.nodes[currentNode].updateTexCoords(this.s, this.t)
             this.nodes[currentNode].display();
             return;
         }
@@ -142,8 +148,7 @@ class ComponentsGraph {
                 var new_material_index = this.materialIndex % this.materialIDs.length
                 var new_materialID = this.materialIDs[new_material_index]
                 
-                this.appearance = this.scene.graph.materials[new_materialID]                
-                //this.appearance.apply()
+                this.appearance = this.scene.graph.materials[new_materialID]
             }
             
             this.pushTexture();
@@ -155,16 +160,13 @@ class ComponentsGraph {
                 }else
                     this.appearance.setTexture(this.scene.graph.textures[this.textureID])
             }
-
+            this.appearance.setTextureWrap("Repeat", "Repeat")
             this.appearance.apply()
 
             this.scene.pushMatrix();
             this.scene.multMatrix(this.nodes[currentNode]["Tm"]);
 
             for (var child of this.children[currentNode]) {
-                //console.log( this.nodes[child]);
-                //console.log(this.nodes[currentNode]["Tm"]);
-                //console.log(currentNode + ' -> ' + child);
                 this.display(child);
             }
             this.popMaterial();
@@ -588,6 +590,7 @@ export class MySceneGraph {
             this.textures[textureID] = texture
         }
         
+        this.log("Parsed textures");
         
         return null;
     }
@@ -715,7 +718,7 @@ export class MySceneGraph {
             this.materials[materialID] = appearance
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -1118,7 +1121,28 @@ export class MySceneGraph {
                     componentObject["TextureID"] = "none"
                 else if (this.textures[ID] == null)
                     return "Invalid texture with ID " + ID;
-                else componentObject["TextureID"] = ID
+                else{
+                    try{
+                        var s = this.reader.getFloat(child, 'length_s')
+                    }catch{
+                        if (!(s != null && !isNaN(s))){
+                            console.log("S null")
+                            s = 1
+                        }
+                    }
+                    try{                    
+                        var t = this.reader.getFloat(child, 'length_t')
+                    }catch{
+                        if (!(t != null && !isNaN(t))){
+                            console.log("T null")
+                            t = 1
+                        }
+                    }
+                    componentObject["TextureID"] = ID
+                    componentObject["TextureS"] = s
+                    componentObject["TextureT"] = t
+                }
+
                                 
             }
             
@@ -1278,8 +1302,6 @@ export class MySceneGraph {
      */
     displayScene() {
         //To do: Create display loop for transversing the scene graph
-        this.scene.setDiffuse(1, 0.65, 0, 1);
-		this.scene.setSpecular(1, 0.65, 0, 1);
 
         this.components_graph.display(this.idRoot);
 
