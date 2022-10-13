@@ -25,8 +25,8 @@ var COMPONENTS_INDEX = 8;
 
 class ComponentsGraph {
     constructor(scene) {
-        this.children = {};
-        this.nodes = {}; //objects (make sure that leaves are primitives only)
+        this.children = {}; // stores parent-child relationships via ID
+        this.nodes = {}; // ID: object
         this.dependencies = [] //nodes that are expected to be added
 
         this.scene = scene
@@ -38,9 +38,7 @@ class ComponentsGraph {
         this.materialIndex = 0  // this is expected to only increase and eventually overflow
 
         this.texture_id_s_t_stack = []
-        this.textureID = "none"
-        this.s = 1
-        this.t = 1
+        this.textureID_s_t = ["none", 1, 1]
 
         // set first material as default
         this.appearance = this.scene.graph.materials[this.materialIDs[0]]
@@ -88,6 +86,10 @@ class ComponentsGraph {
             if (this.children[nodeID] == null && !(nodeID in primitives))
                 return nodeID + " is an invalid leaf";
         }
+
+        for (var nodeID in this.nodes){
+            console.log(this.nodes[nodeID]["TextureID_s_t"])
+        }
         return true;
     }
 
@@ -114,16 +116,16 @@ class ComponentsGraph {
     }
 
     pushTexture(){
-        this.texture_id_s_t_stack.push([this.textureID, this.s, this.t])
+        this.texture_id_s_t_stack.push(this.textureID_s_t)//[this.textureID, this.s, this.t])
     }
     popTexture(){
         this.textureID_s_t = this.texture_id_s_t_stack.pop()
         if (this.textureID_s_t[0] == "none")
             this.appearance.setTexture(null)
         else{
-            this.s = this.textureID_s_t[1]
-            this.t = this.textureID_s_t[2]
-            var next_texture = this.scene.graph.textures[this.textureID[0]]
+            this.textureID_s_t[1]
+            this.textureID_s_t[2]
+            var next_texture = this.scene.graph.textures[this.textureID_s_t[0]]
             this.appearance.setTexture(next_texture)
         }
     }
@@ -133,8 +135,7 @@ class ComponentsGraph {
         //console.log(currentNode);
         if (this.children[currentNode] == null){
             // Primitive
-            console.log(this.s, this.t)
-            this.nodes[currentNode].updateTexCoords(this.s, this.t)
+            this.nodes[currentNode].updateTexCoords(this.textureID_s_t[1], this.textureID_s_t[2])
             this.nodes[currentNode].display();
             return;
         }
@@ -152,13 +153,13 @@ class ComponentsGraph {
             }
             
             this.pushTexture();
-            if (this.nodes[currentNode]["TextureID"] != "inherit"){
-                this.textureID = this.nodes[currentNode]["TextureID"]
-                if (this.textureID == "none"){
+            if (this.nodes[currentNode]["TextureID_s_t"][0] != "inherit"){
+                this.textureID_s_t = this.nodes[currentNode]["TextureID_s_t"]
+                if (this.textureID_s_t[0] == "none"){
                     // clears texture
                     this.appearance.setTexture(null)
                 }else
-                    this.appearance.setTexture(this.scene.graph.textures[this.textureID])
+                    this.appearance.setTexture(this.scene.graph.textures[this.textureID_s_t[0]])
             }
             this.appearance.setTextureWrap("Repeat", "Repeat")
             this.appearance.apply()
@@ -1116,31 +1117,24 @@ export class MySceneGraph {
                 var ID = this.reader.getString(child, 'id');
                 
                 if (ID == "inherit")
-                    componentObject["TextureID"] = "inherit"
+                    componentObject["TextureID_s_t"] = ["inherit", 1, 1]
                 else if (ID == "none")
-                    componentObject["TextureID"] = "none"
+                    componentObject["TextureID_s_t"] = ["none", 1, 1]
                 else if (this.textures[ID] == null)
                     return "Invalid texture with ID " + ID;
                 else{
-                    try{
-                        var s = this.reader.getFloat(child, 'length_s')
-                    }catch{
-                        if (!(s != null && !isNaN(s))){
-                            console.log("S null")
-                            s = 1
-                        }
+                    var s, t = 1
+                    s = this.reader.getFloat(child, 'length_s')
+                    if (!(s != null && !isNaN(s))){
+                        console.log("length_s is null")
+                        s = 1
                     }
-                    try{                    
-                        var t = this.reader.getFloat(child, 'length_t')
-                    }catch{
-                        if (!(t != null && !isNaN(t))){
-                            console.log("T null")
-                            t = 1
-                        }
+                    t = this.reader.getFloat(child, 'length_t')
+                    if (!(t != null && !isNaN(t))){                    
+                        console.log("length_t is null")
+                        t = 1
                     }
-                    componentObject["TextureID"] = ID
-                    componentObject["TextureS"] = s
-                    componentObject["TextureT"] = t
+                    componentObject["TextureID_s_t"] = [ID, s, t]
                 }
 
                                 

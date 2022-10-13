@@ -72,7 +72,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="inherit"/>
             <children>                
                 <componentref id="demoTest2" />
             </children>
@@ -83,7 +83,7 @@
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="demoTexture" length_s="0.25" length_t="0.25"/>
             <children>                
                 <primitiveref id="demoRectangle" />
             </children>
