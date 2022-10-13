@@ -35,7 +35,7 @@ class ComponentsGraph {
         for (let m in this.scene.graph.materials) {
             this.materialIDs.push(m)
         }
-        this.materialIndex = 0  // this is expected to only increase and eventually overflow
+        this.m_presses_count = 0  // this is expected to only increase and eventually overflow
 
         this.texture_id_s_t_stack = []
         this.textureID_s_t = ["none", 1, 1]
@@ -86,11 +86,16 @@ class ComponentsGraph {
             if (this.children[nodeID] == null && !(nodeID in primitives))
                 return nodeID + " is an invalid leaf";
         }
-
-        for (var nodeID in this.nodes){
-            console.log(this.nodes[nodeID]["TextureID_s_t"])
-        }
         return true;
+    }
+
+    increment_materialIndex(){
+        if (this.m_presses_count == 9007199254740992)
+            this.m_presses_count = 0
+        else
+            this.m_presses_count++
+        console.log("m_presses_count: " + this.m_presses_count)
+
     }
 
     print(startingNodeID) {
@@ -110,13 +115,13 @@ class ComponentsGraph {
     }
     popMaterial(){
         this.materialIDs = this.material_ids_stack.pop()
-        var new_material_index = this.materialIndex % this.materialIDs.length
-        this.appearance = this.scene.graph.materials[this.materialIDs[new_material_index]]
-        //this.appearance.apply()
+        var materialIndex = this.m_presses_count % this.materialIDs.length
+        var materialID = this.materialIDs[materialIndex]
+        this.appearance = this.scene.graph.materials[materialID]
     }
 
     pushTexture(){
-        this.texture_id_s_t_stack.push(this.textureID_s_t)//[this.textureID, this.s, this.t])
+        this.texture_id_s_t_stack.push(this.textureID_s_t)
     }
     popTexture(){
         this.textureID_s_t = this.texture_id_s_t_stack.pop()
@@ -141,17 +146,22 @@ class ComponentsGraph {
         }
         else{
             // Not Primitive
-            
-            this.pushMaterial();            
-            if (this.nodes[currentNode]["MaterialIDs"][this.materialIndex] != "inherit"){
+            this.pushMaterial();
+            var materialIndex = this.m_presses_count % this.nodes[currentNode]["MaterialIDs"].length
+            if (this.nodes[currentNode]["MaterialIDs"][materialIndex] != "inherit"){
                 this.materialIDs = this.nodes[currentNode]["MaterialIDs"]
-
-                var new_material_index = this.materialIndex % this.materialIDs.length
-                var new_materialID = this.materialIDs[new_material_index]
+                var materialID = this.materialIDs[materialIndex]
                 
-                this.appearance = this.scene.graph.materials[new_materialID]
+                this.appearance = this.scene.graph.materials[materialID]
+
+                if (this.appearance == null){
+                    console.log(materialID)
+                    console.log(material_index + " " + this.materialIDs.length)
+                    console.log(this.appearance)
+                }
             }
-            
+
+
             this.pushTexture();
             if (this.nodes[currentNode]["TextureID_s_t"][0] != "inherit"){
                 this.textureID_s_t = this.nodes[currentNode]["TextureID_s_t"]

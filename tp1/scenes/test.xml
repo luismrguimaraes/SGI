@@ -74,6 +74,7 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="demoMaterial_old" />
             </materials>
             <texture id="none"/>
             <children>
@@ -89,8 +90,9 @@
             </transformation>
             <materials>
                 <material id="demoMaterial2" />
+                <material id="demoMaterial_old" />
             </materials>
-            <texture id="none"/>
+            <texture id="none" length_t="4"/>
             <children>            
                 <componentref id="cactusSet1"/>
                 <componentref id="cactusSet2"/>
