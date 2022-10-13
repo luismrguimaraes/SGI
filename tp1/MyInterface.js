@@ -40,6 +40,10 @@ export class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
+        if (event.code == "KeyM"){
+            this.scene.graph.components_graph.increment_materialIndex()
+            console.log("M pressed")
+        }
         this.activeKeys[event.code]=true;
     };
 

@@ -9,7 +9,7 @@
     </views>
 
     <ambient>
-        <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+        <ambient r="0.25" g="0.2" b="0.2" a="1.0" />
         <background r="0.7" g="0.8" b="1" a="1" />
     </ambient>
 
@@ -23,15 +23,30 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="images/vidral.jpg" />
+        <texture id="trunk" file="scenes/images/trunk-image.jpg" />
+        <texture id="leaves" file="scenes/images/leaves.jpg" />
+        <texture id="sand" file="scenes/images/sand.jpg" />
     </textures>
 
     <materials>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
-            <diffuse r="1" g="0.65" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.1" b="0" a="1.0" />
+            <diffuse r="0.94" g="0.9" b="0.56" a="1.0" />
             <specular r="1" g="0.65" b="0.0" a="1.0" />
+        </material>
+        <material id="demoMaterial_old" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
+            <diffuse r="0.8" g="0.65" b="0.0" a="1.0" />
+            <specular r="1" g="0.65" b="0.0" a="1.0" />
+        </material>
+
+        <material id="demoMaterial2" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
+            <diffuse r="0.33" g="0.55" b="0.0" a="1.0" />
+            <specular r="0.65" g="0.65" b="0.0" a="0.7" />
         </material>
     </materials>
 
@@ -59,6 +74,7 @@
             </transformation>
             <materials>
                 <material id="demoMaterial" />
+                <material id="demoMaterial_old" />
             </materials>
             <texture id="none"/>
             <children>
@@ -73,9 +89,10 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="demoMaterial2" />
+                <material id="demoMaterial_old" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="none" length_t="4"/>
             <children>            
                 <componentref id="cactusSet1"/>
                 <componentref id="cactusSet2"/>
@@ -103,7 +120,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="trunk" length_s="2"/>
             <children>             
                 <componentref id="cactusSet"/>
             </children>
@@ -414,7 +431,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="leaves"/>
             <children>                
                 <componentref id="cactus_head_1"/>
                 <componentref id="cactus_head_2"/>
@@ -428,7 +445,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="leaves"/>
             <children>                
                 <componentref id="cactus_head_1"/>
                 <componentref id="cactus_head_2"/>
@@ -490,7 +507,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="trunk"/>
             <children>                
                 <primitiveref id="Cylinder"/>
             </children>
