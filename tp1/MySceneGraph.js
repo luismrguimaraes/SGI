@@ -1,4 +1,4 @@
-import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFcamera, CGFcameraOrtho, CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
@@ -211,6 +211,8 @@ export class MySceneGraph {
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
 
+        this.cameras = []
+
         // File reading 
         this.reader = new CGFXMLreader();
 
@@ -405,6 +407,112 @@ export class MySceneGraph {
      */
     parseView(viewsNode) {
         this.onXMLMinorError("To do: Parse views and create cameras.");
+        var children = viewsNode.children;
+    
+        if (children.length < 1)
+            return "At least one view is required"
+
+        var views_ids = []
+
+        // for every view
+        for (let i = 0; i<children.length; ++i){
+            var nodeName = children[i].nodeName
+            if (nodeName == "perspective")
+            {
+                var id = this.reader.getString(children[i], 'id');
+                var near = this.reader.getFloat(children[i], 'near');
+                var far = this.reader.getFloat(children[i], 'far');
+                var angle = this.reader.getFloat(children[i], 'angle');
+
+                if (!(id != null && near != null && !isNaN(near) && far != null && !isNaN(far) && angle != null && !isNaN(angle)))
+                    return "Invalid parameters in views"
+
+                if (views_ids.includes(id))
+                    return "id " + id + " has conflics in Views"
+                views_ids.push(id)
+                var grandChildren = children[i].children
+                var from = -1
+                var to = -1
+
+                for (let j = 0; j<grandChildren.length; ++j){
+                    if (grandChildren[j].nodeName != "from" && grandChildren[j].nodeName != "to")
+                        return "Invalid child in perspective " + id
+
+                    var x = this.reader.getFloat(grandChildren[j], 'x');
+                    var y = this.reader.getFloat(grandChildren[j], 'y');
+                    var z = this.reader.getFloat(grandChildren[j], 'z');
+                    if (!(x != null && !isNaN(x) && y != null && !isNaN(y) && z != null && !isNaN(z)))
+                        return "Invalid parameters in children of perspective " + id
+
+                    if (grandChildren[j].nodeName == "from"){
+                        from = vec3.fromValues(x,y,z)
+
+                    }else if (grandChildren[j].nodeName == "to"){                        
+                        to = vec3.fromValues(x,y,z)
+                    }
+                }
+
+                if (from == -1 || to == -1)
+                    return "Invalid children in perspective " + id;
+
+                var new_camera = new CGFcamera(angle, near, far, from, to)
+                new_camera.id = id
+                this.cameras.push(new_camera)
+            }
+            else if (nodeName == "ortho")
+            {
+                var id = this.reader.getString(children[i], 'id');
+                var near = this.reader.getFloat(children[i], 'near');
+                var far = this.reader.getFloat(children[i], 'far');
+                var left = this.reader.getFloat(children[i], 'left');
+                var right = this.reader.getFloat(children[i], 'right');
+                var top = this.reader.getFloat(children[i], 'top');
+                var bottom = this.reader.getFloat(children[i], 'bottom');
+
+                if (!(id != null && near != null && !isNaN(near) && far != null && !isNaN(far) && angle != null && !isNaN(angle)
+                      && left != null && !isNaN(left) && right != null && !isNaN(right) && top != null && !isNaN(top) && bottom != null && !isNaN(bottom)))
+                    return "Invalid parameters in views"
+
+                if (views_ids.includes(id))
+                    return "id " + id + " has conflics in Views"
+                views_ids.push(id)
+                var grandChildren = children[i].children
+                var from = -1
+                var to = -1
+                var up = vec3.fromValues(0,1,0)
+
+                for (let j = 0; j<grandChildren.length; ++j){
+                    if (grandChildren[j].nodeName != "from" && grandChildren[j].nodeName != "to" && grandChildren[j].nodeName != "up")
+                        return "Invalid child in view" + id
+
+                    var x = this.reader.getFloat(grandChildren[j], 'x');
+                    var y = this.reader.getFloat(grandChildren[j], 'y');
+                    var z = this.reader.getFloat(grandChildren[j], 'z');
+                    if (!(x != null && !isNaN(x) && y != null && !isNaN(y) && z != null && !isNaN(z)))
+                        return "Invalid parameters in children of perspective " + id
+
+                    if (grandChildren[j].nodeName == "from"){
+                        from = vec3.fromValues(x,y,z)
+
+                    }else if (grandChildren[j].nodeName == "to"){
+                        to = vec3.fromValues(x,y,z)
+                    }else if (grandChildren[j].nodeName == "up"){
+                        up = vec3.fromValues(x,y,z)
+                    }
+                }
+
+                if (from == -1 || to == -1)
+                    return "Invalid children in orthogonal " + id;
+
+                var new_camera = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, up)
+                new_camera.id = id
+                this.cameras.push(new_camera)
+                
+            }
+        }
+
+        this.scene.interface.create_views()
+        
 
         return null;
     }
