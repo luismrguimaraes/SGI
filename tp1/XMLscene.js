@@ -107,7 +107,7 @@ export class XMLscene extends CGFscene {
         this.sceneInited = true;
 		
 		// Add group of lights
-		this.myinterface.addLightsGroup(this.graph.lights);
+		this.interface.addLightsGroup(this.graph.lights);
     }
 
     /**
