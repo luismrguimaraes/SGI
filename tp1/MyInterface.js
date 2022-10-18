@@ -54,4 +54,17 @@ export class MyInterface extends CGFinterface {
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
+	
+	addLightsGroup(lights) {
+        var group = this.gui.addFolder("Lights");
+		group.open();
+
+		// Add check boxes to the group 
+		for (var key in lights) {
+			if (lights.hasOwnProperty(key)) {
+				this.scene.lightValues[key] = lights[key][0];
+				group.add(this.scene.lightValues, key);
+			}	
+		}
+    }
 }
