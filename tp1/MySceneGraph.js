@@ -41,8 +41,10 @@ class ComponentsGraph {
         this.texture_id_s_t_stack = []
         this.textureID_s_t = ["none", 1, 1]
 
-        // set first material as default
-        this.appearance = this.scene.graph.materials[this.materialIDs[0]]
+        // set default material
+        if (this.scene.graph.defaultCameraId == null)
+            this.appearance = this.scene.graph.materials[this.materialIDs[0]]
+        else this.appearance = this.scene.graph.materials[this.defaultCameraId]
     }
     addChild(parentID, childID) {
         if (
@@ -91,7 +93,7 @@ class ComponentsGraph {
     }
 
     increment_materialIndex(){
-        if (this.m_presses_count == 9007199254740992)
+        if (this.m_presses_count == 2**52)
             this.m_presses_count = 0
         else
             this.m_presses_count++
@@ -412,6 +414,8 @@ export class MySceneGraph {
     
         if (children.length < 1)
             return "At least one view is required"
+
+        this.defaultCameraId = this.reader.getString(viewsNode, 'default');    
 
         var views_ids = []
 

@@ -73,14 +73,13 @@ export class XMLscene extends CGFscene {
                     this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
                 }
 
-                this.lights[i].setVisible(true);
+                this.lights[i].setVisible(false);
                 if (light[0])
                     this.lights[i].enable();
                 else
                     this.lights[i].disable();
 
                 this.lights[i].update();
-
                 i++;
             }
         }
@@ -140,11 +139,11 @@ export class XMLscene extends CGFscene {
         for (var key in this.lightValues) {
             if (this.lightValues.hasOwnProperty(key)) {
                 if (this.lightValues[key]) {
-                    this.lights[i].setVisible(true);
+                    //this.lights[i].setVisible(true);
                     this.lights[i].enable();
                 }
                 else {
-                    this.lights[i].setVisible(false);
+                    //this.lights[i].setVisible(false);
                     this.lights[i].disable();
                 }
                 this.lights[i].update();

@@ -1,7 +1,7 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="defaultCamera">
+    <views >
         <perspective id="Camera1" near="0.1" far="500" angle="45">
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
@@ -14,7 +14,7 @@
             <from x="20" y="10" z="20" />
             <to x="0" y="-2" z="0" />
         </perspective>
-        <ortho id="CameraOrtho" near="0.1" far="500" left="500" right="0" top="500" bottom="0">
+        <ortho id="CameraOrtho" near="0.1" far="500" left="-50" right="50" top="50" bottom="-50">
             <from x="5" y="5" z="5" />
             <to x="0" y="-2" z="0" />
         </ortho>
@@ -77,6 +77,12 @@
             <diffuse r="0.65" g="0.90" b="1" a="1" />
             <specular r="0.55" g="0.55" b="1" a="0.9" />
         </material>
+        <material id="zero" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="0.0" />
+            <ambient r="0.0" g="0.0" b="0.0" a="0.0" />
+            <diffuse r="0.0" g="0.0" b="0" a="0" />
+            <specular r="0." g="0.0" b="0" a="0.0" />
+        </material>
     </materials>
 
     <transformations>    
@@ -121,7 +127,7 @@
                 <componentref id="compositeTerrainSet7"/>
                 <componentref id="compositeTerrainSet8"/>
                 <componentref id="oasis"/>
-                <componentref id="bigDune"/>
+                <!--componentref id="bigDune" -->
 
             </children>
         </component>
@@ -433,15 +439,16 @@
         </component> 
         <component id="bigCylinder">
             <transformation>
-                <scale x="13" y="1.2" z="40"/>
-                <translate x="0" y="0" z="-1"/>
+                <scale x="10" y="0.6" z="30"/>
+                <!-- scale x="13" y="1.2" z="40"-->
+                <!--translate x="0" y="0" z="-1"-->
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>                
-                <primitiveref id="Cylinder" />
+                <primitiveref id="Sphere" />
             </children>
         </component>
 
@@ -594,6 +601,7 @@
             </transformation>
             <materials>
                 <material id="inherit" />
+                <material id="zero" />
             </materials>
             <texture id="inherit"/>
             <children>                

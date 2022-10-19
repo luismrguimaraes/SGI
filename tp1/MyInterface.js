@@ -26,6 +26,7 @@ export class MyInterface extends CGFinterface {
 
         // add a group of controls (and open/expand by defult)
 
+        this.activeCameraName = ""
         this.initKeys();
 
         return true;
@@ -42,16 +43,16 @@ export class MyInterface extends CGFinterface {
 
     processKeyDown(event) {
         if (event.code == "KeyM"){
-            this.scene.graph.components_graph.increment_materialIndex()
             console.log("M pressed")
+            this.scene.graph.components_graph.increment_materialIndex()
         }
         if (event.code == "ArrowRight"){
-            this.camera_next()
             console.log("Right arrow pressed")
+            this.camera_next()
         }         
         if (event.code == "ArrowLeft"){
-            this.camera_previous()
             console.log("Left arrow pressed")
+            this.camera_previous()
         }  
         this.activeKeys[event.code]=true;
     };
@@ -67,41 +68,77 @@ export class MyInterface extends CGFinterface {
     camera_next(){
         if (this.camera_index +1 < this.scene.graph.cameras.length)
             this.camera_index++
-        else this.camera_index = 0
+        else return
 
         this.scene.camera = this.scene.graph.cameras[this.camera_index]
+        this.setActiveCamera(this.scene.camera)
+        this.activeCameraName = this.activeCamera.id
+
         this.scene.updateProjectionMatrix()
         this.scene.loadIdentity()
 
         this.scene.applyViewMatrix()
         
-        this.setActiveCamera(this.scene.camera)
+
+        console.log(this.activeCameraName)
+
     }
     camera_previous(){
         if (this.camera_index -1 >= 0)
             this.camera_index--
-        else this.camera_index = this.scene.graph.cameras.length -1
+        else return
 
         this.scene.camera = this.scene.graph.cameras[this.camera_index]
+        this.setActiveCamera(this.scene.camera)
+        this.activeCameraName = this.activeCamera.id
+
         this.scene.updateProjectionMatrix()
         this.scene.loadIdentity()
 
         this.scene.applyViewMatrix()
-        this.setActiveCamera(this.scene.camera)
+
+
+        console.log(this.activeCameraName)
+
     }
     
-    camera_method(){
-        console.log("yolo")
+    camera_method(value){
+        for (var i = 0; i < this.scene.graph.cameras.length; ++i)
+            if (this.scene.graph.cameras[i].id == value){
+                console.log(value)
+                this.scene.camera = this.scene.graph.cameras[i]
+                this.setActiveCamera(this.scene.camera)
+                this.activeCameraName = this.activeCamera.id
+
+                this.scene.updateProjectionMatrix()
+                this.scene.loadIdentity()
+
+                this.scene.applyViewMatrix()
+            }
     }
+
     create_views(){
         // Creates folder in Interface        
         console.log(this.scene.graph.cameras[0])
         var folder = this.scene.interface.gui.addFolder("Views");
-        for(let i = 0; i < this.scene.graph.cameras.length; i++)
-            folder.add(this.scene.graph.cameras[i], "near")
-            .name(this.scene.graph.cameras[i].id)
-            .onChange(this.camera_method.bind(this.scene))
-        
+
+        if (this.scene.graph.defaultCameraId != null)
+            this.activeCameraName = this.scene.graph.defaultCameraId
+        else 
+            this.activeCameraName = this.scene.graph.cameras[0].id
+
+        var itemNames = []
+        for (var i = 0; i < this.scene.graph.cameras.length; ++i)
+            itemNames.push(this.scene.graph.cameras[i].id)
+        this.gui.add(this, "activeCameraName", itemNames)
+            .name("Views:")
+            .onChange((value) => {
+                this.camera_method(value)
+            })
+
+                // do something with item
+                
+                //this.camera_method.bind(this))
         // Changes camera to the first one in the cameras array
         this.scene.camera = this.scene.graph.cameras[this.camera_index]
         this.scene.updateProjectionMatrix()
