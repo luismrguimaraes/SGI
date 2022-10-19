@@ -137,6 +137,7 @@ export class MyInterface extends CGFinterface {
         for (var i = 0; i < this.scene.graph.cameras.length; ++i){
             if (this.scene.graph.cameras[i].id == this.activeCameraName){
                 this.scene.camera = this.scene.graph.cameras[i]
+                this.camera_index = i
                 break
             }
         }

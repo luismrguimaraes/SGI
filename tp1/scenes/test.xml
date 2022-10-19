@@ -7,7 +7,7 @@
             <to x="0" y="-2" z="0" />
         </perspective>
         <perspective id="defaultCamera" near="0.1" far="500" angle="0.4">
-            <from x="15" y="15" z="15" />
+            <from x="110" y="20" z="110" />
             <to x="0" y="0" z="0" />
         </perspective>
         <perspective id="Camera2" near="0.1" far="500" angle="45">
@@ -39,7 +39,7 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </omni>
 		<omni id="light2" enabled="1">
-            <location x="20" y="10" z="50" w="1.0" />
+            <location x="-150" y="40" z="-150" w="1.0" />
             <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -49,10 +49,22 @@
     <textures>
         <texture id="trunk" file="scenes/images/trunk-image.jpg" />
         <texture id="leaves" file="scenes/images/leaves.jpg" />
-        <texture id="sand" file="scenes/images/sand.jpg" />
+        <texture id="sand" file="scenes/images/bank.jpg" />
+        <texture id="sphinx" file="scenes/images/sphinx_and_pyramids_scaled.jpeg" />
+        <texture id="dune" file="scenes/images/dune_scaled.jpg" />
+        <texture id="dune_flipped" file="scenes/images/dune_scaled_flipped.jpg" />
+        <texture id="water" file="scenes/images/water_scaled.png" />
+        <texture id="pyramid" file="scenes/images/pyramid_cropped.jpg" />
+
     </textures>
 
     <materials>
+        <material id="sand" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.1" b="0" a="1.0" />
+            <diffuse r="0.668" g="0.43" b="0.219" a="1.0" />
+            <specular r="0.7" g="0.45" b="0.0" a="1.0" />
+        </material>
         <material id="demoMaterial" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.2" g="0.1" b="0" a="1.0" />
@@ -71,17 +83,17 @@
             <diffuse r="0.33" g="0.55" b="0.0" a="1.0" />
             <specular r="0.65" g="0.65" b="0.0" a="0.7" />
         </material>
-        <material id="blue" shininess="10">
-            <emission r="0.0" g="0.0" b="0.01" a="1.0" />
+        <material id="blue" shininess="0">
+            <emission r="0.0" g="0.0" b="0.00" a="1.0" />
             <ambient r="0.05" g="0.04" b="0.3" a="1.0" />
             <diffuse r="0.65" g="0.90" b="1" a="1" />
             <specular r="0.55" g="0.55" b="1" a="0.9" />
         </material>
         <material id="zero" shininess="0">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
-            <diffuse r="0.0" g="0.0" b="0" a="1" />
-            <specular r="0.0" g="0.0" b="0" a="0.0" />
+            <emission r="1.0" g="1.0" b="1.0" a="0.0" />
+            <ambient r="1.0" g="1.0" b="1.0" a="0.0" />
+            <diffuse r="1.0" g="1.0" b="1" a="0.0" />
+            <specular r="1.0" g="1.0" b="1" a="0.0" />
         </material>
     </materials>
 
@@ -101,8 +113,8 @@
 		<primitive id="Torus">
             <torus inner="1" outer="2" slices="20" loops="10" />
         </primitive>
-        <primitive id="Triangle">
-            <triangle  x2="1" y2="0" z2="0" x3="0" y3="0" z3="1" x1="0" y1="0" z1="0"/>
+        <primitive id="pyramidWall">
+            <triangle x1="1" y1="0" z1="1" x2="0" y2="1" z2="0" x3="-1" y3="0" z3="1" />
         </primitive>
     </primitives>
 
@@ -111,13 +123,14 @@
             <transformation>
             </transformation>
             <materials>
+                <material id="sand" />
                 <material id="demoMaterial" />
                 <material id="demoMaterial_old" />
             </materials>
-            <texture id="none"/>
+            <texture id="sand"/>
             <children>
                 <componentref id="cactusSets"/>
-                <componentref id="compositeTerrainSet"/>
+                <componentref id="compositeTerrainSet"/> <!--center-->
                 <componentref id="compositeTerrainSet1"/>
                 <componentref id="compositeTerrainSet2"/>
                 <componentref id="compositeTerrainSet3"/>
@@ -127,10 +140,89 @@
                 <componentref id="compositeTerrainSet7"/>
                 <componentref id="compositeTerrainSet8"/>
                 <componentref id="oasis"/>
+                <componentref id="walls"/>
+                <componentref id="pyramid"/>
                 <!--componentref id="bigDune" -->
 
             </children>
         </component>
+
+        <component id="walls">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+                <material id="blue" />
+            </materials>
+            <texture id="none" length_s="2"/>
+            <children>
+                <componentref id="wall1"/>
+                <componentref id="wall2"/>
+                <componentref id="wall3"/>
+                <componentref id="wall4"/>
+            </children>
+        </component>
+
+        <component id="wall1">
+            <transformation>
+                <translate x="0" y="30" z="-250"/>
+                
+                <scale x="130" y="20" z="100"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="dune" length_s="2"/>
+            <children>
+                <primitiveref id="Rectangle"/>
+            </children>
+        </component>
+        <component id="wall2">
+            <transformation>
+                <rotate axis="y" angle="90"/>
+                <translate x="0" y="30" z="-250"/>
+                
+                <scale x="130" y="20" z="100"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="dune_flipped"/>
+            <children>
+                <primitiveref id="Rectangle"/>
+            </children>
+        </component>
+        <component id="wall3" length_s="1.5" length_t = "1.2">
+            <transformation>
+                <rotate axis="y" angle="180"/>
+                <translate x="0" y="30" z="-250"/>
+                
+                <scale x="130" y="20" z="100"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="dune"/>
+            <children>
+                <primitiveref id="Rectangle"/>
+            </children>
+        </component>
+        <component id="wall4">
+            <transformation>
+                <rotate axis="y" angle="270"/>
+                <translate x="0" y="30" z="-250"/>
+                
+                <scale x="130" y="20" z="100"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="dune_flipped"/>
+            <children>
+                <primitiveref id="Rectangle"/>
+            </children>
+        </component>
+
         <component id="oasis">
             <transformation>
                 <scale x="8" y="0.75" z="9.5"/>
@@ -139,7 +231,7 @@
                 <material id="blue" />
                 <material id="demoMaterial2" />
             </materials>
-            <texture id="none"/>
+            <texture id="water"/>
             <children>
                 <primitiveref id="Sphere"/>
             </children>
@@ -444,7 +536,7 @@
         </component> 
         <component id="bigSphere">
             <transformation>
-                <scale x="10" y="0.6" z="30"/>
+                <scale x="8" y="0.6" z="30"/>
                 <!-- scale x="13" y="1.2" z="40"-->
                 <!--translate x="0" y="0" z="-1"-->
             </transformation>
@@ -457,9 +549,61 @@
             </children>
         </component>
 
+        <component id="pyramid">
+            <transformation>
+                <translate x="-100" y="0" z="-70"/>
+                <scale x="40" y="45" z="40" />
+            </transformation>
+            <materials>
+                <material id="sand" />
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="pyramid" length_t="4"/>
+            <children>            
+                <primitiveref id="pyramidWall"/>
+                <componentref id="pyramidWall2"/>
+                <componentref id="pyramidWall3"/>
+                <componentref id="pyramidWall4"/>
 
+            </children>
+        </component>
 
-
+        <component id="pyramidWall2">
+            <transformation>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <primitiveref id="pyramidWall"/>
+            </children>
+        </component>
+        <component id="pyramidWall3">
+            <transformation>
+                <rotate axis="y" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <primitiveref id="pyramidWall"/>
+            </children>
+        </component><component id="pyramidWall4">
+            <transformation>
+                <rotate axis="y" angle="270"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <primitiveref id="pyramidWall"/>
+            </children>
+        </component>
+        
 
         <component id="cactusSets">
             <transformation>

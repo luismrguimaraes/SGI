@@ -1268,12 +1268,12 @@ export class MySceneGraph {
                     if (!(s != null && !isNaN(s))){
                         console.log("length_s is null")
                         s = 1
-                    }
+                    }else console.log("length_s not null")
                     t = this.reader.getFloat(child, 'length_t')
                     if (!(t != null && !isNaN(t))){                    
                         console.log("length_t is null")
                         t = 1
-                    }
+                    }else console.log("length_t is null")
                     componentObject["TextureID_s_t"] = [ID, s, t]
                 }
 
