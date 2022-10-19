@@ -1,4 +1,6 @@
 - Mountains (using cubes (using rectangles))
-- Oasis (spheres?)
 - Sky (clouds using cylinders and spheres at the extremities)
 - Skybox with mountains/pyramids?
+
+- Pyramid with triangles
+- Rectangle with sphinx texture

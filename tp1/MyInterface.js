@@ -118,10 +118,7 @@ export class MyInterface extends CGFinterface {
     }
 
     create_views(){
-        // Creates folder in Interface        
-        console.log(this.scene.graph.cameras[0])
-        var folder = this.scene.interface.gui.addFolder("Views");
-
+        //var folder = this.scene.interface.gui.addFolder("Views");
         if (this.scene.graph.defaultCameraId != null)
             this.activeCameraName = this.scene.graph.defaultCameraId
         else 
@@ -136,11 +133,13 @@ export class MyInterface extends CGFinterface {
                 this.camera_method(value)
             })
 
-                // do something with item
-                
-                //this.camera_method.bind(this))
-        // Changes camera to the first one in the cameras array
-        this.scene.camera = this.scene.graph.cameras[this.camera_index]
+        // Changes camera to the default
+        for (var i = 0; i < this.scene.graph.cameras.length; ++i){
+            if (this.scene.graph.cameras[i].id == this.activeCameraName){
+                this.scene.camera = this.scene.graph.cameras[i]
+                break
+            }
+        }
         this.scene.updateProjectionMatrix()
         this.scene.loadIdentity()
 
