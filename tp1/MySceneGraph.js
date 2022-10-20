@@ -835,22 +835,6 @@ export class MySceneGraph {
                             return "unable to parse alpha of the material for ID = " + materialID;
                         appearance.setSpecular(r,g,b,a)
                         break;
-
-					case 'attenuation':
-                        var constant = this.reader.getFloat(grandChildren[j], 'constant');
-                        if (!(constant != null && !isNaN(constant)))
-                            return "unable to parse constant of the material for ID = " + materialID;
-
-                        var linear = this.reader.getFloat(grandChildren[j], 'linear');
-                        if (!(linear != null && !isNaN(linear)))
-                            return "unable to parse linear of the material for ID = " + materialID;
-
-                        var quadratic = this.reader.getFloat(grandChildren[j], 'quadratic');
-                        if (!(quadratic != null && !isNaN(quadratic)))
-                            return "unable to parse quadratic of the material for ID = " + materialID;
-                            
-                        appearance.setAttenuation(constant,linear,quadratic)
-                        break;
                     
                     default:
                         return "unable to parse material component of the material for ID = " + materialID;
