@@ -584,7 +584,7 @@ export class MySceneGraph {
                 continue;
             }
             else {
-                attributeNames.push(...["location", "ambient", "diffuse", "specular"]);
+                attributeNames.push(...["location", "ambient", "diffuse", "specular", "attenuation"]);
                 attributeTypes.push(...["position", "color", "color", "color"]);
             }
 
@@ -600,10 +600,12 @@ export class MySceneGraph {
             // Light enable/disable
             var enableLight = true;
             var aux = this.reader.getBoolean(children[i], 'enabled');
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
-                this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))) {
+                this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = true'");
+				aux = true;
+			}
 
-            enableLight = aux || 1;
+            enableLight = aux;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
@@ -832,6 +834,22 @@ export class MySceneGraph {
                         if (!(a != null && !isNaN(a)))
                             return "unable to parse alpha of the material for ID = " + materialID;
                         appearance.setSpecular(r,g,b,a)
+                        break;
+
+					case 'attenuation':
+                        var constant = this.reader.getFloat(grandChildren[j], 'constant');
+                        if (!(constant != null && !isNaN(constant)))
+                            return "unable to parse constant of the material for ID = " + materialID;
+
+                        var linear = this.reader.getFloat(grandChildren[j], 'linear');
+                        if (!(linear != null && !isNaN(linear)))
+                            return "unable to parse linear of the material for ID = " + materialID;
+
+                        var quadratic = this.reader.getFloat(grandChildren[j], 'quadratic');
+                        if (!(quadratic != null && !isNaN(quadratic)))
+                            return "unable to parse quadratic of the material for ID = " + materialID;
+                            
+                        appearance.setAttenuation(constant,linear,quadratic)
                         break;
                     
                     default:
