@@ -24,4 +24,4 @@
 ----
 ## Issues/Problems
 
-- (items describing unimplemented features, bugs, problems, etc.)
+The engine is sometimes more flexible than what the sxs specification allows for.
