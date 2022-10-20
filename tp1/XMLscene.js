@@ -66,6 +66,7 @@ export class XMLscene extends CGFscene {
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
+				this.lights[i].setAttenuation(light[6][0], light[6][1], light[6][2]);
 
                 if (light[1] == "spot") {
                     this.lights[i].setSpotCutOff(light[6]);
@@ -89,6 +90,7 @@ export class XMLscene extends CGFscene {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
+		this.setAttenuation(1.0, 0.0, 0.0);
         this.setShininess(10.0);
     }
     /** Handler called when the graph is finally loaded. 
