@@ -12,8 +12,14 @@
 ## Project information
 
 - (items describing main strong points)
-- Scene
+- A **ComponentsGraph** data structure is created to store information about each node. After parsing the components, a check is done to verify that the graph is well defined.
+- The display of the scene graph is done recursively, using a depth-first traversal of the ComponentsGraph data structure.
+- Inheritance of transformations, materials and textures are guaranteed by using stacks. The scene's matrix stack is used in the case of transformations, and two stacks are created in the ComponentsGraph data structure to store materials and textures' ids (the actual objects stored in the scene graph are accessed when setting the appearance of the scene).
+
+- Desert
   - (Brief description of the created scene)
+  - The center of the scene is an oasis surrounded by cactuses (which are composed of a cylinder and toruses)
+  - Pyramids with different sizes can be seen as well
   - (relative link to the scene)
 ----
 ## Issues/Problems

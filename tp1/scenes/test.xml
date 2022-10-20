@@ -1,12 +1,12 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="defaultCamera">
-        <perspective id="Camera1" near="0.1" far="500" angle="45">
+    <views default="Camera2">
+        <perspective id="Camera0" near="0.1" far="500" angle="45">
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
-        <perspective id="defaultCamera" near="0.1" far="500" angle="0.4">
+        <perspective id="Camera1" near="0.1" far="500" angle="0.4">
             <from x="110" y="20" z="110" />
             <to x="0" y="0" z="0" />
         </perspective>
@@ -127,7 +127,7 @@
                 <material id="demoMaterial" />
                 <material id="demoMaterial_old" />
             </materials>
-            <texture id="sand"/>
+            <texture id="none"/>
             <children>
                 <componentref id="cactusSets"/>
                 <componentref id="compositeTerrainSet"/> <!--center-->
@@ -140,7 +140,7 @@
                 <componentref id="compositeTerrainSet7"/>
                 <componentref id="compositeTerrainSet8"/>
                 <componentref id="oasis"/>
-                <componentref id="walls"/>
+                <!--componentref id="walls"-->
                 <componentref id="pyramid"/>
                 <!--componentref id="bigDune" -->
 
@@ -231,7 +231,7 @@
                 <material id="blue" />
                 <material id="demoMaterial2" />
             </materials>
-            <texture id="water"/>
+            <texture id="none"/>
             <children>
                 <primitiveref id="Sphere"/>
             </children>
@@ -536,7 +536,7 @@
         </component> 
         <component id="bigSphere">
             <transformation>
-                <scale x="8" y="0.6" z="30"/>
+                <scale x="8.9" y="0.6" z="15"/>
                 <!-- scale x="13" y="1.2" z="40"-->
                 <!--translate x="0" y="0" z="-1"-->
             </transformation>
