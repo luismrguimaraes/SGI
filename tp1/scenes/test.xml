@@ -11,8 +11,8 @@
             <to x="0" y="0" z="0" />
         </perspective>
         <perspective id="Camera2" near="0.1" far="500" angle="45">
-            <from x="20" y="6" z="20" />
-            <to x="0" y="-2" z="0" />
+            <from x="20" y="50" z="20" />
+            <to x="-20" y="50" z="-20" />
         </perspective>
         <ortho id="CameraOrtho" near="0.1" far="500" left="-50" right="50" top="50" bottom="-50">
             <from x="5" y="5" z="5" />
@@ -30,9 +30,9 @@
     </ambient>
 
     <lights>
-        <spot id="light0" enabled="1" angle="30" exponent="16">
-            <target x="-40" y="0" z="-40" />
-            <location x="0" y="60" z="0" w="1.0" />
+        <spot id="Unidentified" enabled="1" angle="30" exponent="16">
+            <target x="-20" y="0" z="-20" />
+            <location x="0" y="0" z="0" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
@@ -64,7 +64,7 @@
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
-			<attenuation constant="0.0" linear="0.5" quadratic="0.0"/>
+			<attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
         </omni>
     </lights>
 
@@ -79,6 +79,8 @@
         <texture id="pyramid" file="scenes/images/pyramid_cropped.jpg" />
         <texture id="mountain" file="scenes/images/montain.jpg" />
         <texture id="cloud" file="scenes/images/cloud_cropped.jpg" />
+        <texture id="spacetech" file="scenes/images/spacetech_cropped.jpg" />
+        <texture id="weird" file="scenes/images/weird_alien_picture_cropped.jpeg" />
         
 
     </textures>
@@ -103,9 +105,9 @@
             <specular r="1" g="0.65" b="0.0" a="1.0" />
         </material>
         <material id="demoMaterial2" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <emission r="0.0" g="0.3" b="0.3" a="0.3" />
             <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
-            <diffuse r="0.33" g="0.55" b="0.0" a="1.0" />
+            <diffuse r="0.33" g="0.55" b="0.0" a="0" />
             <specular r="0.65" g="0.65" b="0.0" a="0.7" />
         </material>
         <material id="blue" shininess="0">
@@ -115,9 +117,15 @@
             <specular r="0.35" g="0.55" b="1" a="0.9" />
         </material>
         <material id="zero" shininess="10">
-            <emission r="0" g="0" b="0" a="0.0" />
+            <emission r="0" g="0.3" b="0.2" a="0.2" />
             <ambient r="0" g="0" b="0" a="0.0" />
             <diffuse r="0.7" g="0.7" b="0.7" a="0.4" />
+            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
+        </material>
+        <material id="soft_green" shininess="10">
+            <emission r="0" g="0.8" b="0.7" a="1" />
+            <ambient r="0" g="0.2" b="0" a="1" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="0.7" />
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
         </material>
     </materials>
@@ -136,7 +144,7 @@
             <cylinder height="2" base="1" top="1" stacks="40" slices="40" />
         </primitive>
 		<primitive id="Torus">
-            <torus inner="1" outer="2" slices="20" loops="10" />
+            <torus inner="0.2" outer="2" slices="30" loops="30" />
         </primitive>
         <primitive id="PyramidWall">
             <triangle x1="1" y1="0" z1="1" x2="0" y2="1" z2="0" x3="-1" y3="0" z3="1" />
@@ -154,15 +162,13 @@
             </materials>
             <texture id="none" length_s="1" length_t="1"/>
             <children>
-                <componentref id="cactusSets"/>
                 <componentref id="bigCompositeTerrainSet"/>
-                <componentref id="oasis"/>
-
                 <componentref id="walls"/>
-                <componentref id="bigPyramid"/>
-                <componentref id="smallPyramid"/>
-                <componentref id="smallerPyramid"/>
-                <componentref id="cloud"/>
+
+                <componentref id="oasis_and_cactusSets"/>
+
+                <componentref id="pyramidSet"/>
+                <componentref id="spaceship"/>
 
             </children>
         </component>
@@ -242,20 +248,52 @@
             </children>
         </component>
 
-        <component id="oasis">
+
+        <component id="spaceship">
             <transformation>
-                <scale x="8" y="0.75" z="9.5"/>
+                <translate x="-99" y="100" z="20"/>
             </transformation>
             <materials>
+                <material id="zero" />
                 <material id="blue" />
-                <material id="demoMaterial2" />
             </materials>
-            <texture id="none"/>
+            <texture id="cloud" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="cockpit"/>
+                <componentref id="base"/>
+            </children>
+        </component>
+        <component id="cockpit">
+            <transformation>
+                <translate x="0" y="17" z="0"/>
+                <scale x="12" y="15.5" z="12"/>
+            </transformation>
+            <materials>
+                <material id="soft_green" />
+                <material id="zero" />
+            </materials>
+            <texture id="weird" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="Sphere"/>
             </children>
         </component>
-                <component id="cloud">
+        <component id="base">
+            <transformation>
+                <rotate axis="x" angle="90"/>
+                <scale x="50" y="50" z="9"/>
+            </transformation>
+            <materials>
+                <material id="zero" />
+                <material id="demoMaterial2" />
+            </materials>
+            <texture id="cloud" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Torus"/>
+            </children>
+        </component>
+
+
+        <component id="cloud">
             <transformation>
                 <translate x="-310" y="150" z="20"/>
                 <rotate angle="45" axis="z"/>
@@ -270,363 +308,59 @@
                 <primitiveref id="Sphere"/>
             </children>
         </component>
-
-
-        <component id="bigCompositeTerrainSet1"> 
-            <transformation> 
-                <translate x="-410" y="0" z="0"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="bigCompositeTerrainSet"/>
-            </children>
-        </component>   
-        <component id="bigCompositeTerrainSet2"> 
-            <transformation> 
-                <translate x="0" y="0" z="-410"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="bigCompositeTerrainSet"/>
-            </children>
-        </component>   
-
-        <component id="bigCompositeTerrainSet">
-            <transformation> 
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/> <!--center-->
-                <componentref id="compositeTerrainSet1"/>
-                <componentref id="compositeTerrainSet2"/>
-                <componentref id="compositeTerrainSet3"/>
-                <componentref id="compositeTerrainSet4"/>
-                <componentref id="compositeTerrainSet5"/>
-                <componentref id="compositeTerrainSet6"/>
-                <componentref id="compositeTerrainSet7"/>
-                <componentref id="compositeTerrainSet8"/>
-            </children>
-        </component>        
-
-        <component id="compositeTerrainSet1">
+        
+        <component id="oasis_and_cactusSets">
             <transformation>
-                <translate x="130" y="0" z="-130"/>  
+                <translate x="50" y="0" z="30"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-        <component id="compositeTerrainSet2">
-            <transformation>
-                <translate x="130" y="0" z="130"/>  
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-        <component id="compositeTerrainSet3">
-            <transformation>
-                <translate x="-130" y="0" z="-130"/>  
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-        <component id="compositeTerrainSet4">
-            <transformation>
-                <translate x="-130" y="0" z="130"/>  
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-        <component id="compositeTerrainSet5">
-            <transformation>
-                <translate x="0" y="0" z="130"/>  
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-        <component id="compositeTerrainSet6">
-            <transformation>
-                <translate x="0" y="0" z="-130"/>  
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-        <component id="compositeTerrainSet7">
-            <transformation>
-                <translate x="130" y="0" z="0"/>  
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-        <component id="compositeTerrainSet8">
-            <transformation>
-                <translate x="-130" y="0" z="0"/>  
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrainSet"/>
-            </children>
-        </component>
-
-        <component id="compositeTerrainSet">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>
-                <componentref id="compositeTerrain1"/>
-                <componentref id="compositeTerrain2"/>
-                <componentref id="compositeTerrain3"/>
-                <componentref id="compositeTerrain4"/>
-            </children>
-        </component>
-        <component id="compositeTerrain1"> 
-            <transformation>
-                <translate x="35" y="0" z="-35"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
+            <texture id="none"/>
             <children>            
-                <componentref id="compositeTerrain"/>
+                <componentref id="oasis"/>
+                <componentref id="cactusSets"/>
             </children>
         </component>
-        <component id="compositeTerrain2"> 
+        <component id="oasis">
             <transformation>
-                <translate x="-35" y="0" z="35"/>
-                <rotate axis="y" angle="90"/>
+                <scale x="8" y="0.75" z="9.5"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="blue" />
+                <material id="demoMaterial2" />
             </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="compositeTerrain"/>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="Sphere"/>
             </children>
         </component>
-        <component id="compositeTerrain3"> 
-            <transformation>
-                <translate x="35" y="0" z="35"/>
-                <rotate axis="y" angle="-90"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="compositeTerrain"/>
-            </children>
-        </component>
-        <component id="compositeTerrain4"> 
-            <transformation>
-                <translate x="-35" y="0" z="-35"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="compositeTerrain"/>
-            </children>
-        </component>
-        <component id="compositeTerrain">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="terrain1"/>
-                <componentref id="terrain2"/>
-                <componentref id="terrain3"/>
-                <componentref id="terrain4"/>
-            </children>
-        </component>
-        <component id="terrain1"> 
-            <transformation>
-                <translate x="20" y="0" z="-20"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="terrain"/>
-            </children>
-        </component>
-        <component id="terrain2"> 
-            <transformation>
-                <translate x="-20" y="0" z="20"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="terrain"/>
-            </children>
-        </component>
-        <component id="terrain3"> 
-            <transformation>
-                <translate x="20" y="0" z="20"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="terrain"/>
-            </children>
-        </component>
-        <component id="terrain4"> 
-            <transformation>
-                <translate x="-20" y="0" z="-20"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="terrain"/>
-            </children>
-        </component>
-        <component id="terrain"> 
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>            
-                <componentref id="bigSphere1"/>                
-                <componentref id="bigSphere2"/>                
-                <componentref id="bigSphere3"/>                
-            </children>
-        </component> 
+        
 
-
-
-
-
-
-        <component id="bigSphere1"> 
+        <component id="pyramidSet">
             <transformation>
-                <translate x="0" y="0" z="10" />
-                <rotate axis="y" angle="33"/>
+                <translate x="30" y="0" z="10"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="sand" />
+                <material id="demoMaterial" />
             </materials>
-            <texture id="inherit"/>
-            <children>                
-                <componentref id="bigSphere" />
-            </children>
-        </component>  
-        <component id="bigSphere2"> 
-            <transformation>
-                <rotate axis="y" angle="80"/>
-                <translate x="0" y="0" z="12.5" />
-                <rotate axis="y" angle="33"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>                
-                <componentref id="bigSphere" />
-            </children>
-        </component>  
-        <component id="bigSphere3"> 
-            <transformation>
-                <rotate axis="y" angle="201"/>
-                <translate x="0" y="0" z="13" />
-                <rotate axis="y" angle="112"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>                
-                <componentref id="bigSphere" />
-            </children>
-        </component> 
-        <component id="bigSphere">
-            <transformation>
-                <scale x="8.9" y="0.6" z="15"/>
-                <!-- scale x="13" y="1.2" z="40"-->
-                <!--translate x="0" y="0" z="-1"-->
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit"/>
-            <children>                
-                <primitiveref id="Sphere" />
+            <texture id="mountain"/>
+            <children>            
+                <componentref id="bigPyramid"/>
+                <componentref id="smallPyramid"/>
+                <componentref id="smallerPyramid"/>
             </children>
         </component>
-
-
-
         <component id="bigPyramid">
             <transformation>
                 <translate x="-100" y="0" z="-70"/>
                 <scale x="40" y="45" z="40" />
             </transformation>
             <materials>
-                <material id="sand" />
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="pyramid"/>
             </children>
@@ -637,10 +371,9 @@
                 <scale x="20" y="24" z="20" />
             </transformation>
             <materials>
-                <material id="sand" />
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="pyramid"/>
             </children>
@@ -651,10 +384,9 @@
                 <scale x="10" y="11.5" z="10" />
             </transformation>
             <materials>
-                <material id="sand" />
-                <material id="demoMaterial" />
+                <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>            
                 <componentref id="pyramid"/>
             </children>
@@ -663,10 +395,9 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="sand" />
-                <material id="demoMaterial" />
+                <material id="inherit"/>
             </materials>
-            <texture id="inherit" length_t="4"/>
+            <texture id="inherit"/>
             <children>            
                 <primitiveref id="PyramidWall"/>
                 <componentref id="pyramidWall2"/>
@@ -957,6 +688,344 @@
             <texture id="trunk" length_s="1" length_t="1"/>
             <children>                
                 <primitiveref id="Cylinder"/>
+            </children>
+        </component>
+
+
+        <component id="bigCompositeTerrainSet1"> 
+            <transformation> 
+                <translate x="-410" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="bigCompositeTerrainSet"/>
+            </children>
+        </component>   
+        <component id="bigCompositeTerrainSet2"> 
+            <transformation> 
+                <translate x="0" y="0" z="-410"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="bigCompositeTerrainSet"/>
+            </children>
+        </component>   
+
+        <component id="bigCompositeTerrainSet">
+            <transformation> 
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/> <!--center-->
+                <componentref id="compositeTerrainSet1"/>
+                <componentref id="compositeTerrainSet2"/>
+                <componentref id="compositeTerrainSet3"/>
+                <componentref id="compositeTerrainSet4"/>
+                <componentref id="compositeTerrainSet5"/>
+                <componentref id="compositeTerrainSet6"/>
+                <componentref id="compositeTerrainSet7"/>
+                <componentref id="compositeTerrainSet8"/>
+            </children>
+        </component>        
+
+        <component id="compositeTerrainSet1">
+            <transformation>
+                <translate x="130" y="0" z="-130"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+        <component id="compositeTerrainSet2">
+            <transformation>
+                <translate x="130" y="0" z="130"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+        <component id="compositeTerrainSet3">
+            <transformation>
+                <translate x="-130" y="0" z="-130"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+        <component id="compositeTerrainSet4">
+            <transformation>
+                <translate x="-130" y="0" z="130"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+        <component id="compositeTerrainSet5">
+            <transformation>
+                <translate x="0" y="0" z="130"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+        <component id="compositeTerrainSet6">
+            <transformation>
+                <translate x="0" y="0" z="-130"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+        <component id="compositeTerrainSet7">
+            <transformation>
+                <translate x="130" y="0" z="0"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+        <component id="compositeTerrainSet8">
+            <transformation>
+                <translate x="-130" y="0" z="0"/>  
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrainSet"/>
+            </children>
+        </component>
+
+        <component id="compositeTerrainSet">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="compositeTerrain1"/>
+                <componentref id="compositeTerrain2"/>
+                <componentref id="compositeTerrain3"/>
+                <componentref id="compositeTerrain4"/>
+            </children>
+        </component>
+        <component id="compositeTerrain1"> 
+            <transformation>
+                <translate x="35" y="0" z="-35"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="compositeTerrain"/>
+            </children>
+        </component>
+        <component id="compositeTerrain2"> 
+            <transformation>
+                <translate x="-35" y="0" z="35"/>
+                <rotate axis="y" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="compositeTerrain"/>
+            </children>
+        </component>
+        <component id="compositeTerrain3"> 
+            <transformation>
+                <translate x="35" y="0" z="35"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="compositeTerrain"/>
+            </children>
+        </component>
+        <component id="compositeTerrain4"> 
+            <transformation>
+                <translate x="-35" y="0" z="-35"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="compositeTerrain"/>
+            </children>
+        </component>
+        <component id="compositeTerrain">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="terrain1"/>
+                <componentref id="terrain2"/>
+                <componentref id="terrain3"/>
+                <componentref id="terrain4"/>
+            </children>
+        </component>
+        <component id="terrain1"> 
+            <transformation>
+                <translate x="20" y="0" z="-20"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="terrain"/>
+            </children>
+        </component>
+        <component id="terrain2"> 
+            <transformation>
+                <translate x="-20" y="0" z="20"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="terrain"/>
+            </children>
+        </component>
+        <component id="terrain3"> 
+            <transformation>
+                <translate x="20" y="0" z="20"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="terrain"/>
+            </children>
+        </component>
+        <component id="terrain4"> 
+            <transformation>
+                <translate x="-20" y="0" z="-20"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="terrain"/>
+            </children>
+        </component>
+        <component id="terrain"> 
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>            
+                <componentref id="bigSphere1"/>                
+                <componentref id="bigSphere2"/>                
+                <componentref id="bigSphere3"/>                
+            </children>
+        </component> 
+        <component id="bigSphere1"> 
+            <transformation>
+                <translate x="0" y="0" z="10" />
+                <rotate axis="y" angle="33"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>                
+                <componentref id="bigSphere" />
+            </children>
+        </component>  
+        <component id="bigSphere2"> 
+            <transformation>
+                <rotate axis="y" angle="80"/>
+                <translate x="0" y="0" z="12.5" />
+                <rotate axis="y" angle="33"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>                
+                <componentref id="bigSphere" />
+            </children>
+        </component>  
+        <component id="bigSphere3"> 
+            <transformation>
+                <rotate axis="y" angle="201"/>
+                <translate x="0" y="0" z="13" />
+                <rotate axis="y" angle="112"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>                
+                <componentref id="bigSphere" />
+            </children>
+        </component> 
+        <component id="bigSphere">
+            <transformation>
+                <scale x="8.9" y="0.6" z="15"/>
+                <!-- scale x="13" y="1.2" z="40"-->
+                <!--translate x="0" y="0" z="-1"-->
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>                
+                <primitiveref id="Sphere" />
             </children>
         </component>
     </components>
