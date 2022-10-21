@@ -24,4 +24,6 @@
 ----
 ## Issues/Problems
 
-The engine is sometimes more flexible than what the sxs specification allows for.
+- The engine is sometimes more flexible than what the sxs specification allows for. 
+- Spotlights don't seem to be working properly.
+- Some perspective cameras appeared upside down when testing other scenes. We were not able to conclude whether this was due to a mis-configuration of the scene or a bug in our engine.

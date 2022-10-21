@@ -165,6 +165,7 @@ class ComponentsGraph {
             }
 
 
+            this.appearance.setTextureWrap("REPEAT", "REPEAT")
             this.pushTexture();
             if (this.nodes[currentNode]["TextureID_s_t"][0] != "inherit"){
                 this.textureID_s_t = this.nodes[currentNode]["TextureID_s_t"]
@@ -174,7 +175,6 @@ class ComponentsGraph {
                 }else
                     this.appearance.setTexture(this.scene.graph.textures[this.textureID_s_t[0]])
             }
-            this.appearance.setTextureWrap("Repeat", "Repeat")
             this.appearance.apply()
 
             this.scene.pushMatrix();
