@@ -584,7 +584,7 @@ export class MySceneGraph {
                 continue;
             }
             else {
-                attributeNames.push(...["location", "ambient", "diffuse", "specular", "attenuation"]);
+                attributeNames.push(...["location", "ambient", "diffuse", "specular"]);
                 attributeTypes.push(...["position", "color", "color", "color"]);
             }
 
@@ -623,13 +623,16 @@ export class MySceneGraph {
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
 
                 if (attributeIndex != -1) {
-                    if (attributeTypes[j] == "position")
+                    if (attributeTypes[j] == "position") {
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
-                    else
+                    }
+					else {
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
 
-                    if (!Array.isArray(aux))
+					}
+                    if (!Array.isArray(aux)) {
                         return aux;
+					}
 
                     global.push(aux);
                 }
@@ -647,9 +650,8 @@ export class MySceneGraph {
                 if (!(exponent != null && !isNaN(exponent)))
                     return "unable to parse exponent of the light for ID = " + lightId;
 
-                var targetIndex = nodeNames.indexOf("target");
-
                 // Retrieves the light target.
+                var targetIndex = nodeNames.indexOf("target");
                 var targetLight = [];
                 if (targetIndex != -1) {
                     var aux = this.parseCoordinates3D(grandChildren[targetIndex], "target light for ID " + lightId);
@@ -661,7 +663,40 @@ export class MySceneGraph {
                 else
                     return "light target undefined for ID = " + lightId;
 
-                global.push(...[angle, exponent, targetLight])
+				// Retrieves the light attenuation.
+				var attenuationIndex = nodeNames.indexOf("attenuation");
+                var attenuationLight = [];
+                if (attenuationIndex != -1) {
+                    var aux = this.parseAttenuation(grandChildren[attenuationIndex], "attenuation light for ID " + lightId);
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    attenuationLight = aux;
+                }
+                else
+                    return "light attenuation undefined for ID = " + lightId;
+
+				global.push(...[angle, exponent, targetLight, attenuationLight])
+
+            }
+
+			// Gets the additional attributes of the omni light
+            if (children[i].nodeName == "omni") {
+                // Retrieves the light attenuation.
+				var attenuationIndex = nodeNames.indexOf("attenuation");
+                var attenuationLight = [];
+                if (attenuationIndex != -1) {
+                    var aux = this.parseAttenuation(grandChildren[attenuationIndex], "attenuation light for ID " + lightId);
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    attenuationLight = aux;
+                }
+                else
+                    return "light attenuation undefined for ID = " + lightId;
+
+				global.push(...[attenuationLight])
+
             }
 
             this.lights[lightId] = global;
@@ -1345,6 +1380,34 @@ export class MySceneGraph {
         position.push(...[x, y, z]);
 
         return position;
+    }
+
+	/**
+     * Parse the attenuation from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
+    parseAttenuation(node, messageError) {
+        var attenuation = [];
+
+        // constant
+        var constant = this.reader.getFloat(node, 'constant');
+        if (!(constant != null && !isNaN(constant)))
+            return "unable to parse constant of the " + messageError;
+
+        // linear
+        var linear = this.reader.getFloat(node, 'linear');
+        if (!(linear != null && !isNaN(linear)))
+            return "unable to parse linear of the " + messageError;
+
+        // quadratic
+        var quadratic = this.reader.getFloat(node, 'quadratic');
+        if (!(quadratic != null && !isNaN(quadratic)))
+            return "unable to parse quadratic-coordinate of the " + messageError;
+
+        attenuation.push(...[constant, linear, quadratic]);
+
+        return attenuation;
     }
 
     /**

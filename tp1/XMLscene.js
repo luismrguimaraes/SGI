@@ -61,18 +61,29 @@ export class XMLscene extends CGFscene {
 
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
+console.log(light);
 
                 this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
-				this.lights[i].setAttenuation(light[6][0], light[6][1], light[6][2]);
+				//this.lights[i].setConstantAttenuation(light[6][0], light[6][1], light[6][2]);
+				//this.lights[i].setLinearAttenuation(light[6][0], light[6][1], light[6][2]);
+				//this.lights[i].setQuadraticAttenuation(light[6][0], light[6][1], light[6][2]);
 
                 if (light[1] == "spot") {
                     this.lights[i].setSpotCutOff(light[6]);
                     this.lights[i].setSpotExponent(light[7]);
                     this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
+					this.lights[i].setConstantAttenuation(light[9][0]);
+					this.lights[i].setLinearAttenuation(light[9][1])
+					this.lights[i].setQuadraticAttenuation(light[9][2]);
                 }
+				else {
+					this.lights[i].setConstantAttenuation(light[6][0]);
+					this.lights[i].setLinearAttenuation(light[6][1])
+					this.lights[i].setQuadraticAttenuation(light[6][2]);
+				}
 
                 this.lights[i].setVisible(false);
                 if (light[0])
@@ -90,7 +101,6 @@ export class XMLscene extends CGFscene {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
-		this.setAttenuation(1.0, 0.0, 0.0);
         this.setShininess(10.0);
     }
     /** Handler called when the graph is finally loaded. 
