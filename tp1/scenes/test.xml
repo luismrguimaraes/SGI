@@ -1,29 +1,27 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="Camera2">
+    <views default="CameraOrtho2">
         <perspective id="Camera0" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+            <from x="30" y="12" z="50" />
+            <to x="190" y="4" z="40" />
         </perspective>
         <perspective id="Camera1" near="0.1" far="500" angle="0.4">
-            <from x="110" y="20" z="110" />
-            <to x="0" y="0" z="0" />
-        </perspective>
-        <perspective id="Camera2" near="0.1" far="500" angle="45">
-            <from x="50" y="100" z="50" />
-            <to x="-20" y="50" z="-20" />
+            <from x="140" y="25" z="140" />
+            <to x="0" y="6.8" z="0" />
         </perspective>
         <ortho id="CameraOrtho" near="0.1" far="500" left="-50" right="50" top="50" bottom="-50">
             <from x="5" y="5" z="5" />
-            <to x="0" y="-2" z="0" />
+            <to x="0" y="0" z="0" />
+        </ortho>
+        <ortho id="CameraOrtho2" left="-5" right="5" near="-5" far="5" bottom="-5" top="5">
+            <from x="-5" y="0" z="-5" />
+            <to x="0" y="0" z="0" />
         </ortho>
     </views>
 
     <ambient>
         <ambient r="0.25" g="0.2" b="0.2" a="1.0" />
-        rgba(140, 225, 255, 1)
-        rgba(107, 192, 251, 1) (darker)
         <background r="0.546875" g="0.87890625" b="1" a="1" />
         <!--background r="0.41796875" g="0.75" b="0.98046875" a="1" /-->
 
@@ -33,9 +31,9 @@
         <spot id="Unidentified" enabled="1" angle="13" exponent="16">
             <target x="-20" y="10" z="-20" />
             <location x="20" y="30" z="20" w="1.0" />
-            <ambient r="0" g="0.2" b="0" a="1.0" />
-            <diffuse r="0.7" g="1.0" b="0.7" a="1.0" />
-            <specular r="0.7" g="1.0" b="0.7" a="1.0" />
+            <ambient r="0" g="0.3" b="0" a="1.0" />
+            <diffuse r="0" g="1.0" b="0" a="1.0" />
+            <specular r="0" g="1.0" b="0" a="1.0" />
 			<attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
         </spot>
 		<omni id="light1" enabled="1">
@@ -76,7 +74,7 @@
         <texture id="dune" file="scenes/images/dune_scaled.jpg" />
         <texture id="dune_flipped" file="scenes/images/dune_scaled_flipped.jpg" />
         <texture id="water" file="scenes/images/water_scaled.png" />
-        <texture id="pyramid" file="scenes/images/pyramid_cropped.jpg" />
+        <texture id="pyramid" file="scenes/images/pyramid2_cropped.jpg" />
         <texture id="mountain" file="scenes/images/montain.jpg" />
         <texture id="cloud" file="scenes/images/cloud_cropped.jpg" />
         <texture id="spacetech" file="scenes/images/spacetech_cropped.jpg" />
@@ -87,30 +85,30 @@
 
     <materials>
         <material id="sand" shininess="10">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.2" g="0.1" b="0" a="1.0" />
-            <diffuse r="0.668" g="0.43" b="0.219" a="1.0" />
-            <specular r="0.7" g="0.45" b="0.0" a="1.0" />
+            <emission r="0.1" g="0.05" b="0.0" a="1.0" />
+            <ambient r="0.5" g="0.2" b="0" a="1.0" />
+            <diffuse r="0.968" g="0.43" b="0.219" a="1.0" />
+            <specular r="0.9" g="0.45" b="0.0" a="1.0" />
         </material>
         <material id="pyramid" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.2" g="0.1" b="0" a="1.0" />
-            <diffuse r="0.568" g="0.33" b="0.119" a="1.0" />
-            <specular r="0.4" g="0.35" b="0.0" a="0.5" />
+            <diffuse r="0.668" g="0.43" b="0.219" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="0.5" />
         </material>
-        <material id="demoMaterial" shininess="10">
+        <material id="sand2" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.2" g="0.1" b="0" a="1.0" />
             <diffuse r="0.94" g="0.9" b="0.56" a="1.0" />
             <specular r="1" g="0.65" b="0.0" a="1.0" />
         </material>
-        <material id="demoMaterial_old" shininess="10">
+        <material id="sand_blue" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
             <diffuse r="0.8" g="0.65" b="0.0" a="1.0" />
             <specular r="1" g="0.65" b="0.0" a="1.0" />
         </material>
-        <material id="demoMaterial2" shininess="10">
+        <material id="light_blue" shininess="10">
             <emission r="0.0" g="0.3" b="0.3" a="0.3" />
             <ambient r="0.2" g="0.4" b="0.8" a="1.0" />
             <diffuse r="0.33" g="0.55" b="0.0" a="0" />
@@ -169,7 +167,9 @@
             </transformation>
             <materials>
                 <material id="sand" />
-                <material id="demoMaterial" />
+                <material id="sand2" />
+                <material id="sand_blue" />
+
             </materials>
             <texture id="none" length_s="1" length_t="1"/>
             <children>
@@ -228,7 +228,7 @@
                 <primitiveref id="Rectangle"/>
             </children>
         </component>
-        <component id="wall3" length_s="1.5" length_t = "1.2">
+        <component id="wall3">
             <transformation>
                 <rotate axis="y" angle="180"/>
                 <translate x="0" y="38" z="-210"/>
@@ -299,7 +299,7 @@
             <materials>
                 <material id="grey" />
                 <material id="zero" />
-                <material id="demoMaterial2" />
+                <material id="light_blue" />
             </materials>
             <texture id="spacetech" length_s="1" length_t="1"/>
             <children>
@@ -316,7 +316,7 @@
             </transformation>
             <materials>
                 <material id="zero" />
-                <material id="demoMaterial2" />
+                <material id="light_blue" />
             </materials>
             <texture id="cloud" length_s="1" length_t="1"/>
             <children>
@@ -342,8 +342,8 @@
                 <scale x="8" y="0.75" z="9.5"/>
             </transformation>
             <materials>
+                <material id="light_blue" />
                 <material id="blue" />
-                <material id="demoMaterial2" />
             </materials>
             <texture id="none"/>
             <children>
@@ -360,7 +360,7 @@
                 <material id="pyramid" />
                 <material id="sand" />
             </materials>
-            <texture id="sand" length_s="2" length_t="2"/>
+            <texture id="pyramid" length_s="2" length_t="2"/>
             <children>            
                 <componentref id="bigPyramid"/>
                 <componentref id="smallPyramid"/>
@@ -462,8 +462,8 @@
             <transformation>
             </transformation>
             <materials>
-                <material id="demoMaterial2" />
-                <material id="demoMaterial_old" />
+                <material id="light_blue" />
+                <material id="sand_blue" />
             </materials>
             <texture id="none" length_t="4"/>
             <children>            
@@ -475,7 +475,7 @@
         </component>
         <component id="cactusSet1">
             <transformation>
-                <translate x="20" y="0" z="0"/>
+                <translate x="15" y="0" z="0"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -487,7 +487,7 @@
         </component>
         <component id="cactusSet2">
             <transformation>
-                <translate x="15" y="0" z="17"/>
+                <translate x="12" y="0" z="14"/>
                 <rotate axis="y" angle="57"/>
             </transformation>
             <materials>
@@ -500,7 +500,7 @@
         </component>
         <component id="cactusSet3">
             <transformation>
-                <translate x="0" y="0" z="-27"/>
+                <translate x="0" y="0" z="-18"/>
                 <rotate axis="y" angle="-57"/>
             </transformation>
             <materials>
@@ -513,7 +513,7 @@
         </component>
         <component id="cactusSet4">
             <transformation>
-                <translate x="-22" y="0" z="-13"/>
+                <translate x="-18" y="0" z="-9"/>
                 <rotate axis="y" angle="167"/>
             </transformation>
             <materials>

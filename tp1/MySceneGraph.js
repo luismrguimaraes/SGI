@@ -497,7 +497,6 @@ export class MySceneGraph {
 
                     if (grandChildren[j].nodeName == "from"){
                         from = vec3.fromValues(x,y,z)
-
                     }else if (grandChildren[j].nodeName == "to"){
                         to = vec3.fromValues(x,y,z)
                     }else if (grandChildren[j].nodeName == "up"){
