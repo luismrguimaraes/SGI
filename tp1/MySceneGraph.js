@@ -18,12 +18,6 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
-/* ToDo:
-    Change logic of material and texture objects to ids, and get 
-    a single this.appearance for the graph, that is constantly
-    changing
-*/
-
 class ComponentsGraph {
     constructor(scene) {
         this.children = {}; // stores parent-child relationships via ID
@@ -36,7 +30,7 @@ class ComponentsGraph {
         for (let m in this.scene.graph.materials) {
             this.materialIDs.push(m)
         }
-        this.m_presses_count = 0  // this is expected to only increase and eventually overflow
+        this.m_presses_count = 0
 
         this.texture_id_s_t_stack = []
         this.textureID_s_t = ["none", 1, 1]
@@ -93,7 +87,7 @@ class ComponentsGraph {
     }
 
     increment_materialIndex(){
-        if (this.m_presses_count == 2**52)
+        if (this.m_presses_count == 2**52) // overflow control
             this.m_presses_count = 0
         else
             this.m_presses_count++
@@ -163,7 +157,6 @@ class ComponentsGraph {
                     console.log(this.appearance)
                 }
             }
-
 
             this.appearance.setTextureWrap("REPEAT", "REPEAT")
             this.pushTexture();
@@ -1499,8 +1492,6 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
-
         this.components_graph.display(this.idRoot);
 
 
