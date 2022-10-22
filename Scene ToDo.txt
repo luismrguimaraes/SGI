@@ -1,11 +1,4 @@
 - Mountains (using cubes (using rectangles))?
 - Skybox with mountains/pyramids?
 - Sky (clouds using cylinders and spheres at the extremities)?
-
-- Pyramid with triangles (and textures); Spotlight pointing to pyramids
-- Rectangle with sphinx texture
-
-Cameras:
-- 1 focusing to the pyramids
-- 1 focusing on the Oasis
-- 
+- Rectangle with sphinx texture?
