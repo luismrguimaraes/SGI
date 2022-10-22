@@ -1,8 +1,9 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFcamera, CGFcameraOrtho, CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 import { MyTriangle } from './primitives/MyTriangle.js';
 import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyTorus } from './primitives/MyTorus.js';
+import { MySphere } from './primitives/MySphere.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -17,12 +18,27 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
-class Graph {
-    constructor() {
-        this.children = {};
-        this.nodes = {}; //objects (make sure that leaves are primitives only)
+class ComponentsGraph {
+    constructor(scene) {
+        this.children = {}; // stores parent-child relationships via ID
+        this.nodes = {}; // ID: object
         this.dependencies = [] //nodes that are expected to be added
-        //this.copy_index = 0;
+
+        this.scene = scene
+        this.material_ids_stack = []
+        this.materialIDs = []
+        for (let m in this.scene.graph.materials) {
+            this.materialIDs.push(m)
+        }
+        this.m_presses_count = 0
+
+        this.texture_id_s_t_stack = []
+        this.textureID_s_t = ["none", 1, 1]
+
+        // set default material
+        if (this.scene.graph.defaultCameraId == null)
+            this.appearance = this.scene.graph.materials[this.materialIDs[0]]
+        else this.appearance = this.scene.graph.materials[this.defaultCameraId]
     }
     addChild(parentID, childID) {
         if (
@@ -42,7 +58,7 @@ class Graph {
     addNode(nodeID, node) {
         if (!(nodeID in this.nodes)){
             this.nodes[nodeID] = node;
-            console.log("Node " + nodeID + " added.");
+            //console.log("Node " + nodeID + " added.");
         } 
         //else console.log('node already exists');
         return nodeID;
@@ -70,6 +86,15 @@ class Graph {
         return true;
     }
 
+    increment_materialIndex(){
+        if (this.m_presses_count == 2**52) // overflow control
+            this.m_presses_count = 0
+        else
+            this.m_presses_count++
+        console.log("m_presses_count: " + this.m_presses_count)
+
+    }
+
     print(startingNodeID) {
         this._printGraphAux(startingNodeID);
     }
@@ -80,6 +105,82 @@ class Graph {
             console.log(currentNode + ' -> ' + child);
             this._printGraphAux(child);
         }
+    }
+
+    pushMaterial(){
+        this.material_ids_stack.push(this.materialIDs)
+    }
+    popMaterial(){
+        this.materialIDs = this.material_ids_stack.pop()
+        var materialIndex = this.m_presses_count % this.materialIDs.length
+        var materialID = this.materialIDs[materialIndex]
+        this.appearance = this.scene.graph.materials[materialID]
+    }
+
+    pushTexture(){
+        this.texture_id_s_t_stack.push(this.textureID_s_t)
+    }
+    popTexture(){
+        this.textureID_s_t = this.texture_id_s_t_stack.pop()
+        if (this.textureID_s_t[0] == "none")
+            this.appearance.setTexture(null)
+        else{
+            this.textureID_s_t[1]
+            this.textureID_s_t[2]
+            var next_texture = this.scene.graph.textures[this.textureID_s_t[0]]
+            this.appearance.setTexture(next_texture)
+        }
+    }
+     
+
+    display(currentNode){
+        //console.log(currentNode);
+        if (this.children[currentNode] == null){
+            // Primitive
+            this.nodes[currentNode].updateTexCoords(this.textureID_s_t[1], this.textureID_s_t[2])
+            this.nodes[currentNode].display();
+            return;
+        }
+        else{
+            // Not Primitive
+            this.pushMaterial();
+            var materialIndex = this.m_presses_count % this.nodes[currentNode]["MaterialIDs"].length
+            if (this.nodes[currentNode]["MaterialIDs"][materialIndex] != "inherit"){
+                this.materialIDs = this.nodes[currentNode]["MaterialIDs"]
+                var materialID = this.materialIDs[materialIndex]
+                
+                this.appearance = this.scene.graph.materials[materialID]
+
+                if (this.appearance == null){
+                    console.log(materialID)
+                    console.log(material_index + " " + this.materialIDs.length)
+                    console.log(this.appearance)
+                }
+            }
+
+            this.appearance.setTextureWrap("REPEAT", "REPEAT")
+            this.pushTexture();
+            if (this.nodes[currentNode]["TextureID_s_t"][0] != "inherit"){
+                this.textureID_s_t = this.nodes[currentNode]["TextureID_s_t"]
+                if (this.textureID_s_t[0] == "none"){
+                    // clears texture
+                    this.appearance.setTexture(null)
+                }else
+                    this.appearance.setTexture(this.scene.graph.textures[this.textureID_s_t[0]])
+            }
+            this.appearance.apply()
+
+            this.scene.pushMatrix();
+            this.scene.multMatrix(this.nodes[currentNode]["Tm"]);
+
+            for (var child of this.children[currentNode]) {
+                this.display(child);
+            }
+            this.popMaterial();
+            this.popTexture();
+            this.appearance.apply();
+            this.scene.popMatrix();
+        } 
     }
 }
 
@@ -101,12 +202,12 @@ export class MySceneGraph {
 
         this.idRoot = null;                    // The id of the root element.
 
-        this.graph = new Graph();
-
         this.axisCoords = [];
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
+
+        this.cameras = []
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -301,7 +402,113 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+        var children = viewsNode.children;
+    
+        if (children.length < 1)
+            return "At least one view is required"
+
+        this.defaultCameraId = this.reader.getString(viewsNode, 'default');    
+
+        var views_ids = []
+
+        // for every view
+        for (let i = 0; i<children.length; ++i){
+            var nodeName = children[i].nodeName
+            if (nodeName == "perspective")
+            {
+                var id = this.reader.getString(children[i], 'id');
+                var near = this.reader.getFloat(children[i], 'near');
+                var far = this.reader.getFloat(children[i], 'far');
+                var angle = this.reader.getFloat(children[i], 'angle');
+
+                if (!(id != null && near != null && !isNaN(near) && far != null && !isNaN(far) && angle != null && !isNaN(angle)))
+                    return "Invalid parameters in views"
+
+                if (views_ids.includes(id))
+                    return "id " + id + " has conflics in Views"
+                views_ids.push(id)
+                var grandChildren = children[i].children
+                var from = -1
+                var to = -1
+
+                for (let j = 0; j<grandChildren.length; ++j){
+                    if (grandChildren[j].nodeName != "from" && grandChildren[j].nodeName != "to")
+                        return "Invalid child in perspective " + id
+
+                    var x = this.reader.getFloat(grandChildren[j], 'x');
+                    var y = this.reader.getFloat(grandChildren[j], 'y');
+                    var z = this.reader.getFloat(grandChildren[j], 'z');
+                    if (!(x != null && !isNaN(x) && y != null && !isNaN(y) && z != null && !isNaN(z)))
+                        return "Invalid parameters in children of perspective " + id
+
+                    if (grandChildren[j].nodeName == "from"){
+                        from = vec3.fromValues(x,y,z)
+
+                    }else if (grandChildren[j].nodeName == "to"){                        
+                        to = vec3.fromValues(x,y,z)
+                    }
+                }
+
+                if (from == -1 || to == -1)
+                    return "Invalid children in perspective " + id;
+
+                var new_camera = new CGFcamera(angle, near, far, from, to)
+                new_camera.id = id
+                this.cameras.push(new_camera)
+            }
+            else if (nodeName == "ortho")
+            {
+                var id = this.reader.getString(children[i], 'id');
+                var near = this.reader.getFloat(children[i], 'near');
+                var far = this.reader.getFloat(children[i], 'far');
+                var left = this.reader.getFloat(children[i], 'left');
+                var right = this.reader.getFloat(children[i], 'right');
+                var top = this.reader.getFloat(children[i], 'top');
+                var bottom = this.reader.getFloat(children[i], 'bottom');
+
+                if (!(id != null && near != null && !isNaN(near) && far != null && !isNaN(far) && angle != null && !isNaN(angle)
+                      && left != null && !isNaN(left) && right != null && !isNaN(right) && top != null && !isNaN(top) && bottom != null && !isNaN(bottom)))
+                    return "Invalid parameters in views"
+
+                if (views_ids.includes(id))
+                    return "id " + id + " has conflics in Views"
+                views_ids.push(id)
+                var grandChildren = children[i].children
+                var from = -1
+                var to = -1
+                var up = vec3.fromValues(0,1,0)
+
+                for (let j = 0; j<grandChildren.length; ++j){
+                    if (grandChildren[j].nodeName != "from" && grandChildren[j].nodeName != "to" && grandChildren[j].nodeName != "up")
+                        return "Invalid child in view" + id
+
+                    var x = this.reader.getFloat(grandChildren[j], 'x');
+                    var y = this.reader.getFloat(grandChildren[j], 'y');
+                    var z = this.reader.getFloat(grandChildren[j], 'z');
+                    if (!(x != null && !isNaN(x) && y != null && !isNaN(y) && z != null && !isNaN(z)))
+                        return "Invalid parameters in children of perspective " + id
+
+                    if (grandChildren[j].nodeName == "from"){
+                        from = vec3.fromValues(x,y,z)
+                    }else if (grandChildren[j].nodeName == "to"){
+                        to = vec3.fromValues(x,y,z)
+                    }else if (grandChildren[j].nodeName == "up"){
+                        up = vec3.fromValues(x,y,z)
+                    }
+                }
+
+                if (from == -1 || to == -1)
+                    return "Invalid children in orthogonal " + id;
+
+                var new_camera = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, up)
+                new_camera.id = id
+                this.cameras.push(new_camera)
+                
+            }
+        }
+
+        this.scene.interface.create_views()
+        
 
         return null;
     }
@@ -385,10 +592,12 @@ export class MySceneGraph {
             // Light enable/disable
             var enableLight = true;
             var aux = this.reader.getBoolean(children[i], 'enabled');
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
-                this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
+            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false))) {
+                this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = true'");
+				aux = true;
+			}
 
-            enableLight = aux || 1;
+            enableLight = aux;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
@@ -406,13 +615,16 @@ export class MySceneGraph {
                 var attributeIndex = nodeNames.indexOf(attributeNames[j]);
 
                 if (attributeIndex != -1) {
-                    if (attributeTypes[j] == "position")
+                    if (attributeTypes[j] == "position") {
                         var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
-                    else
+                    }
+					else {
                         var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
 
-                    if (!Array.isArray(aux))
+					}
+                    if (!Array.isArray(aux)) {
                         return aux;
+					}
 
                     global.push(aux);
                 }
@@ -430,9 +642,8 @@ export class MySceneGraph {
                 if (!(exponent != null && !isNaN(exponent)))
                     return "unable to parse exponent of the light for ID = " + lightId;
 
-                var targetIndex = nodeNames.indexOf("target");
-
                 // Retrieves the light target.
+                var targetIndex = nodeNames.indexOf("target");
                 var targetLight = [];
                 if (targetIndex != -1) {
                     var aux = this.parseCoordinates3D(grandChildren[targetIndex], "target light for ID " + lightId);
@@ -444,7 +655,40 @@ export class MySceneGraph {
                 else
                     return "light target undefined for ID = " + lightId;
 
-                global.push(...[angle, exponent, targetLight])
+				// Retrieves the light attenuation.
+				var attenuationIndex = nodeNames.indexOf("attenuation");
+                var attenuationLight = [];
+                if (attenuationIndex != -1) {
+                    var aux = this.parseAttenuation(grandChildren[attenuationIndex], "attenuation light for ID " + lightId);
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    attenuationLight = aux;
+                }
+                else
+                    return "light attenuation undefined for ID = " + lightId;
+
+				global.push(...[angle, exponent, targetLight, attenuationLight])
+
+            }
+
+			// Gets the additional attributes of the omni light
+            if (children[i].nodeName == "omni") {
+                // Retrieves the light attenuation.
+				var attenuationIndex = nodeNames.indexOf("attenuation");
+                var attenuationLight = [];
+                if (attenuationIndex != -1) {
+                    var aux = this.parseAttenuation(grandChildren[attenuationIndex], "attenuation light for ID " + lightId);
+                    if (!Array.isArray(aux))
+                        return aux;
+
+                    attenuationLight = aux;
+                }
+                else
+                    return "light attenuation undefined for ID = " + lightId;
+
+				global.push(...[attenuationLight])
+
             }
 
             this.lights[lightId] = global;
@@ -467,7 +711,39 @@ export class MySceneGraph {
     parseTextures(texturesNode) {
 
         //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        var children = texturesNode.children;
+
+        this.textures = [];
+
+        // Any number of materials.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "texture") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current texture.
+            var textureID = this.reader.getString(children[i], 'id');
+            if (textureID == null)
+                return "no ID defined for material";
+
+            // Checks for repeated IDs.
+            if (this.textures[textureID] != null)
+                return "ID must be unique for each material (conflict: ID = " + textureID + ")";
+            
+            // Get url of the current texture
+            var textureUrl = this.reader.getString(children[i], 'file');
+            if (textureUrl == null)
+                return "no file defined for texture";
+            
+            var texture = new CGFtexture(this.scene, textureUrl)
+
+            this.textures[textureID] = texture
+        }
+        
+        this.log("Parsed textures");
+        
         return null;
     }
 
@@ -498,13 +774,103 @@ export class MySceneGraph {
 
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
-                return "ID must be unique for each light (conflict: ID = " + materialID + ")";
+                return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
             //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            var s = this.reader.getFloat(children[i], 'shininess');
+            if (!(s != null && !isNaN(s)))
+                return "unable to parse shininess of the material for ID = " + materialID;
+            
+            grandChildren = children[i].children
+            var appearance = new CGFappearance(this.scene)
+
+            for (var j = 0; j < grandChildren.length; j++){
+                switch (grandChildren[j].nodeName) {
+                    case 'emission':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        
+                        appearance.setEmission(r,g,b,a)
+                        break;
+
+                    case 'ambient':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+                            
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        appearance.setAmbient(r,g,b,a)
+                        break;
+
+                    case 'diffuse':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+                            
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        appearance.setDiffuse(r,g,b,a)                        
+                        break;
+
+                    case 'specular':
+                        var r = this.reader.getFloat(grandChildren[j], 'r');
+                        if (!(r != null && !isNaN(r)))
+                            return "unable to parse red of the material for ID = " + materialID;
+
+                        var g = this.reader.getFloat(grandChildren[j], 'g');
+                        if (!(g != null && !isNaN(g)))
+                            return "unable to parse green of the material for ID = " + materialID;
+
+                        var b = this.reader.getFloat(grandChildren[j], 'b');
+                        if (!(b != null && !isNaN(b)))
+                            return "unable to parse blue of the material for ID = " + materialID;
+                            
+                        var a = this.reader.getFloat(grandChildren[j], 'a');
+                        if (!(a != null && !isNaN(a)))
+                            return "unable to parse alpha of the material for ID = " + materialID;
+                        appearance.setSpecular(r,g,b,a)
+                        break;
+                    
+                    default:
+                        return "unable to parse material component of the material for ID = " + materialID;
+                }
+            }
+            this.materials[materialID] = appearance
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
@@ -763,6 +1129,24 @@ export class MySceneGraph {
 
                 this.primitives[primitiveId] = torus;
             }
+            else if(primitiveType == "sphere"){
+                // radius
+                var radius = this.reader.getFloat(grandChildren[0], 'radius');
+                if (!(radius != null && !isNaN(radius)))
+                    return "unable to parse radius of the primitive coordinates for ID = " + primitiveId;
+                // slices
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
+                // stacks
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
+
+                var sphere = new MySphere(this.scene, radius, stacks, slices)
+
+                this.primitives[primitiveId] = sphere;
+            }
             else {
                 console.warn("To do: Parse other primitives.");
             }
@@ -784,6 +1168,8 @@ export class MySceneGraph {
         var grandChildren = [];
         var grandgrandChildren = [];
         var nodeNames = [];
+
+        this.components_graph = new ComponentsGraph(this.scene);
 
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
@@ -873,11 +1259,58 @@ export class MySceneGraph {
             componentObject["Tm"] = transfMatrix;
 
             // Materials
+            if(materialsIndex >= 0 && grandChildren[materialsIndex] != null){
+                componentObject["MaterialIDs"] = []
+                grandgrandChildren[materialsIndex] = grandChildren[materialsIndex].children;
+                for (var child of grandgrandChildren[materialsIndex]){
+                    if (child.nodeName != "material")
+                        return "Invalid node name"
+                    
+                    var ID = this.reader.getString(child, 'id');
+                    
+                    if (ID == "inherit")
+                        componentObject["MaterialIDs"].push("inherit")
+                    else if (this.materials[ID] == null)
+                        return "Invalid material with ID " + ID;
+                    else componentObject["MaterialIDs"].push(ID);
+                    
+                }
+            }
+            // Texture            
+            if(textureIndex >= 0 && grandChildren[textureIndex] != null){
+                var child = grandChildren[textureIndex]
+                // I don't think this conditional actually makes sense/is relevant
+                if (child.nodeName != "texture")
+                    return "Invalid node name"
+                
+                var ID = this.reader.getString(child, 'id');
+                
+                if (ID == "inherit")
+                    componentObject["TextureID_s_t"] = ["inherit", 1, 1]
+                else if (ID == "none")
+                    componentObject["TextureID_s_t"] = ["none", 1, 1]
+                else if (this.textures[ID] == null)
+                    return "Invalid texture with ID " + ID;
+                else{
+                    var s, t = 1
+                    s = this.reader.getFloat(child, 'length_s')
+                    if (!(s != null && !isNaN(s))){
+                        console.log("length_s is null in texture " + ID + " of component " + componentID)
+                        s = 1
+                    }
+                    t = this.reader.getFloat(child, 'length_t')
+                    if (!(t != null && !isNaN(t))){                    
+                        console.log("length_t is null in texture " + ID + " of component " + componentID)
+                        t = 1
+                    }
+                    componentObject["TextureID_s_t"] = [ID, s, t]
+                }
 
-            // Texture
-
-            // Add to Graph
-            this.graph.addNode(componentID, componentObject);
+                                
+            }
+            
+            // Add to ComponentsGraph
+            this.components_graph.addNode(componentID, componentObject);
 
             // Children            
             if(childrenIndex >= 0 && grandChildren[childrenIndex] != null){
@@ -889,15 +1322,15 @@ export class MySceneGraph {
                             if (childID in this.primitives)
                                 return "componentref " + childID + " in component " + componentID + " refers to a primitive";
                             if (!(childID in this.components))
-                                this.graph.addDependency(childID);
-                            this.graph.addChild(componentID, childID);
+                                this.components_graph.addDependency(childID);
+                            this.components_graph.addChild(componentID, childID);
                             break;
                         case 'primitiveref':
                             var primitiveID = this.reader.getString(child, 'id');
                             if (!(primitiveID in this.primitives))
                                 return "unable to parse primitiveref " + primitiveID + " of " + componentID;
-                            this.graph.addNode(primitiveID, this.primitives[primitiveID]);
-                            this.graph.addChild(componentID, primitiveID);
+                            this.components_graph.addNode(primitiveID, this.primitives[primitiveID]);
+                            this.components_graph.addChild(componentID, primitiveID);
                             break;
                     }
                 }
@@ -907,11 +1340,9 @@ export class MySceneGraph {
             this.components[componentID] = componentObject;
         }
 
-        var integrityCheck_result = this.graph.integrityCheck(this.idRoot, this.primitives);
-        if (integrityCheck_result != true) //check if dependencies have been satisfied(?)
+        var integrityCheck_result = this.components_graph.integrityCheck(this.idRoot, this.primitives);
+        if (integrityCheck_result != true) //check if dependencies have been satisfied
             return integrityCheck_result;
-
-        //this.graph.print(this.idRoot);
     }
 
 
@@ -941,6 +1372,34 @@ export class MySceneGraph {
         position.push(...[x, y, z]);
 
         return position;
+    }
+
+	/**
+     * Parse the attenuation from a node with ID = id
+     * @param {block element} node
+     * @param {message to be displayed in case of error} messageError
+     */
+    parseAttenuation(node, messageError) {
+        var attenuation = [];
+
+        // constant
+        var constant = this.reader.getFloat(node, 'constant');
+        if (!(constant != null && !isNaN(constant)))
+            return "unable to parse constant of the " + messageError;
+
+        // linear
+        var linear = this.reader.getFloat(node, 'linear');
+        if (!(linear != null && !isNaN(linear)))
+            return "unable to parse linear of the " + messageError;
+
+        // quadratic
+        var quadratic = this.reader.getFloat(node, 'quadratic');
+        if (!(quadratic != null && !isNaN(quadratic)))
+            return "unable to parse quadratic-coordinate of the " + messageError;
+
+        attenuation.push(...[constant, linear, quadratic]);
+
+        return attenuation;
     }
 
     /**
@@ -1027,35 +1486,13 @@ export class MySceneGraph {
     }
 
 
-    displayGraph(currentNode){
-        //console.log(currentNode);
-        if (this.graph.children[currentNode] == null){
-            // Primitive
-            this.graph.nodes[currentNode].display();
-            return;
-        }
-        else{
-            this.scene.pushMatrix();
-            this.scene.multMatrix(this.graph.nodes[currentNode]["Tm"]);
-            for (var child of this.graph.children[currentNode]) {
-                //console.log( this.graph.nodes[child]);
-                //console.log(this.graph.nodes[currentNode]["Tm"]);
-                //console.log(currentNode + ' -> ' + child);
-                this.displayGraph(child);
-            }    
-            this.scene.popMatrix();
-        } 
-    }
+    
 
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //To do: Create display loop for transversing the scene graph
-        this.scene.setDiffuse(1, 0.65, 0, 1);
-		this.scene.setSpecular(1, 0.65, 0, 1);
-
-        this.displayGraph(this.idRoot);
+        this.components_graph.display(this.idRoot);
 
 
         //To test the parsing/creation of the primitives, call the display function directly

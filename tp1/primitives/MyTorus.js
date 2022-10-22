@@ -55,7 +55,7 @@ export class MyTorus extends CGFobject {
 			}
 		}
 		
-		this.initialTexCoords=this.texCoords;
+		this.initialTexCoords = this.texCoords;
 		
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();		
