@@ -1,7 +1,7 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="Camera1">
+    <views default="Camera0">
         <perspective id="Camera0" near="0.1" far="500" angle="45">
             <from x="30" y="12" z="50" />
             <to x="190" y="4" z="40" />
@@ -10,13 +10,17 @@
             <from x="140" y="25" z="140" />
             <to x="0" y="6.8" z="0" />
         </perspective>
-        <ortho id="Side view Ortho" near="-50" far="900" left="-50" right="50" bottom="-10" top="20">
+        <ortho id="SideOrtho1" near="-50" far="900" left="-90" right="90" bottom="-5" top="55">
             <from x="-50" y="5" z="0" />
             <to x="40" y="5" z="0" />
         </ortho>
-        <ortho id="CameraOrtho2" left="-5" right="5" near="-5" far="5" bottom="-5" top="5">
-            <from x="-5" y="0" z="-5" />
-            <to x="0" y="0" z="0" />
+        <ortho id="SideOrtho2" near="-50" far="900" left="-90" right="90" bottom="-5" top="55">
+            <from x="150" y="8" z="50" />
+            <to x="-50" y="0" z="0" />
+        </ortho>
+        <ortho id="OrthoAbove" near="100" far="900" left="-120" right="120" bottom="-120" top="120">
+            <from x="0" y="150" z="0" />
+            <to x="0" y="0" z="20" />
         </ortho>
     </views>
 
@@ -78,8 +82,6 @@
         <texture id="cloud" file="scenes/images/cloud_cropped.jpg" />
         <texture id="spacetech" file="scenes/images/spacetech_cropped.jpg" />
         <texture id="weird" file="scenes/images/weird_alien_picture_cropped.jpeg" />
-        
-
     </textures>
 
     <materials>
