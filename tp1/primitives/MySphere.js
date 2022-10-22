@@ -1,4 +1,5 @@
 import { CGFobject } from '../../lib/CGF.js';
+import { MySemiSphere } from "./MySemiSphere.js";
 /**
  * MySphere
  * @constructor
@@ -10,7 +11,7 @@ export class MySphere extends CGFobject {
 		this.sphereFrontHalf = new MySemiSphere(this.scene, stacks, slices);
 		this.sphereBackHalf = new MySemiSphere(this.scene, stacks, slices);
 	}
-	
+		
 	display() {
 		this.scene.pushMatrix();
 		this.scene.scale(this.radius, this.radius, this.radius);

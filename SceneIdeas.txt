@@ -1,0 +1,4 @@
+- Mountains (using cubes (using rectangles))?
+- Skybox with mountains/pyramids?
+- Sky (clouds using cylinders and spheres at the extremities)?
+- Rectangle with sphinx texture?
