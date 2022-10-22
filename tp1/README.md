@@ -16,7 +16,7 @@
 - The scene is a desert which features: 
   - an oasis composed by water surrounded by cactuses.
   - three pyramids with different sizes.
-  - "walls" covered in a texture which result in an increased perceptual size of the scene.
+  - "walls" covered in a texture which result in an increased perceived size of the scene.
   - an easter egg: an elongated sphere and a flatten torus make up a surprising figure above ground.
   - ![screenshot_1](screenshots/1.png)
   - ![screenshot_2](screenshots/2.png)
