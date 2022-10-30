@@ -1079,7 +1079,7 @@ export class MySceneGraph {
                         ]
         //var nurbsSurface = new CGFnurbsSurface(2, 1, vertexes);
         //var obj = new CGFnurbsObject(this.scene, 20, 20, nurbsSurface );
-        var patch = new MyPatch(this.scene, 2,20, 1,20, vertexes);
+        var patch = new MyPatch(this.scene, "test", 1, 20, 1, 20, vertexes);
         patch.display();
 
         //To test the parsing/creation of the primitives, call the display function directly
