@@ -16,6 +16,7 @@ export class XMLscene extends CGFscene {
         super();
 
         this.interface = myinterface;
+		this.lightValues = {};
     }
 
     /**
@@ -60,26 +61,37 @@ export class XMLscene extends CGFscene {
 
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
+console.log(light);
 
                 this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
+				//this.lights[i].setConstantAttenuation(light[6][0], light[6][1], light[6][2]);
+				//this.lights[i].setLinearAttenuation(light[6][0], light[6][1], light[6][2]);
+				//this.lights[i].setQuadraticAttenuation(light[6][0], light[6][1], light[6][2]);
 
                 if (light[1] == "spot") {
                     this.lights[i].setSpotCutOff(light[6]);
                     this.lights[i].setSpotExponent(light[7]);
                     this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
+					this.lights[i].setConstantAttenuation(light[9][0]);
+					this.lights[i].setLinearAttenuation(light[9][1])
+					this.lights[i].setQuadraticAttenuation(light[9][2]);
                 }
+				else {
+					this.lights[i].setConstantAttenuation(light[6][0]);
+					this.lights[i].setLinearAttenuation(light[6][1])
+					this.lights[i].setQuadraticAttenuation(light[6][2]);
+				}
 
-                this.lights[i].setVisible(true);
+                this.lights[i].setVisible(false);
                 if (light[0])
                     this.lights[i].enable();
                 else
                     this.lights[i].disable();
 
                 this.lights[i].update();
-
                 i++;
             }
         }
@@ -104,6 +116,9 @@ export class XMLscene extends CGFscene {
         this.initLights();
 
         this.sceneInited = true;
+		
+		// Add group of lights
+		this.interface.addLightsGroup(this.graph.lights);
     }
 
     /**
@@ -126,9 +141,26 @@ export class XMLscene extends CGFscene {
         this.pushMatrix();
         //this.axis.display();
 
-        for (var i = 0; i < this.lights.length; i++) {
+        /*for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
             this.lights[i].enable();
+        }*/
+		
+		// Handles lights enabling/disabling according to interface information
+		var i = 0;
+        for (var key in this.lightValues) {
+            if (this.lightValues.hasOwnProperty(key)) {
+                if (this.lightValues[key]) {
+                    //this.lights[i].setVisible(true);
+                    this.lights[i].enable();
+                }
+                else {
+                    //this.lights[i].setVisible(false);
+                    this.lights[i].disable();
+                }
+                this.lights[i].update();
+                i++;
+            }
         }
 
         if (this.sceneInited) {
