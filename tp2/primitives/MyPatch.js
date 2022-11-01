@@ -56,11 +56,10 @@ export class MyPatch extends CGFobject {
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
-
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
+	*/
+	updateTexCoords(s, t) {
 		this.updateTexCoordsGLBuffers();
-	}*/
+	}
 	
 }
 

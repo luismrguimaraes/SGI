@@ -160,6 +160,16 @@
         <primitive id="PyramidWall">
             <triangle x1="-1" y1="0" z1="1" x2="1" y2="0" z2="1" x3="0" y3="1" z3="0" />
         </primitive>
+        <primitive id="PatchTest">
+            <patch degree_u="2" parts_u="20" degree_v="1" parts_v="20" >
+            <controlpoint x="-2.0" y="-2.0" z="0" />
+            <controlpoint x="-2.0" y="2.0" z="0" />
+            <controlpoint x="2.0" y="-2.0" z="0" />
+            <controlpoint x="2.0" y="2.0" z="0" />
+            <controlpoint x="-2.0" y="-2.1" z="1" />
+            <controlpoint x="-2.0" y="2.0" z="1" />
+            </patch>
+        </primitive>
     </primitives>
 
     <components>
@@ -181,6 +191,8 @@
 
                 <componentref id="pyramidSet"/>
                 <componentref id="spaceship"/>
+
+                <primitiveref id="PatchTest"/>
 
             </children>
         </component>

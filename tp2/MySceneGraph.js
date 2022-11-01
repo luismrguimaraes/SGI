@@ -993,7 +993,7 @@ export class MySceneGraph {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus')) {
+                    grandChildren[0].nodeName != 'torus' && grandChildren[0].nodeName != 'patch')) {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
             }
 
@@ -1172,10 +1172,25 @@ export class MySceneGraph {
 
                 var grandgrandChildren = grandChildren[0].children
                 var vertexes = []
-                for (var j = 0; j < grandgrandChildren.length(); ++j){
-                    if (j % 1) 1
+                
+                var more_vertexes = []
+                var j = 0
+                for (; j < grandgrandChildren.length; ++j){
+                    if (j % (degree_v +1) == 0 && j!=0){
+                        vertexes.push(more_vertexes)
+                        more_vertexes = []
+                    }
+                    var vertex = this.parseCoordinates3D(grandgrandChildren[j], "control point " + j + " of patch " + primitiveId)
+                    vertex.push(1)
+                    more_vertexes.push(vertex)
+                    console.log(vertex)
                 }
+                if (j % (degree_v +1) == 0 && j!=0) {
+                    vertexes.push(more_vertexes)
+                }
+                console.log(vertexes)
                 var patch = new MyPatch(this.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes)
+                this.primitives[primitiveId] = patch
    
             }
             else {
@@ -1547,6 +1562,6 @@ export class MySceneGraph {
         //var nurbsSurface = new CGFnurbsSurface(2, 1, vertexes);
         //var obj = new CGFnurbsObject(this.scene, 20, 20, nurbsSurface );
         var patch = new MyPatch(this.scene, "test", 2, 20, 1, 20, vertexes);
-        patch.display();
+        //patch.display();
     }
 }
