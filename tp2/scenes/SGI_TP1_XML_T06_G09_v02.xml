@@ -190,6 +190,58 @@
             
             </patch>
         </primitive>
+        <primitive id="NurbBarrel_half_wrong">
+            <patch degree_u="2" parts_u="20" degree_v="3" parts_v="20" >
+            <controlpoint x="-1.5" y="0" z="-5" />
+            <controlpoint x="-1.5" y="1.5" z="-5" />
+            <controlpoint x="1.5" y="1.5" z="-5" />
+            <controlpoint x="1.5" y="0" z="-5" />
+
+            <controlpoint x="-3" y="0" z="0" />
+            <controlpoint x="-3" y="3" z="0" />
+            <controlpoint x="3" y="3" z="0" />
+            <controlpoint x="3" y="0" z="0" />
+
+            <controlpoint x="-1.5" y="0" z="5" />
+            <controlpoint x="-1.5" y="1.5" z="5" />
+            <controlpoint x="1.5" y="1.5" z="5" />
+            <controlpoint x="1.5" y="0" z="5" />
+            
+            </patch>
+        </primitive>
+        <primitive id="NurbBarrel_half">
+            <patch degree_u="2" parts_u="20" degree_v="3" parts_v="20" >
+            <controlpoint x="-1.5" y="0" z="-5" />
+            <controlpoint x="-1.5" y="1.5" z="-5" />
+            <controlpoint x="1.5" y="1.5" z="-5" />
+            <controlpoint x="1.5" y="0" z="-5" />
+
+            <controlpoint x="-3" y="0" z="0" />
+            <controlpoint x="-3" y="3" z="0" />
+            <controlpoint x="3" y="3" z="0" />
+            <controlpoint x="3" y="0" z="0" />
+
+            <controlpoint x="-1.5" y="0" z="5" />
+            <controlpoint x="-1.5" y="1.5" z="5" />
+            <controlpoint x="1.5" y="1.5" z="5" />
+            <controlpoint x="1.5" y="0" z="5" />
+            
+            </patch>
+        </primitive>
+        <primitive id="NurbBarrel_lid">
+            <patch degree_u="1" parts_u="20" degree_v="3" parts_v="20" >
+            <controlpoint x="-1.5" y="0" z="0" />
+            <controlpoint x="-1.5" y="4" z="0" />
+            <controlpoint x="1.5" y="4" z="0" />
+            <controlpoint x="1.5" y="0" z="0" />
+
+            <controlpoint x="-1.5" y="0" z="0" />
+            <controlpoint x="-1.5" y="-4" z="0" />
+            <controlpoint x="1.5" y="-4" z="0" />
+            <controlpoint x="1.5" y="0" z="0" />
+            
+            </patch>
+        </primitive>
     </primitives>
 
     <components>
@@ -218,16 +270,31 @@
 
         <component id="patchTest">
             <transformation>
-                <scale x="15" y ="5" z="6"/>
+                <translate x="0" y="6" z="0"/>
             </transformation>
             <materials>
                 <material id="blue" />
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="NurbTent"/>
+                <primitiveref id="NurbBarrel_half"/>
+                <componentref id="NurbBarrel_half_2"/>
             </children>
         </component>
+        
+        <component id="NurbBarrel_half_2">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="NurbBarrel_half"/>
+            </children>
+        </component>
+        
 
         <component id="walls">
             <transformation>
