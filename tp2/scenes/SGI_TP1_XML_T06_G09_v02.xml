@@ -190,56 +190,32 @@
             
             </patch>
         </primitive>
-        <primitive id="NurbBarrel_half_wrong">
-            <patch degree_u="2" parts_u="20" degree_v="3" parts_v="20" >
-            <controlpoint x="-1.5" y="0" z="-5" />
-            <controlpoint x="-1.5" y="1.5" z="-5" />
-            <controlpoint x="1.5" y="1.5" z="-5" />
-            <controlpoint x="1.5" y="0" z="-5" />
+        <primitive id="NurbBarrel_quarter">
+            <patch degree_u="2" parts_u="20" degree_v="2" parts_v="20" >
+            <controlpoint x="1" y="0" z="3" />
+            <controlpoint x="1" y="1" z="3" />
+            <controlpoint x="0" y="1" z="3" />
 
-            <controlpoint x="-3" y="0" z="0" />
-            <controlpoint x="-3" y="3" z="0" />
-            <controlpoint x="3" y="3" z="0" />
-            <controlpoint x="3" y="0" z="0" />
+            <controlpoint x="2" y="0" z="0" />
+            <controlpoint x="2" y="2" z="0" />
+            <controlpoint x="0" y="2" z="0" />
 
-            <controlpoint x="-1.5" y="0" z="5" />
-            <controlpoint x="-1.5" y="1.5" z="5" />
-            <controlpoint x="1.5" y="1.5" z="5" />
-            <controlpoint x="1.5" y="0" z="5" />
-            
+            <controlpoint x="1" y="0" z="-3" />
+            <controlpoint x="1" y="1" z="-3" />
+            <controlpoint x="0" y="1" z="-3" />            
             </patch>
         </primitive>
-        <primitive id="NurbBarrel_half">
-            <patch degree_u="2" parts_u="20" degree_v="3" parts_v="20" >
-            <controlpoint x="-1.5" y="0" z="-5" />
-            <controlpoint x="-1.5" y="1.5" z="-5" />
-            <controlpoint x="1.5" y="1.5" z="-5" />
-            <controlpoint x="1.5" y="0" z="-5" />
 
-            <controlpoint x="-3" y="0" z="0" />
-            <controlpoint x="-3" y="3" z="0" />
-            <controlpoint x="3" y="3" z="0" />
-            <controlpoint x="3" y="0" z="0" />
+        <primitive id="NurbBarrel_lid_quarter">
+            <patch degree_u="2" parts_u="20" degree_v="1" parts_v="20" >
 
-            <controlpoint x="-1.5" y="0" z="5" />
-            <controlpoint x="-1.5" y="1.5" z="5" />
-            <controlpoint x="1.5" y="1.5" z="5" />
-            <controlpoint x="1.5" y="0" z="5" />
+            <controlpoint x="1" y="0" z="0" />
+            <controlpoint x="1" y="1" z="0" />
+            <controlpoint x="0" y="1" z="0" />
             
-            </patch>
-        </primitive>
-        <primitive id="NurbBarrel_lid">
-            <patch degree_u="1" parts_u="20" degree_v="3" parts_v="20" >
-            <controlpoint x="-1.5" y="0" z="0" />
-            <controlpoint x="-1.5" y="4" z="0" />
-            <controlpoint x="1.5" y="4" z="0" />
-            <controlpoint x="1.5" y="0" z="0" />
-
-            <controlpoint x="-1.5" y="0" z="0" />
-            <controlpoint x="-1.5" y="-4" z="0" />
-            <controlpoint x="1.5" y="-4" z="0" />
-            <controlpoint x="1.5" y="0" z="0" />
-            
+            <controlpoint x="-1" y="0" z="0" />
+            <controlpoint x="-1" y="1" z="0" />
+            <controlpoint x="0" y="1" z="0" />
             </patch>
         </primitive>
     </primitives>
@@ -270,19 +246,46 @@
 
         <component id="patchTest">
             <transformation>
-                <translate x="0" y="6" z="0"/>
+                <translate x="0" y="16" z="0"/>
+                <scale x="5" y="5" z="5" />
             </transformation>
             <materials>
                 <material id="blue" />
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="NurbBarrel_half"/>
-                <componentref id="NurbBarrel_half_2"/>
+                <primitiveref id="NurbBarrel_lid_quarter"/>
             </children>
         </component>
         
-        <component id="NurbBarrel_half_2">
+        <component id="NurbBarrel_half">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="NurbBarrel_quarter_90"/>
+                <componentref id="NurbBarrel_quarter_180"/>
+                <componentref id="NurbBarrel_quarter_270"/>
+                <primitiveref id="NurbBarrel_quarter" />
+            </children>
+        </component>
+
+        <component id="NurbBarrel_quarter_90">
+            <transformation>
+                <rotate axis="z" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="NurbBarrel_quarter" />
+            </children>
+        </component>
+        <component id="NurbBarrel_quarter_180">
             <transformation>
                 <rotate axis="z" angle="180"/>
             </transformation>
@@ -291,7 +294,19 @@
             </materials>
             <texture id="none"/>
             <children>
-                <primitiveref id="NurbBarrel_half"/>
+                <primitiveref id="NurbBarrel_quarter" />
+            </children>
+        </component>
+        <component id="NurbBarrel_quarter_270">
+            <transformation>
+                <rotate axis="z" angle="270"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="NurbBarrel_quarter" />
             </children>
         </component>
         
