@@ -61,7 +61,6 @@ export class XMLscene extends CGFscene {
 
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
-console.log(light);
 
                 this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
@@ -119,6 +118,9 @@ console.log(light);
 		
 		// Add group of lights
 		this.interface.addLightsGroup(this.graph.lights);
+
+        this.setUpdatePeriod(100);
+        this.startTime = null;
     }
 
     /**
@@ -173,5 +175,16 @@ console.log(light);
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+    update(time) {
+        if (this.sceneInited) {
+            if (this.startTime === null) this.startTime = time;
+            // traverse scenegraph and, for nodes having animation,
+            // compute the animation matrix
+            //this.graph.computeAnimation.computeAnimation(time - this.startTime)
+
+            console.log(time)
+        }
     }
 }

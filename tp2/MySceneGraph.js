@@ -20,6 +20,25 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var COMPONENTS_INDEX = 8;
 
+
+class MyAnimation {
+
+    constructor() {
+        if (this.constructor == Animal) {
+          throw new Error("Abstract classes can't be instantiated.");
+      }
+    }
+  
+    update(t) {
+        console.log("update " + t);
+      
+    }
+  
+    apply() {
+      console.log("apply");
+    }
+  }
+
 class ComponentsGraph {
     constructor(scene) {
         this.children = {}; // stores parent-child relationships via ID
@@ -41,7 +60,15 @@ class ComponentsGraph {
         if (this.scene.graph.defaultCameraId == null)
             this.appearance = this.scene.graph.materials[this.materialIDs[0]]
         else this.appearance = this.scene.graph.materials[this.defaultCameraId]
+
+        this.animationMatrix = null;
+        this.animations = []
     }
+
+    computeAnimation(ellapsedTime){
+        
+    }
+
     addChild(parentID, childID) {
         if (
             this.children[childID] != null &&
