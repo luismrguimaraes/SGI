@@ -18,26 +18,10 @@ var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATIONS_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 
-class MyAnimation {
-
-    constructor() {
-        if (this.constructor == Animal) {
-          throw new Error("Abstract classes can't be instantiated.");
-      }
-    }
-  
-    update(t) {
-        console.log("update " + t);
-      
-    }
-  
-    apply() {
-      console.log("apply");
-    }
-  }
 
 class ComponentsGraph {
     constructor(scene) {
@@ -66,7 +50,7 @@ class ComponentsGraph {
     }
 
     computeAnimation(ellapsedTime){
-        
+        return "okay"
     }
 
     addChild(parentID, childID) {
@@ -384,6 +368,18 @@ export class MySceneGraph {
 
             //Parse primitives block
             if ((error = this.parsePrimitives(nodes[index])) != null)
+                return error;
+        }
+
+        // <animations>
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != ANIMATIONS_INDEX)
+                this.onXMLMinorError("tag <animations> out of order");
+
+            //Parse primitives block
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -1210,12 +1206,10 @@ export class MySceneGraph {
                     var vertex = this.parseCoordinates3D(grandgrandChildren[j], "control point " + j + " of patch " + primitiveId)
                     vertex.push(1)
                     more_vertexes.push(vertex)
-                    console.log(vertex)
                 }
                 if (j % (degree_v +1) == 0 && j!=0) {
                     vertexes.push(more_vertexes)
                 }
-                console.log(vertexes)
                 var patch = new MyPatch(this.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes)
                 this.primitives[primitiveId] = patch
    
@@ -1227,6 +1221,16 @@ export class MySceneGraph {
 
         this.log("Parsed primitives");
         return null;
+    }
+
+    /**
+   * Parses the <animations> block.
+   * @param {animations block element} componentsNode
+   */
+    parseAnimations(animationsNode){
+        
+
+        //this.log("Parsed animations")
     }
 
     /**
@@ -1273,6 +1277,7 @@ export class MySceneGraph {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
+            var animationIndex = nodeNames.indexOf("animation");
 
             // Transformations
             var transfMatrix = mat4.create();
@@ -1409,6 +1414,15 @@ export class MySceneGraph {
                 }
             }
 
+            // Animations
+            if(animationIndex >= 0 && grandChildren[animationIndex] != null){
+                //var child = grandChildren[animationIndex] 
+                console.log(grandChildren[animationIndex].children)
+                var ID = this.reader.getString(child, 'id');
+                for (var child of grandChildren[animationIndex].children){
+                    console.log("1")
+                }
+            }
             // Add to this.components
             this.components[componentID] = componentObject;
         }
@@ -1416,6 +1430,8 @@ export class MySceneGraph {
         var integrityCheck_result = this.components_graph.integrityCheck(this.idRoot, this.primitives);
         if (integrityCheck_result != true) //check if dependencies have been satisfied
             return integrityCheck_result;
+
+        this.log("Parsed components")
     }
 
 
