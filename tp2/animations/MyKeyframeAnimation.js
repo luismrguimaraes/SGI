@@ -2,10 +2,10 @@ import { MyAnimation } from "./MyAnimation.js"
 
 export class MyKeyframeAnimation extends MyAnimation{
 
-    constructor() {
-        if (this.constructor == MyAnimation) {
-            throw new Error("Abstract classes can't be instantiated.");
-        }
+    constructor(keyframes) {
+        this.keyframes = keyframes
+        
+
     }
   
     update(t) {
