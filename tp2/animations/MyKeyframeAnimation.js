@@ -3,6 +3,7 @@ import { MyAnimation } from "./MyAnimation.js"
 export class MyKeyframeAnimation extends MyAnimation{
 
     constructor(keyframes) {
+        super()
         this.keyframes = keyframes
         
 

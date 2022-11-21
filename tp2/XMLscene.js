@@ -3,7 +3,7 @@ import { CGFaxis,CGFcamera } from '../lib/CGF.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
-var updatePeriod = 100
+var updatePeriod = 1000
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -181,10 +181,7 @@ export class XMLscene extends CGFscene {
     update(time) {
         if (this.sceneInited) {
             if (this.startTime === null) this.startTime = time;
-            // traverse scenegraph and, for nodes having animation,
-            // compute the animation matrix
-            console.log(this.graph.components_graph.computeAnimation(time - this.startTime))
-
+            this.graph.components_graph.computeAnimations(time - this.startTime)
         }
     }
 }

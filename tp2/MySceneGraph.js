@@ -5,6 +5,7 @@ import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { MySphere } from './primitives/MySphere.js';
 import { MyPatch } from './primitives/MyPatch.js';
+import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -49,8 +50,21 @@ class ComponentsGraph {
         this.animations = []
     }
 
-    computeAnimation(ellapsedTime){
-        return "okay"
+    computeAnimation(nodeID){
+        
+    }
+
+    computeAnimations(ellapsedTime){
+        this.computeAnimations_rec(this.root, ellapsedTime)
+    }
+    computeAnimations_rec(nodeID, ellapsedTime){
+        if (this.nodes[nodeID]["Animation"] != null)
+            this.computeAnimations(nodeID)
+        
+        if (this.children[nodeID] != null){
+            for (var child of this.children[nodeID])
+                this.computeAnimations_rec(child, ellapsedTime)
+        }    
     }
 
     addChild(parentID, childID) {
@@ -1228,8 +1242,112 @@ export class MySceneGraph {
    * @param {animations block element} componentsNode
    */
     parseAnimations(animationsNode){
-        
+        var children = animationsNode.children
 
+        this.animations = []
+
+        var grandChildren = []
+        var grandgrandChildren = []
+
+        // Any number of animations.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "keyframeanim") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current animation.
+            var animationID = this.reader.getString(children[i], 'id');
+            if (animationID == null)
+                return "no ID defined for animation";
+
+            // Checks for repeated IDs.
+            if (this.animations[animationID] != null)
+                return "ID must be unique for each animation (conflict: ID = " + animationID + ")";
+
+            grandChildren = children[i].children;
+            
+
+            if (children[i].nodeName == "keyframeanim") {
+                var keyframes = []
+                for (var j = 0; j < grandChildren.length; j++) {
+                    grandgrandChildren = grandChildren[j].children
+
+                    for (var transformation of grandgrandChildren){
+                        console.log(transformation)
+                        var transfMatrix = mat4.create();
+
+                        switch (transformation.nodeName) {
+                            case 'translate':
+                                var coordinates = this.parseCoordinates3D(transformation, "translate transformation in " + animationID);
+                                if (!Array.isArray(coordinates))
+                                    return coordinates;
+        
+                                mat4.translate(transfMatrix, transfMatrix, coordinates);
+                                break;
+                            case 'scale':
+                                var coordinates = [];
+                                var messageError = "scale transformation in " + animationID
+
+                                // x
+                                var x = this.reader.getFloat(transformation, 'sx');
+                                if (!(x != null && !isNaN(x)))
+                                    return "unable to parse x-coordinate of the " + messageError;
+                                // y
+                                var y = this.reader.getFloat(transformation, 'sy');
+                                if (!(y != null && !isNaN(y)))
+                                    return "unable to parse y-coordinate of the " + messageError;
+                                // z
+                                var z = this.reader.getFloat(transformation, 'sz');
+                                if (!(z != null && !isNaN(z)))
+                                    return "unable to parse z-coordinate of the " + messageError;
+
+                                coordinates.push(...[x, y, z]);
+                                //var coordinates = this.parseCoordinates3D(transformation, "scale transformation in " + animationID);
+                                if (!Array.isArray(coordinates))
+                                    return coordinates;
+        
+                                mat4.scale(transfMatrix, transfMatrix, coordinates);
+                                break;
+                            case 'rotate':
+                                // axis
+                                var axisString = this.reader.getString(transformation, 'axis');
+                                if (!(axisString != null))
+                                    return "unable to parse axis of a rotation in " + animationID;
+                                var axis = [0,0,0];
+                                switch(axisString){
+                                    case 'x':
+                                        axis = [1,0,0];
+                                        break;
+                                    case 'y':
+                                        axis = [0,1,0];
+                                        break;
+                                    case 'z':
+                                        axis = [0,0,1];
+                                        break;
+                                }
+                                // angle
+                                var angle = this.reader.getFloat(transformation, "angle") * Math.PI/180.0;
+                                if (!(angle != null && !isNaN(angle)))
+                                    return "unable to parse angle of a rotation in " + animationID;
+                                    
+                                mat4.rotate(transfMatrix, transfMatrix, angle, axis);
+                                //this.onXMLMinorError("To do: Parse rotate transformations.");
+                                break;
+                        }
+                    }
+                    keyframes.push(mat4)
+
+                }
+                //console.log(keyframes)
+
+                this.animations[animationID] = new MyKeyframeAnimation(keyframes)
+            }
+
+            
+
+        }
         //this.log("Parsed animations")
     }
 
@@ -1416,13 +1534,11 @@ export class MySceneGraph {
 
             // Animations
             if(animationIndex >= 0 && grandChildren[animationIndex] != null){
-                //var child = grandChildren[animationIndex] 
-                console.log(grandChildren[animationIndex].children)
-                var ID = this.reader.getString(child, 'id');
-                for (var child of grandChildren[animationIndex].children){
-                    console.log("1")
-                }
+                var animation = grandChildren[animationIndex] 
+                var ID = this.reader.getString(animation, 'id');
+                componentObject["Animation"] = this.animations[ID] //this must be a copy
             }
+
             // Add to this.components
             this.components[componentID] = componentObject;
         }
@@ -1430,6 +1546,7 @@ export class MySceneGraph {
         var integrityCheck_result = this.components_graph.integrityCheck(this.idRoot, this.primitives);
         if (integrityCheck_result != true) //check if dependencies have been satisfied
             return integrityCheck_result;
+        this.components_graph.root = this.idRoot
 
         this.log("Parsed components")
     }
