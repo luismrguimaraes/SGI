@@ -45,12 +45,15 @@ class ComponentsGraph {
         if (this.scene.graph.defaultCameraId == null)
             this.appearance = this.scene.graph.materials[this.materialIDs[0]]
         else this.appearance = this.scene.graph.materials[this.defaultCameraId]
-
-        this.animationMatrix = null;
-        this.animations = []
     }
 
-    computeAnimation(nodeID){
+    computeAnimation(nodeID, ellapsedTime){
+        if (this.nodes[nodeID]["Animation"].length == 0)
+            return
+
+        //console.log(ellapsedTime)
+
+        this.nodes[nodeID]["Animation"][0].update(ellapsedTime)
         
     }
 
@@ -58,8 +61,11 @@ class ComponentsGraph {
         this.computeAnimations_rec(this.root, ellapsedTime)
     }
     computeAnimations_rec(nodeID, ellapsedTime){
-        if (this.nodes[nodeID]["Animation"] != null)
-            this.computeAnimations(nodeID)
+        if (this.children[nodeID] == null)
+            return
+        if (this.nodes[nodeID]["Animation"].length > 0){
+            this.computeAnimation(nodeID, ellapsedTime)
+        }
         
         if (this.children[nodeID] != null){
             for (var child of this.children[nodeID])
@@ -1271,11 +1277,18 @@ export class MySceneGraph {
 
             if (children[i].nodeName == "keyframeanim") {
                 var keyframes = []
+                var instants = []
+                var instant = 0
                 for (var j = 0; j < grandChildren.length; j++) {
+                    var new_instant = this.reader.getFloat(grandChildren[j], "instant")
+                    if (new_instant < instant)
+                        return "Invalid instant in keyframe " + j + " of animation " + animationID
+                    var instant = new_instant
+
                     grandgrandChildren = grandChildren[j].children
 
                     for (var transformation of grandgrandChildren){
-                        console.log(transformation)
+                        //console.log(transformation)
                         var transfMatrix = mat4.create();
 
                         switch (transformation.nodeName) {
@@ -1337,18 +1350,16 @@ export class MySceneGraph {
                                 break;
                         }
                     }
+                    instants.push(instant)
                     keyframes.push(mat4)
 
                 }
                 //console.log(keyframes)
 
-                this.animations[animationID] = new MyKeyframeAnimation(keyframes)
+                this.animations[animationID] = new MyKeyframeAnimation(keyframes, instants)
             }
-
-            
-
         }
-        //this.log("Parsed animations")
+        this.log("Parsed animations")
     }
 
     /**
@@ -1502,11 +1513,22 @@ export class MySceneGraph {
                     componentObject["TextureID_s_t"] = [ID, s, t]
                 }
 
-                                
+                
             }
             
+            // Animations
+            componentObject["Animation"] = []
+            if(animationIndex >= 0 && grandChildren[animationIndex] != null){
+                var animation = grandChildren[animationIndex] 
+                var ID = this.reader.getString(animation, 'id');
+                componentObject["Animation"] = [this.animations[ID]] //this must be a copy
+            }
+
             // Add to ComponentsGraph
             this.components_graph.addNode(componentID, componentObject);
+            
+            // Add to this.components
+            this.components[componentID] = componentObject;
 
             // Children            
             if(childrenIndex >= 0 && grandChildren[childrenIndex] != null){
@@ -1531,16 +1553,6 @@ export class MySceneGraph {
                     }
                 }
             }
-
-            // Animations
-            if(animationIndex >= 0 && grandChildren[animationIndex] != null){
-                var animation = grandChildren[animationIndex] 
-                var ID = this.reader.getString(animation, 'id');
-                componentObject["Animation"] = this.animations[ID] //this must be a copy
-            }
-
-            // Add to this.components
-            this.components[componentID] = componentObject;
         }
 
         var integrityCheck_result = this.components_graph.integrityCheck(this.idRoot, this.primitives);
