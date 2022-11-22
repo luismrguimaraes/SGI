@@ -1,9 +1,10 @@
 export class MyAnimation {
 
-    constructor() {
+    constructor(scene) {
         if (this.constructor == MyAnimation) {
             throw new Error("Abstract classes can't be instantiated.");
         }
+        this.scene = scene
     }
   
     update(t) {

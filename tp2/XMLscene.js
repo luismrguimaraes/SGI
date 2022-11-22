@@ -3,7 +3,7 @@ import { CGFaxis,CGFcamera } from '../lib/CGF.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
-var updatePeriod = 1000
+var updatePeriod = 10
 
 /**
  * XMLscene class, representing the scene that is to be rendered.

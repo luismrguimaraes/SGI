@@ -233,14 +233,15 @@
     <animations>
         <keyframeanim id="animation_1">
             <keyframe instant="0.5">
-                <translation x="2" y="0" z="20" />
+                <translation x="0" y="20" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="5" sz="1" />
             </keyframe>
+
             <keyframe instant="2">
-                <translation x="0" y="1" z="0" />
+                <translation x="0" y="-20" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
@@ -275,9 +276,7 @@
 
         <component id="patchTest">
             <transformation>
-                <translate x="0" y="10" z="0"/>
-                <rotate axis="x" angle="90"/>
-                <scale x="5" y="5" z="5" />
+                
             </transformation>
             <materials>
                 <material id="blue" />

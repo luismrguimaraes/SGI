@@ -48,13 +48,8 @@ class ComponentsGraph {
     }
 
     computeAnimation(nodeID, ellapsedTime){
-        if (this.nodes[nodeID]["Animation"].length == 0)
-            return
-
-        //console.log(ellapsedTime)
-
-        this.nodes[nodeID]["Animation"][0].update(ellapsedTime)
-        
+        if (this.nodes[nodeID]["Animation"].length != 0)
+            this.nodes[nodeID]["Animation"][0].update(ellapsedTime)        
     }
 
     computeAnimations(ellapsedTime){
@@ -205,6 +200,10 @@ class ComponentsGraph {
 
             this.scene.pushMatrix();
             this.scene.multMatrix(this.nodes[currentNode]["Tm"]);
+            
+            if (this.nodes[currentNode]["Animation"].length != 0){
+                this.nodes[currentNode]["Animation"][0].apply()
+            }
 
             for (var child of this.children[currentNode]) {
                 this.display(child);
@@ -1365,7 +1364,7 @@ export class MySceneGraph {
                 }
                 //console.log(keyframes)
 
-                this.animations[animationID] = new MyKeyframeAnimation(keyframes, instants)
+                this.animations[animationID] = new MyKeyframeAnimation(keyframes, instants, this.scene)
             }
         }
         this.log("Parsed animations")
