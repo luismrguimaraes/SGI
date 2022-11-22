@@ -1287,19 +1287,23 @@ export class MySceneGraph {
 
                     grandgrandChildren = grandChildren[j].children
 
+                    var transf_index = 0
+                    var next_keyframe = []
                     for (var transformation of grandgrandChildren){
                         //console.log(transformation)
-                        var transfMatrix = mat4.create();
-
                         switch (transformation.nodeName) {
-                            case 'translate':
+                            case 'translation':
+                                if (transf_index != 0)
+                                    return "Invalid translation (transformation " + transf_index + ") in animation " + animationID 
                                 var coordinates = this.parseCoordinates3D(transformation, "translate transformation in " + animationID);
                                 if (!Array.isArray(coordinates))
                                     return coordinates;
         
-                                mat4.translate(transfMatrix, transfMatrix, coordinates);
+                                next_keyframe.push(coordinates)
                                 break;
                             case 'scale':
+                                if (transf_index != 4)
+                                    return "Invalid scale (transformation " + transf_index + ") in animation " + animationID 
                                 var coordinates = [];
                                 var messageError = "scale transformation in " + animationID
 
@@ -1317,13 +1321,14 @@ export class MySceneGraph {
                                     return "unable to parse z-coordinate of the " + messageError;
 
                                 coordinates.push(...[x, y, z]);
-                                //var coordinates = this.parseCoordinates3D(transformation, "scale transformation in " + animationID);
                                 if (!Array.isArray(coordinates))
                                     return coordinates;
         
-                                mat4.scale(transfMatrix, transfMatrix, coordinates);
+                                next_keyframe.push(coordinates)
                                 break;
-                            case 'rotate':
+                            case 'rotation':
+                                if (transf_index != 1 && transf_index != 2 && transf_index != 3)
+                                    return "Invalid rotation (transformation " + transf_index + ") in animation " + animationID 
                                 // axis
                                 var axisString = this.reader.getString(transformation, 'axis');
                                 if (!(axisString != null))
@@ -1345,14 +1350,18 @@ export class MySceneGraph {
                                 if (!(angle != null && !isNaN(angle)))
                                     return "unable to parse angle of a rotation in " + animationID;
                                     
-                                mat4.rotate(transfMatrix, transfMatrix, angle, axis);
-                                //this.onXMLMinorError("To do: Parse rotate transformations.");
+                                var coordinates = []
+
+                                next_keyframe.push(coordinates)
                                 break;
+                            default:
+                                return "Unable to parse transformations in keyframe " + j + " of animation " + animationID
                         }
+                        transf_index++
                     }
                     instants.push(instant)
-                    keyframes.push(mat4)
-
+                    keyframes.push(next_keyframe)
+                    console.log(keyframes)
                 }
                 //console.log(keyframes)
 
