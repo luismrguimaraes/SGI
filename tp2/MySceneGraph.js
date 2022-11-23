@@ -1361,7 +1361,7 @@ export class MySceneGraph {
                     }
                     instants.push(instant)
                     keyframes.push(next_keyframe)
-                    console.log(keyframes)
+                    //console.log(keyframes)
                 }
                 //console.log(keyframes)
 

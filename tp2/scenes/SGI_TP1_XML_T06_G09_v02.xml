@@ -231,6 +231,36 @@
     </primitives>
 
     <animations>
+        <keyframeanim id="pyramid_abduction">
+            <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="5">
+                <translation x="0" y="20" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="5.1">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="10" sy="10" sz="10" />
+            </keyframe>
+            <keyframe instant="5.2">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0" sy="0" sz="0" />
+            </keyframe>
+        </keyframeanim>
         <keyframeanim id="animation_1">
             <keyframe instant="0.5">
                 <translation x="0" y="20" z="0" />
@@ -266,7 +296,7 @@
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="120" />
-                <rotation axis="x" angle="0" />
+                <rotation axis="x" angle="120" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="3">
@@ -298,8 +328,9 @@
 
                 
                 <componentref id="spaceship"/>
+                <componentref id="pyramidSet"/>
 
-                <componentref id="patchTest"/>
+                <componentref id="tents" />
             </children>
         </component>
 
@@ -313,7 +344,46 @@
             <texture id="none"/>
             <children>
                 <componentref id="NurbBarrel"/>  
-                <componentref id ="pyramidSet"/>              
+                <componentref id="pyramidSet"/>              
+            </children>
+        </component>
+
+        <component id="tents">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="tent_1"/>
+                <componentref id="tent_2"/>
+            </children>
+        </component>
+        <component id="tent_1">
+            <transformation>
+                <translate x="60" y="0" z="60"/>
+                <rotate angle="45" axis="y"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="NurbTent"/>
+            </children>
+        </component>
+        <component id="tent_2">
+            <transformation>
+                <translate x="75" y="0" z="75"/>
+                <rotate angle="80" axis="y"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="NurbTent"/>
             </children>
         </component>
         
@@ -582,6 +652,8 @@
                 <componentref id="smallPyramid"/>
                 <componentref id="smallerPyramid"/>
             </children>
+            <animation id="pyramid_abduction"/>
+
         </component>
         <component id="bigPyramid">
             <transformation>
@@ -636,7 +708,6 @@
                 <componentref id="pyramidWall4"/>
 
             </children>
-            <animation id="animation_2"/>
         </component>
         <component id="pyramidWall2">
             <transformation>
