@@ -49,7 +49,9 @@ export class MyKeyframeAnimation extends MyAnimation{
             else{
                 let start_index = active_segment
                 let end_index = start_index +1
-                let exec_ratio = (t_seconds - this.instants[start_index]) / this.instants[end_index]
+                let t_total = this.instants[end_index] - this.instants[start_index]
+                let exec_ratio = (t_seconds - this.instants[start_index]) / t_total
+                console.log(exec_ratio, this.instants[start_index], this.instants[end_index])
 
                 this.active_transformation = mat4.create()
                 // for every geometric transformation in active_transformation

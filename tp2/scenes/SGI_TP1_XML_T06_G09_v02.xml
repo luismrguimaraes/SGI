@@ -239,8 +239,14 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="5" sz="1" />
             </keyframe>
-
-            <keyframe instant="2">
+            <keyframe instant="1.75">
+                <translation x="-5" y="0" z="10" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="0.7" sz="1" />
+            </keyframe>
+            <keyframe instant="3">
                 <translation x="0" y="-20" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
