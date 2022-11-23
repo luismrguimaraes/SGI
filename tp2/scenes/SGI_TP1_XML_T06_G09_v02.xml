@@ -254,6 +254,29 @@
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </keyframeanim>
+        <keyframeanim id="animation_2">
+            <keyframe instant="0.5">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="1.75">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="120" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="3">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </keyframeanim>
     </animations>
 
     <components>
@@ -273,7 +296,7 @@
 
                 <componentref id="oasis_and_cactusSets"/>
 
-                <componentref id="pyramidSet"/>
+                
                 <componentref id="spaceship"/>
 
                 <componentref id="patchTest"/>
@@ -289,9 +312,9 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="NurbBarrel"/>                
+                <componentref id="NurbBarrel"/>  
+                <componentref id ="pyramidSet"/>              
             </children>
-            <animation id="animation_1"/>
         </component>
         
         <component id="NurbBarrel">
@@ -613,6 +636,7 @@
                 <componentref id="pyramidWall4"/>
 
             </children>
+            <animation id="animation_2"/>
         </component>
         <component id="pyramidWall2">
             <transformation>

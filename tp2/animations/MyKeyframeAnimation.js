@@ -23,56 +23,61 @@ export class MyKeyframeAnimation extends MyAnimation{
         if (t_seconds >= this.instants[last_index])
             active_segment = "last"
 
-        //var transfMatrix = mat4.create();
         if (active_segment != "none"){
             if (active_segment == "last"){
-                let start_index = last_index
-                this.active_transformation = mat4.create()
-                // for every geometric transformation in active_transformation
-                for (var i = 0; i < this.keyframes[start_index].length; ++i){
-                    //apply transformation
-                    if (i == 0){
-                        var transf_vec3 = this.keyframes[start_index][i]
-                        mat4.translate(this.active_transformation, this.active_transformation, transf_vec3)
-                    }else if (i > 0 && i < 4){
-                        //let axis = 
-                        //transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
-                        //mat4.rotate(this.active_transformation, this.active_transformation, transf_vec3)
-                    }else{
-                        transf_vec3 = this.keyframes[start_index][i]
-                        mat4.scale(this.active_transformation, this.active_transformation, transf_vec3)
-                    }
-                    }
-            }
-            else{
-                let start_index = active_segment
-                let end_index = start_index +1
-                let t_total = this.instants[end_index] - this.instants[start_index]
-                let exec_ratio = (t_seconds - this.instants[start_index]) / t_total
-                console.log(exec_ratio, this.instants[start_index], this.instants[end_index])
+                var start_index = last_index
 
-                this.active_transformation = mat4.create()
-                // for every geometric transformation in active_transformation
-                for (var i = 0; i < this.keyframes[start_index].length; ++i){
-                    //interpolate
-                    var transf_vec3 = vec3.create()
-                    
-                    //apply transformation
-                    if (i == 0){
-                        transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
-                        mat4.translate(this.active_transformation, this.active_transformation, transf_vec3)
-                    }else if (i > 0 && i < 4){
-                        //let axis = 
-                        //transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
-                        //mat4.rotate(this.active_transformation, this.active_transformation, transf_vec3)
-                    }else{
-                        transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
-                        mat4.scale(this.active_transformation, this.active_transformation, transf_vec3)
-                    }
-                }
-                //vec3.lerp(transfMatrix, this.instants[start_index], this.instants[end_index], exec_ratio)
+                var interpolating = false
+            }else{
+                var start_index = active_segment
+                var end_index = start_index +1
+                var t_total = this.instants[end_index] - this.instants[start_index]
+                var exec_ratio = (t_seconds - this.instants[start_index]) / t_total
+                //console.log(exec_ratio, this.instants[start_index], this.instants[end_index])
+
+                var interpolating = true
             }
-        }else mat4.scale(this.active_transformation, this.active_transformation, [0,0,0])
+            this.active_transformation = mat4.create()
+
+            // for every geometric transformation in active keyframe
+            for (var i = 0; i < this.keyframes[start_index].length; ++i){                
+                var transf_vec3 = vec3.create()
+                if (i == 0){
+                    // Translation
+                    if (interpolating)
+                        transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
+                    else
+                        transf_vec3 = this.keyframes[start_index][i]
+                    mat4.translate(this.active_transformation, this.active_transformation, transf_vec3)
+                }else if (i > 0 && i < 4){
+                    // Rotations
+                    if (interpolating){
+                        var angle = (this.keyframes[end_index][i] - this.keyframes[start_index][i]) * exec_ratio + this.keyframes[start_index][i]
+                    }else
+                        var angle = this.keyframes[start_index][i]
+                    //mat4.rotate(this.active_transformation, this.active_transformation, transf_vec3)
+                    console.log(angle)
+                    switch (i){
+                        case 1:
+                            mat4.rotateZ(this.active_transformation, this.active_transformation, angle)
+                            break
+                        case 2:
+                            mat4.rotateY(this.active_transformation, this.active_transformation, angle)
+                            break
+                        case 3:
+                            mat4.rotateX(this.active_transformation, this.active_transformation, angle) 
+                    }
+                }else{
+                    // Scale
+                    if(interpolating)
+                        transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
+                    else
+                        transf_vec3 = this.keyframes[start_index][i]
+                    mat4.scale(this.active_transformation, this.active_transformation, transf_vec3)
+                }
+            }
+        }
+        else mat4.scale(this.active_transformation, this.active_transformation, [0,0,0])
 
     }
   

@@ -1335,23 +1335,24 @@ export class MySceneGraph {
                                 var axis = [0,0,0];
                                 switch(axisString){
                                     case 'x':
-                                        axis = [1,0,0];
+                                        if (transf_index != 3) 
+                                            return "Invalid position for rotation with axis x in animation " + animationID
                                         break;
                                     case 'y':
-                                        axis = [0,1,0];
+                                        if (transf_index != 2) 
+                                            return "Invalid position for rotation with axis y in animation " + animationID
                                         break;
                                     case 'z':
-                                        axis = [0,0,1];
+                                        if (transf_index != 1) 
+                                            return "Invalid position for rotation with axis z in animation " + animationID
                                         break;
                                 }
                                 // angle
                                 var angle = this.reader.getFloat(transformation, "angle") * Math.PI/180.0;
                                 if (!(angle != null && !isNaN(angle)))
                                     return "unable to parse angle of a rotation in " + animationID;
-                                    
-                                var coordinates = []
-
-                                next_keyframe.push(coordinates)
+                                console.log(angle)
+                                next_keyframe.push(angle)
                                 break;
                             default:
                                 return "Unable to parse transformations in keyframe " + j + " of animation " + animationID
