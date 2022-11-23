@@ -5,6 +5,7 @@ import { MyCylinder } from './primitives/MyCylinder.js';
 import { MyTorus } from './primitives/MyTorus.js';
 import { MySphere } from './primitives/MySphere.js';
 import { MyPatch } from './primitives/MyPatch.js';
+import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -18,26 +19,10 @@ var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATIONS_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 
-class MyAnimation {
-
-    constructor() {
-        if (this.constructor == Animal) {
-          throw new Error("Abstract classes can't be instantiated.");
-      }
-    }
-  
-    update(t) {
-        console.log("update " + t);
-      
-    }
-  
-    apply() {
-      console.log("apply");
-    }
-  }
 
 class ComponentsGraph {
     constructor(scene) {
@@ -60,13 +45,27 @@ class ComponentsGraph {
         if (this.scene.graph.defaultCameraId == null)
             this.appearance = this.scene.graph.materials[this.materialIDs[0]]
         else this.appearance = this.scene.graph.materials[this.defaultCameraId]
-
-        this.animationMatrix = null;
-        this.animations = []
     }
 
-    computeAnimation(ellapsedTime){
+    computeAnimation(nodeID, ellapsedTime){
+        if (this.nodes[nodeID]["Animation"].length != 0)
+            this.nodes[nodeID]["Animation"][0].update(ellapsedTime)        
+    }
+
+    computeAnimations(ellapsedTime){
+        this.computeAnimations_rec(this.root, ellapsedTime)
+    }
+    computeAnimations_rec(nodeID, ellapsedTime){
+        if (this.children[nodeID] == null)
+            return
+        if (this.nodes[nodeID]["Animation"].length > 0){
+            this.computeAnimation(nodeID, ellapsedTime)
+        }
         
+        if (this.children[nodeID] != null){
+            for (var child of this.children[nodeID])
+                this.computeAnimations_rec(child, ellapsedTime)
+        }    
     }
 
     addChild(parentID, childID) {
@@ -201,6 +200,10 @@ class ComponentsGraph {
 
             this.scene.pushMatrix();
             this.scene.multMatrix(this.nodes[currentNode]["Tm"]);
+            
+            if (this.nodes[currentNode]["Animation"].length != 0){
+                this.nodes[currentNode]["Animation"][0].apply()
+            }
 
             for (var child of this.children[currentNode]) {
                 this.display(child);
@@ -384,6 +387,18 @@ export class MySceneGraph {
 
             //Parse primitives block
             if ((error = this.parsePrimitives(nodes[index])) != null)
+                return error;
+        }
+
+        // <animations>
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != ANIMATIONS_INDEX)
+                this.onXMLMinorError("tag <animations> out of order");
+
+            //Parse primitives block
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -1210,12 +1225,10 @@ export class MySceneGraph {
                     var vertex = this.parseCoordinates3D(grandgrandChildren[j], "control point " + j + " of patch " + primitiveId)
                     vertex.push(1)
                     more_vertexes.push(vertex)
-                    console.log(vertex)
                 }
                 if (j % (degree_v +1) == 0 && j!=0) {
                     vertexes.push(more_vertexes)
                 }
-                console.log(vertexes)
                 var patch = new MyPatch(this.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, vertexes)
                 this.primitives[primitiveId] = patch
    
@@ -1227,6 +1240,135 @@ export class MySceneGraph {
 
         this.log("Parsed primitives");
         return null;
+    }
+
+    /**
+   * Parses the <animations> block.
+   * @param {animations block element} componentsNode
+   */
+    parseAnimations(animationsNode){
+        var children = animationsNode.children
+
+        this.animations = []
+
+        var grandChildren = []
+        var grandgrandChildren = []
+
+        // Any number of animations.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "keyframeanim") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current animation.
+            var animationID = this.reader.getString(children[i], 'id');
+            if (animationID == null)
+                return "no ID defined for animation";
+
+            // Checks for repeated IDs.
+            if (this.animations[animationID] != null)
+                return "ID must be unique for each animation (conflict: ID = " + animationID + ")";
+
+            grandChildren = children[i].children;
+            
+
+            if (children[i].nodeName == "keyframeanim") {
+                var keyframes = []
+                var instants = []
+                var instant = 0
+                for (var j = 0; j < grandChildren.length; j++) {
+                    var new_instant = this.reader.getFloat(grandChildren[j], "instant")
+                    if (new_instant < instant)
+                        return "Invalid instant in keyframe " + j + " of animation " + animationID
+                    var instant = new_instant
+
+                    grandgrandChildren = grandChildren[j].children
+
+                    var transf_index = 0
+                    var next_keyframe = []
+                    for (var transformation of grandgrandChildren){
+                        //console.log(transformation)
+                        switch (transformation.nodeName) {
+                            case 'translation':
+                                if (transf_index != 0)
+                                    return "Invalid translation (transformation " + transf_index + ") in animation " + animationID 
+                                var coordinates = this.parseCoordinates3D(transformation, "translate transformation in " + animationID);
+                                if (!Array.isArray(coordinates))
+                                    return coordinates;
+        
+                                next_keyframe.push(coordinates)
+                                break;
+                            case 'scale':
+                                if (transf_index != 4)
+                                    return "Invalid scale (transformation " + transf_index + ") in animation " + animationID 
+                                var coordinates = [];
+                                var messageError = "scale transformation in " + animationID
+
+                                // x
+                                var x = this.reader.getFloat(transformation, 'sx');
+                                if (!(x != null && !isNaN(x)))
+                                    return "unable to parse x-coordinate of the " + messageError;
+                                // y
+                                var y = this.reader.getFloat(transformation, 'sy');
+                                if (!(y != null && !isNaN(y)))
+                                    return "unable to parse y-coordinate of the " + messageError;
+                                // z
+                                var z = this.reader.getFloat(transformation, 'sz');
+                                if (!(z != null && !isNaN(z)))
+                                    return "unable to parse z-coordinate of the " + messageError;
+
+                                coordinates.push(...[x, y, z]);
+                                if (!Array.isArray(coordinates))
+                                    return coordinates;
+        
+                                next_keyframe.push(coordinates)
+                                break;
+                            case 'rotation':
+                                if (transf_index != 1 && transf_index != 2 && transf_index != 3)
+                                    return "Invalid rotation (transformation " + transf_index + ") in animation " + animationID 
+                                // axis
+                                var axisString = this.reader.getString(transformation, 'axis');
+                                if (!(axisString != null))
+                                    return "unable to parse axis of a rotation in " + animationID;
+                                var axis = [0,0,0];
+                                switch(axisString){
+                                    case 'x':
+                                        if (transf_index != 3) 
+                                            return "Invalid position for rotation with axis x in animation " + animationID
+                                        break;
+                                    case 'y':
+                                        if (transf_index != 2) 
+                                            return "Invalid position for rotation with axis y in animation " + animationID
+                                        break;
+                                    case 'z':
+                                        if (transf_index != 1) 
+                                            return "Invalid position for rotation with axis z in animation " + animationID
+                                        break;
+                                }
+                                // angle
+                                var angle = this.reader.getFloat(transformation, "angle") * Math.PI/180.0;
+                                if (!(angle != null && !isNaN(angle)))
+                                    return "unable to parse angle of a rotation in " + animationID;
+                                console.log(angle)
+                                next_keyframe.push(angle)
+                                break;
+                            default:
+                                return "Unable to parse transformations in keyframe " + j + " of animation " + animationID
+                        }
+                        transf_index++
+                    }
+                    instants.push(instant)
+                    keyframes.push(next_keyframe)
+                    console.log(keyframes)
+                }
+                //console.log(keyframes)
+
+                this.animations[animationID] = new MyKeyframeAnimation(keyframes, instants, this.scene)
+            }
+        }
+        this.log("Parsed animations")
     }
 
     /**
@@ -1273,6 +1415,7 @@ export class MySceneGraph {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
+            var animationIndex = nodeNames.indexOf("animation");
 
             // Transformations
             var transfMatrix = mat4.create();
@@ -1379,11 +1522,22 @@ export class MySceneGraph {
                     componentObject["TextureID_s_t"] = [ID, s, t]
                 }
 
-                                
+                
             }
             
+            // Animations
+            componentObject["Animation"] = []
+            if(animationIndex >= 0 && grandChildren[animationIndex] != null){
+                var animation = grandChildren[animationIndex] 
+                var ID = this.reader.getString(animation, 'id');
+                componentObject["Animation"] = [this.animations[ID]] //this must be a copy
+            }
+
             // Add to ComponentsGraph
             this.components_graph.addNode(componentID, componentObject);
+            
+            // Add to this.components
+            this.components[componentID] = componentObject;
 
             // Children            
             if(childrenIndex >= 0 && grandChildren[childrenIndex] != null){
@@ -1408,14 +1562,14 @@ export class MySceneGraph {
                     }
                 }
             }
-
-            // Add to this.components
-            this.components[componentID] = componentObject;
         }
 
         var integrityCheck_result = this.components_graph.integrityCheck(this.idRoot, this.primitives);
         if (integrityCheck_result != true) //check if dependencies have been satisfied
             return integrityCheck_result;
+        this.components_graph.root = this.idRoot
+
+        this.log("Parsed components")
     }
 
 
