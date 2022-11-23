@@ -26,15 +26,13 @@ export class MyKeyframeAnimation extends MyAnimation{
         //var transfMatrix = mat4.create();
         if (active_segment != "none"){
             if (active_segment == "last"){
-                this.active_transformation = this.keyframes[last_index]
-
                 let start_index = last_index
                 this.active_transformation = mat4.create()
                 // for every geometric transformation in active_transformation
                 for (var i = 0; i < this.keyframes[start_index].length; ++i){
                     //apply transformation
                     if (i == 0){
-                        transf_vec3 = this.keyframes[start_index][i]
+                        var transf_vec3 = this.keyframes[start_index][i]
                         mat4.translate(this.active_transformation, this.active_transformation, transf_vec3)
                     }else if (i > 0 && i < 4){
                         //let axis = 
@@ -57,11 +55,9 @@ export class MyKeyframeAnimation extends MyAnimation{
                 // for every geometric transformation in active_transformation
                 for (var i = 0; i < this.keyframes[start_index].length; ++i){
                     //interpolate
-                    var transf_vec3 = vec3.create()                
+                    var transf_vec3 = vec3.create()
                     
                     //apply transformation
-                    //console.log("before", mat4.clone(this.active_transformation))
-
                     if (i == 0){
                         transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
                         mat4.translate(this.active_transformation, this.active_transformation, transf_vec3)
