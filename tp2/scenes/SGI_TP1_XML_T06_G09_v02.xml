@@ -83,6 +83,7 @@
         <texture id="spacetech" file="scenes/images/spacetech_cropped.jpg" />
         <texture id="weird" file="scenes/images/weird_alien_picture_cropped.jpeg" />
         <texture id="barrel" file="scenes/images/barrel.jpg" />
+        <texture id="white_fabric" file="scenes/images/white-fabric-texture.jpg" />
     </textures>
 
     <materials>
@@ -278,6 +279,24 @@
                 <scale sx="0" sy="0" sz="0" />
             </keyframe>
         </keyframeanim>
+
+        <keyframeanim id="spaceship_arrival">
+            <keyframe instant="5.2">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="5" sy="0.1" sz="5" />
+            </keyframe>
+            <keyframe instant="5.3">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </keyframeanim>
+        
         <keyframeanim id="animation_1">
             <keyframe instant="0.5">
                 <translation x="0" y="20" z="0" />
@@ -334,21 +353,20 @@
                 <material id="sand" />
                 <material id="sand2" />
                 <material id="sand_blue" />
-
             </materials>
-            <texture id="barrel" length_s="1" length_t="1"/>
+            <texture id="none" length_s="1" length_t="1"/>
             <children>
                 <componentref id="bigCompositeTerrainSet"/>
                 <componentref id="walls"/>
 
                 <componentref id="oasis_and_cactusSets"/>
-
                 
                 <componentref id="spaceship"/>
                 <componentref id="pyramidSet"/>
 
                 <componentref id="tents" />
                 <componentref id="NurbBarrel_1"/>
+                <componentref id="NurbBarrel_2"/>
 
             </children>
         </component>
@@ -373,17 +391,18 @@
             <materials>
                 <material id="zero" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="white_fabric"/>
             <children>
                 <componentref id="tent_1"/>
                 <componentref id="tent_2"/>
+                <componentref id="tent_3"/>
             </children>
         </component>
         <component id="tent_1">
             <transformation>
-                <translate x="60" y="0" z="64"/>
+                <translate x="53" y="0" z="61"/>
                 <rotate angle="45" axis="y"/>
-                <scale x="2" y="1.2" z="1.5"/>
+                <scale x="2.9" y="1.7" z="2.5"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -395,9 +414,23 @@
         </component>
         <component id="tent_2">
             <transformation>
-                <translate x="75" y="0" z="75"/>
+                <translate x="77" y="0" z="82"/>
                 <rotate angle="80" axis="y"/>
-                <scale x="2" y="1.2" z="2"/>
+                <scale x="3.2" y="1.7" z="2.9"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="NurbTent"/>
+            </children>
+        </component>
+        <component id="tent_3">
+            <transformation>
+                <translate x="61" y="0" z="78"/>
+                <rotate angle="46" axis="y"/>
+                <scale x="3.2" y="1.7" z="2.9"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -408,9 +441,23 @@
             </children>
         </component>
 
+        <component id="NurbBarrel_2">
+            <transformation>
+                <translate x="75" y="2.35" z="67"/>
+                <rotate angle="90" axis="x"/>
+                <scale x="1" y="1" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="barrel"/>
+            <children>
+                <componentref id="NurbBarrel"/>
+            </children>
+        </component>
         <component id="NurbBarrel_1">
             <transformation>
-                <translate x="59" y="2.35" z="32"/>
+                <translate x="65" y="2.35" z="38"/>
                 <rotate angle="90" axis="x"/>
                 <scale x="1" y="1" z="0.5"/>
             </transformation>
@@ -584,7 +631,8 @@
 
         <component id="spaceship">
             <transformation>
-                <translate x="-50" y="120" z="20"/>
+                <!--translate x="-50" y="120" z="20"-->
+                <translate x="-110" y="120" z="-80"/>
             </transformation>
             <materials>
                 <material id="zero" />
@@ -595,6 +643,7 @@
                 <componentref id="cockpit"/>
                 <componentref id="base"/>
             </children>
+            <animation id="spaceship_arrival"/>
         </component>
         <component id="cockpit">
             <transformation>
