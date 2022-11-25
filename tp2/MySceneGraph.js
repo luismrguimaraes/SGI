@@ -1351,7 +1351,7 @@ export class MySceneGraph {
                                 var angle = this.reader.getFloat(transformation, "angle") * Math.PI/180.0;
                                 if (!(angle != null && !isNaN(angle)))
                                     return "unable to parse angle of a rotation in " + animationID;
-                                console.log(angle)
+                                //console.log(angle)
                                 next_keyframe.push(angle)
                                 break;
                             default:
@@ -1530,7 +1530,10 @@ export class MySceneGraph {
             if(animationIndex >= 0 && grandChildren[animationIndex] != null){
                 var animation = grandChildren[animationIndex] 
                 var ID = this.reader.getString(animation, 'id');
-                componentObject["Animation"] = [this.animations[ID]] //this must be a copy
+                if (this.animations[ID] != null)
+                    componentObject["Animation"] = [this.animations[ID]] //this must be a copy
+                else 
+                    return "Animation " + ID + " is not defined"
             }
 
             // Add to ComponentsGraph
@@ -1570,6 +1573,7 @@ export class MySceneGraph {
         this.components_graph.root = this.idRoot
 
         this.log("Parsed components")
+        //this.components_graph.print(this.idRoot)
     }
 
 

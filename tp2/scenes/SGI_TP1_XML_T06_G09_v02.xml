@@ -82,6 +82,7 @@
         <texture id="cloud" file="scenes/images/cloud_cropped.jpg" />
         <texture id="spacetech" file="scenes/images/spacetech_cropped.jpg" />
         <texture id="weird" file="scenes/images/weird_alien_picture_cropped.jpeg" />
+        <texture id="barrel" file="scenes/images/barrel.jpg" />
     </textures>
 
     <materials>
@@ -231,7 +232,7 @@
     </primitives>
 
     <animations>
-        <keyframeanim id="pyramid_abduction">
+        <keyframeanim id="pyramid_abduction_translate">
             <keyframe instant="0">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
@@ -246,12 +247,28 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
+        </keyframeanim>
+        <keyframeanim id="pyramid_abduction_scale">
+            <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="5">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
             <keyframe instant="5.1">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
-                <scale sx="10" sy="10" sz="10" />
+                <scale sx="0.1" sy="10" sz="0.1" />
             </keyframe>
             <keyframe instant="5.2">
                 <translation x="0" y="0" z="0" />
@@ -319,7 +336,7 @@
                 <material id="sand_blue" />
 
             </materials>
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="barrel" length_s="1" length_t="1"/>
             <children>
                 <componentref id="bigCompositeTerrainSet"/>
                 <componentref id="walls"/>
@@ -331,6 +348,8 @@
                 <componentref id="pyramidSet"/>
 
                 <componentref id="tents" />
+                <componentref id="NurbBarrel_1"/>
+
             </children>
         </component>
 
@@ -343,18 +362,18 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="NurbBarrel"/>  
-                <componentref id="pyramidSet"/>              
+                <primitiveref id="Torus"/>             
             </children>
+            <animation id="pyramid_abduction_translate"/>
         </component>
 
         <component id="tents">
             <transformation>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="zero" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="tent_1"/>
                 <componentref id="tent_2"/>
@@ -362,13 +381,14 @@
         </component>
         <component id="tent_1">
             <transformation>
-                <translate x="60" y="0" z="60"/>
+                <translate x="60" y="0" z="64"/>
                 <rotate angle="45" axis="y"/>
+                <scale x="2" y="1.2" z="1.5"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="NurbTent"/>
             </children>
@@ -377,13 +397,29 @@
             <transformation>
                 <translate x="75" y="0" z="75"/>
                 <rotate angle="80" axis="y"/>
+                <scale x="2" y="1.2" z="2"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="NurbTent"/>
+            </children>
+        </component>
+
+        <component id="NurbBarrel_1">
+            <transformation>
+                <translate x="59" y="2.35" z="32"/>
+                <rotate angle="90" axis="x"/>
+                <scale x="1" y="1" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="barrel"/>
+            <children>
+                <componentref id="NurbBarrel"/>
             </children>
         </component>
         
@@ -393,7 +429,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="NurbBarrel_half"/>
                 <componentref id="NurbBarrel_half_rotated"/>
@@ -408,7 +444,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="NurbBarrel_half"/>
             </children>
@@ -421,7 +457,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="NurbBarrel_lid"/>
                 <componentref id="NurbBarrel_lid_2"/>
@@ -437,7 +473,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <componentref id="NurbBarrel_lid"/>
             </children>
@@ -449,7 +485,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="NurbBarrel_lid_half"/>
                 <componentref id="NurbBarrel_lid_half_rotated"/>
@@ -464,7 +500,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="NurbBarrel_lid_half"/>
             </children>
@@ -593,7 +629,6 @@
             </children>
         </component>
 
-
         <component id="cloud">
             <transformation>
                 <translate x="-310" y="150" z="20"/>
@@ -636,8 +671,7 @@
                 <primitiveref id="Sphere"/>
             </children>
         </component>
-        
-
+   
         <component id="pyramidSet">
             <transformation>
                 <translate x="40" y="0" z="20"/>
@@ -652,7 +686,7 @@
                 <componentref id="smallPyramid"/>
                 <componentref id="smallerPyramid"/>
             </children>
-            <animation id="pyramid_abduction"/>
+            <animation id="pyramid_abduction_translate"/>
 
         </component>
         <component id="bigPyramid">
@@ -706,8 +740,8 @@
                 <componentref id="pyramidWall2"/>
                 <componentref id="pyramidWall3"/>
                 <componentref id="pyramidWall4"/>
-
             </children>
+            <animation id="pyramid_abduction_scale"/>
         </component>
         <component id="pyramidWall2">
             <transformation>
@@ -732,7 +766,8 @@
             <children>            
                 <primitiveref id="PyramidWall"/>
             </children>
-        </component><component id="pyramidWall4">
+        </component>
+        <component id="pyramidWall4">
             <transformation>
                 <rotate axis="y" angle="270"/>
             </transformation>

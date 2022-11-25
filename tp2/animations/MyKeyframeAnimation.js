@@ -46,8 +46,9 @@ export class MyKeyframeAnimation extends MyAnimation{
                     // Translation
                     if (interpolating)
                         transf_vec3 = vec3.lerp(transf_vec3, this.keyframes[start_index][i], this.keyframes[end_index][i], exec_ratio)
-                    else
+                    else{
                         transf_vec3 = this.keyframes[start_index][i]
+                    }
                     mat4.translate(this.active_transformation, this.active_transformation, transf_vec3)
                 }else if (i > 0 && i < 4){
                     // Rotations
@@ -55,8 +56,6 @@ export class MyKeyframeAnimation extends MyAnimation{
                         var angle = (this.keyframes[end_index][i] - this.keyframes[start_index][i]) * exec_ratio + this.keyframes[start_index][i]
                     }else
                         var angle = this.keyframes[start_index][i]
-                    //mat4.rotate(this.active_transformation, this.active_transformation, transf_vec3)
-                    console.log(angle)
                     switch (i){
                         case 1:
                             mat4.rotateZ(this.active_transformation, this.active_transformation, angle)
