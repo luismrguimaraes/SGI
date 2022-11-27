@@ -276,7 +276,7 @@
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="19.57">
-                <translation x="-2" y="-2" z="1" />
+                <translation x="-1" y="-4" z="1" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
@@ -406,43 +406,7 @@
             </keyframe>
         </keyframeanim>
 
-        <keyframeanim id="spaceship_arrival_and_departure">
-            <keyframe instant="2.0">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="5" sy="0.1" sz="5" />
-            </keyframe>
-            <keyframe instant="2.1">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1" sy="1" sz="1" />
-            </keyframe>
-            <keyframe instant="19.5">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1" sy="1" sz="1" />
-            </keyframe>
-            <keyframe instant="19.6">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="0.1" sy="5" sz="0.1" />
-            </keyframe>
-            <keyframe instant="19.6">
-                <translation x="0" y="10" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="0" sy="0" sz="0" />
-            </keyframe>
-        </keyframeanim>
+        
         <keyframeanim id="spaceship_departure_translation">
             <keyframe instant="2.0">
                 <translation x="0" y="0" z="0" />
@@ -466,7 +430,7 @@
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </keyframeanim>
-        <keyframeanim id="spaceship_rotation">
+        <keyframeanim id="spaceship_animation">
             <keyframe instant="2.0">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
@@ -491,21 +455,21 @@
             <keyframe instant="20.7">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="1000" />
+                <rotation axis="y" angle="1070" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="20.9">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="1000" />
+                <rotation axis="y" angle="1140" />
                 <rotation axis="x" angle="0" />
                 <scale sx="0.07" sy="5" sz="0.07" />
             </keyframe>
             <keyframe instant="21.1">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="1000" />
+                <rotation axis="y" angle="1210" />
                 <rotation axis="x" angle="0" />
                 <scale sx="0" sy="0" sz="0" />
             </keyframe>
@@ -519,11 +483,18 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="22">
+            <keyframe instant="20.5">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="1500" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="21.1">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="1815" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </keyframeanim>
@@ -913,7 +884,7 @@
                 <componentref id="cockpit"/>
                 <componentref id="base"/>
             </children>
-            <animation id="spaceship_rotation"/>
+            <animation id="spaceship_animation"/>
         </component>
         <component id="cockpit">
             <transformation>
@@ -947,7 +918,6 @@
             <children>
                 <primitiveref id="Torus"/>
             </children>
-            <!--animation id="spaceship_arrival_and_departure"-->
         </component>
 
         <component id="cloud">
