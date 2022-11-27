@@ -25,4 +25,4 @@
 ----
 ## Issues/Problems
 
-- Commit 3e31997a31d0f21be9b27000c8ee427276bd7ebe reproduces a bug with the scene file: One of the tents inherits the texture of the spaceship component which is not one of its parents.
+- Commit [3e31997a31d0f21be9b27000c8ee427276bd7ebe](https://git.fe.up.pt/sgi-meic/sgi-2022-2023/t06/sgi-t06-g09/-/commit/3e31997a31d0f21be9b27000c8ee427276bd7ebe) reproduces a bug with the scene file: One of the tents inherits the texture of the spaceship component which is not one of its parents.
