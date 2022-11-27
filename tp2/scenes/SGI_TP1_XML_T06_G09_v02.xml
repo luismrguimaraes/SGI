@@ -275,28 +275,28 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="19.6">
+            <keyframe instant="19.57">
                 <translation x="-2" y="-2" z="1" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="19.7">
+            <keyframe instant="19.64">
                 <translation x="-2" y="-1" z="1" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="19.8">
+            <keyframe instant="19.71">
                 <translation x="0.5" y="0" z="-1" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="19.9">
+            <keyframe instant="19.78">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -451,14 +451,14 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="21.4">
+            <keyframe instant="20.95">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="22">
+            <keyframe instant="21.1">
                 <translation x="0" y="200" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -472,38 +472,38 @@
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
-                <scale sx="5" sy="0.1" sz="5" />
+                <scale sx="1.8" sy="0.7" sz="1.8" />
             </keyframe>
-            <keyframe instant="2.2">
+            <keyframe instant="2.14">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="21">
+            <keyframe instant="20.5">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="1000" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="21.2">
+            <keyframe instant="20.7">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="1000" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="21.4">
+            <keyframe instant="20.9">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="1000" />
                 <rotation axis="x" angle="0" />
                 <scale sx="0.07" sy="5" sz="0.07" />
             </keyframe>
-            <keyframe instant="25.6">
-                <translation x="0" y="500000000" z="0" />
+            <keyframe instant="21.1">
+                <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="1000" />
                 <rotation axis="x" angle="0" />
@@ -540,12 +540,23 @@
             </materials>
             <texture id="none" length_s="1" length_t="1"/>
             <children>
+                <componentref id="spaceship_animated"/>
+                <componentref id="everything_but_the_spaceship"/>
+            </children>
+        </component>
+
+        <component id="everything_but_the_spaceship">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
                 <componentref id="bigCompositeTerrainSet"/>
                 <componentref id="walls"/>
 
                 <componentref id="oasis_and_cactusSets"/>
-                
-                <componentref id="spaceship_animated"/>
                 <componentref id="pyramidSet"/>
 
                 <componentref id="tents" />
@@ -691,7 +702,7 @@
         </component>
         <component id="NurbBarrel_2">
             <transformation>
-                <translate x="75" y="2.05" z="67"/>
+                <translate x="70" y="2.05" z="65.6"/>
                 <rotate angle="90" axis="x"/>
                 <scale x="0.6" y="0.6" z="0.3"/>
             </transformation>
