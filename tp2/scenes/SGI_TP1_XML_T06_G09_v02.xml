@@ -1,7 +1,7 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="Camera1">
+    <views default="Animation_camera">
         <perspective id="Camera0" near="0.1" far="500" angle="45">
             <from x="30" y="12" z="50" />
             <to x="190" y="4" z="40" />
@@ -9,6 +9,10 @@
         <perspective id="Camera1" near="0.1" far="500" angle="0.4">
             <from x="140" y="25" z="140" />
             <to x="0" y="6.8" z="0" />
+        </perspective>
+        <perspective id="Animation_camera" near="0.1" far="700" angle="0.4">
+            <from x="290" y="15" z="180" />
+            <to x="-40" y="66.8" z="-20" />
         </perspective>
         <ortho id="SideOrtho1" near="-50" far="900" left="-90" right="90" bottom="-5" top="55">
             <from x="-50" y="5" z="0" />
@@ -256,6 +260,105 @@
     </primitives>
 
     <animations>
+        <keyframeanim id="ground_shake">
+            <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.5">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.6">
+                <translation x="-2" y="-2" z="1" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.7">
+                <translation x="-2" y="-1" z="1" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.8">
+                <translation x="0.5" y="0" z="-1" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.9">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </keyframeanim>
+
+        <keyframeanim id="pyramid_planting_translate">
+            <keyframe instant="0">
+                <translation x="0" y="47" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="3.7">
+                <translation x="0" y="47" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.5">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </keyframeanim>
+        <keyframeanim id="pyramid_planting_scale">
+            <keyframe instant="0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0" sy="0" sz="0" />
+            </keyframe>
+            <keyframe instant="2.5">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0" sy="0" sz="0" />
+            </keyframe>
+            <keyframe instant="2.65">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.1" sy="10" sz="0.1" />
+            </keyframe>
+            <keyframe instant="2.8">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </keyframeanim>
+
         <keyframeanim id="pyramid_abduction_translate">
             <keyframe instant="0">
                 <translation x="0" y="0" z="0" />
@@ -303,19 +406,124 @@
             </keyframe>
         </keyframeanim>
 
-        <keyframeanim id="spaceship_arrival">
-            <keyframe instant="5.2">
+        <keyframeanim id="spaceship_arrival_and_departure">
+            <keyframe instant="2.0">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="5" sy="0.1" sz="5" />
             </keyframe>
-            <keyframe instant="5.3">
+            <keyframe instant="2.1">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.5">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="19.6">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.1" sy="5" sz="0.1" />
+            </keyframe>
+            <keyframe instant="19.6">
+                <translation x="0" y="10" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0" sy="0" sz="0" />
+            </keyframe>
+        </keyframeanim>
+        <keyframeanim id="spaceship_departure_translation">
+            <keyframe instant="2.0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="21.4">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="22">
+                <translation x="0" y="200" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </keyframeanim>
+        <keyframeanim id="spaceship_rotation">
+            <keyframe instant="2.0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="5" sy="0.1" sz="5" />
+            </keyframe>
+            <keyframe instant="2.2">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="21">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="1000" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="21.2">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="1000" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="21.4">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="1000" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.07" sy="5" sz="0.07" />
+            </keyframe>
+            <keyframe instant="25.6">
+                <translation x="0" y="500000000" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="1000" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0" sy="0" sz="0" />
+            </keyframe>
+            
+        </keyframeanim>
+        <keyframeanim id="spaceship_cockpit_rotation">
+            <keyframe instant="2.0">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="22">
+                <translation x="0" y="0" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="1500" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
         </keyframeanim>
@@ -337,13 +545,14 @@
 
                 <componentref id="oasis_and_cactusSets"/>
                 
-                <componentref id="spaceship"/>
+                <componentref id="spaceship_animated"/>
                 <componentref id="pyramidSet"/>
 
                 <componentref id="tents" />
                 <componentref id="barrels"/>
 
             </children>
+            <animation id="ground_shake"/>
         </component>
 
         <component id="tents">
@@ -352,7 +561,7 @@
             <materials>
                 <material id="zero" />
             </materials>
-            <texture id="white_fabric"/>
+            <texture id="white_fabric" length_s="1" length_t="1"/>
             <children>
                 <componentref id="tent_1"/>
                 <componentref id="tent_2"/>
@@ -436,7 +645,7 @@
             <materials>
                 <material id="grey" />
             </materials>
-            <texture id="trunk"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
             <children>
                 <componentref id="tent_stand_1"/>
             </children>
@@ -489,7 +698,7 @@
             <materials>
                 <material id="grey" />
             </materials>
-            <texture id="barrel"/>
+            <texture id="barrel" length_s="1" length_t="1"/>
             <children>
                 <componentref id="NurbBarrel"/>
             </children>
@@ -503,7 +712,7 @@
             <materials>
                 <material id="grey" />
             </materials>
-            <texture id="barrel"/>
+            <texture id="barrel" length_s="1" length_t="1"/>
             <children>
                 <componentref id="NurbBarrel"/>
             </children>
@@ -667,7 +876,18 @@
             </children>
         </component>
 
-
+        <component id="spaceship_animated">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="spaceship"/>
+            </children>
+            <animation id="spaceship_departure_translation"/>
+        </component>
         <component id="spaceship">
             <transformation>
                 <!--translate x="-50" y="120" z="20"-->
@@ -682,7 +902,7 @@
                 <componentref id="cockpit"/>
                 <componentref id="base"/>
             </children>
-            <animation id="spaceship_arrival"/>
+            <animation id="spaceship_rotation"/>
         </component>
         <component id="cockpit">
             <transformation>
@@ -700,6 +920,7 @@
             <children>
                 <primitiveref id="Sphere"/>
             </children>
+            <animation id="spaceship_cockpit_rotation"/>
         </component>
         <component id="base">
             <transformation>
@@ -715,6 +936,7 @@
             <children>
                 <primitiveref id="Torus"/>
             </children>
+            <!--animation id="spaceship_arrival_and_departure"-->
         </component>
 
         <component id="cloud">
@@ -774,7 +996,7 @@
                 <componentref id="smallPyramid"/>
                 <componentref id="smallerPyramid"/>
             </children>
-            <animation id="pyramid_abduction_translate"/>
+            <animation id="pyramid_planting_translate"/>
 
         </component>
         <component id="bigPyramid">
@@ -829,7 +1051,7 @@
                 <componentref id="pyramidWall3"/>
                 <componentref id="pyramidWall4"/>
             </children>
-            <animation id="pyramid_abduction_scale"/>
+            <animation id="pyramid_planting_scale"/>
         </component>
         <component id="pyramidWall2">
             <transformation>
