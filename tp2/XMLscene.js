@@ -47,7 +47,6 @@ export class XMLscene extends CGFscene {
 		this.greenFactor = 1;
 		this.blueFactor = 1;
 		this.testShader = new CGFshader(this.gl, "shaders/defaultScale.vert", "shaders/defaultColor.frag");
-		
     }
 
     /**

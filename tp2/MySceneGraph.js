@@ -142,6 +142,9 @@ class ComponentsGraph {
             return;
         }
         else{
+            if (currentNode == "pyramidSet"){
+    		    this.scene.setActiveShader(this.scene.testShader)
+            }
             // Not Primitive
             this.pushMaterial();
             var materialIndex = this.m_presses_count % this.nodes[currentNode]["MaterialIDs"].length
@@ -180,6 +183,10 @@ class ComponentsGraph {
             this.popTexture();
             this.appearance.apply();
             this.scene.popMatrix();
+            if (currentNode == "pyramidSet"){
+    		    this.scene.setActiveShader(this.scene.defaultShader)
+            }
+
         } 
     }
 }
