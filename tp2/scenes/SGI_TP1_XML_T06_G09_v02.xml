@@ -191,6 +191,29 @@
             <controlpoint x="1" y="0" z="-1" />
             </patch>
         </primitive>
+        <primitive id="NurbTentSide">
+            <patch degree_u="1" parts_u="20" degree_v="2" parts_v="20" >
+            <controlpoint x="-1" y="0" z="1" />
+            <controlpoint x="-1" y="5" z="0" />
+            <controlpoint x="-1" y="0" z="-1" />
+
+            <controlpoint x="1" y="0" z="-1" />
+            <controlpoint x="1" y="5" z="0" />
+            <controlpoint x="1" y="0" z="1" />
+            </patch>
+        </primitive>
+        <primitive id="NurbTentWall">
+            <patch degree_u="1" parts_u="20" degree_v="2" parts_v="20" >
+            <controlpoint x="0.1" y="0" z="-1" />
+            <controlpoint x="0.1" y="5" z="0" />
+            <controlpoint x="0.1" y="0" z="1" />
+            
+            <controlpoint x="-0.1" y="0" z="1" />
+            <controlpoint x="-0.1" y="5" z="0" />
+            <controlpoint x="-0.1" y="0" z="-1" />
+
+            </patch>
+        </primitive>
         <primitive id="NurbBarrel_half">
             <patch degree_u="3" parts_u="20" degree_v="3" parts_v="20" >
 
@@ -264,14 +287,14 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="5.1">
+            <keyframe instant="5.2">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="0.1" sy="10" sz="0.1" />
             </keyframe>
-            <keyframe instant="5.2">
+            <keyframe instant="5.3">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -289,53 +312,6 @@
                 <scale sx="5" sy="0.1" sz="5" />
             </keyframe>
             <keyframe instant="5.3">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1" sy="1" sz="1" />
-            </keyframe>
-        </keyframeanim>
-        
-        <keyframeanim id="animation_1">
-            <keyframe instant="0.5">
-                <translation x="0" y="20" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1" sy="5" sz="1" />
-            </keyframe>
-            <keyframe instant="1.75">
-                <translation x="-5" y="0" z="10" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1" sy="0.7" sz="1" />
-            </keyframe>
-            <keyframe instant="3">
-                <translation x="0" y="-20" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1" sy="1" sz="1" />
-            </keyframe>
-        </keyframeanim>
-        <keyframeanim id="animation_2">
-            <keyframe instant="0.5">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="0" />
-                <scale sx="1" sy="1" sz="1" />
-            </keyframe>
-            <keyframe instant="1.75">
-                <translation x="0" y="0" z="0" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="120" />
-                <rotation axis="x" angle="120" />
-                <scale sx="1" sy="1" sz="1" />
-            </keyframe>
-            <keyframe instant="3">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
@@ -365,24 +341,9 @@
                 <componentref id="pyramidSet"/>
 
                 <componentref id="tents" />
-                <componentref id="NurbBarrel_1"/>
-                <componentref id="NurbBarrel_2"/>
+                <componentref id="barrels"/>
 
             </children>
-        </component>
-
-        <component id="patchTest">
-            <transformation>
-                
-            </transformation>
-            <materials>
-                <material id="blue" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="Torus"/>             
-            </children>
-            <animation id="pyramid_abduction_translate"/>
         </component>
 
         <component id="tents">
@@ -402,14 +363,14 @@
             <transformation>
                 <translate x="53" y="0" z="61"/>
                 <rotate angle="45" axis="y"/>
-                <scale x="2.9" y="1.7" z="2.5"/>
+                <scale x="2.9" y="1.7" z="2.4"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="NurbTent"/>
+                <componentref id="Tent_with_stands"/>
             </children>
         </component>
         <component id="tent_2">
@@ -423,7 +384,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="NurbTent"/>
+                <componentref id="Tent_with_stands"/>
             </children>
         </component>
         <component id="tent_3">
@@ -437,15 +398,93 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <primitiveref id="NurbTent"/>
+                <componentref id="Tent_with_stands"/>
             </children>
         </component>
+        <component id="Tent_with_stands">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="NurbTent"/>
+                <primitiveref id="NurbTentSide"/>
+                <componentref id="NurbTentSide2"/>
+                <componentref id="tent_stands"/>
+            </children>
+        </component>
+        <component id="NurbTentSide2">
+            <transformation>
+                <translate x="-0.9" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="NurbTentWall"/>
+            </children>
+        </component>
+        <component id="tent_stands">
+            <transformation>
+                <translate x="0" y="1.37" z="0"/>
+                <rotate axis="x" angle="90"/>
+                <scale x="0.08" y="0.08" z="0.37"/>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="trunk"/>
+            <children>
+                <componentref id="tent_stand_1"/>
+            </children>
+        </component>
+        <component id="tent_stand_1">
+            <transformation>
+                <translate x="8.4" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="NurbBarrel"/>
+            </children>
+        </component>
+        <component id="tent_stand_2">
+            <transformation>
+                <translate x="-8.4" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="NurbBarrel"/>
+            </children>
+        </component>
+        
+        
 
+        <component id="barrels">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="NurbBarrel_1"/>
+                <componentref id="NurbBarrel_2"/>
+            </children>
+        </component>
         <component id="NurbBarrel_2">
             <transformation>
-                <translate x="75" y="2.35" z="67"/>
+                <translate x="75" y="2.05" z="67"/>
                 <rotate angle="90" axis="x"/>
-                <scale x="1" y="1" z="0.5"/>
+                <scale x="0.6" y="0.6" z="0.3"/>
             </transformation>
             <materials>
                 <material id="grey" />
@@ -457,9 +496,9 @@
         </component>
         <component id="NurbBarrel_1">
             <transformation>
-                <translate x="65" y="2.35" z="38"/>
+                <translate x="65" y="2.05" z="38"/>
                 <rotate angle="90" axis="x"/>
-                <scale x="1" y="1" z="0.5"/>
+                <scale x="0.7" y="0.7" z="0.35"/>
             </transformation>
             <materials>
                 <material id="grey" />
