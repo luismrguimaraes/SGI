@@ -22,8 +22,6 @@ var PRIMITIVES_INDEX = 7;
 var ANIMATIONS_INDEX = 8;
 var COMPONENTS_INDEX = 9;
 
-
-
 class ComponentsGraph {
     constructor(scene) {
         this.children = {}; // stores parent-child relationships via ID
@@ -413,6 +411,7 @@ export class MySceneGraph {
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
+        // <board>
         this.log("all parsed");
     }
 
@@ -1369,6 +1368,21 @@ export class MySceneGraph {
             }
         }
         this.log("Parsed animations")
+    }
+
+    /**
+   * Parses the <boards> block.
+   * @param {boards block element} componentsNode
+   */
+    parseBoards(boardsNode){
+        var center_position = this.parseCoordinates3D(boardsNode)
+        var scale_factor_default = 1
+        var scale_factor = this.getFloat(boardsNode, 'scale_factor')
+        if (scale_factor === undefined){
+            scale_factor = scale_factor_default
+        }
+
+        this.board = new Board(center_position, scale_factor)
     }
 
     /**
