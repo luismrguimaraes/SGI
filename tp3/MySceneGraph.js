@@ -6,6 +6,7 @@ import { MyTorus } from './primitives/MyTorus.js';
 import { MySphere } from './primitives/MySphere.js';
 import { MyPatch } from './primitives/MyPatch.js';
 import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
+import { MainBoard } from './primitives/MainBoard.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -20,7 +21,8 @@ var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var ANIMATIONS_INDEX = 8;
-var COMPONENTS_INDEX = 9;
+var BOARDS_INDEX = 9;
+var COMPONENTS_INDEX = 10;
 
 class ComponentsGraph {
     constructor(scene) {
@@ -412,6 +414,16 @@ export class MySceneGraph {
                 return error;
         }
         // <board>
+        if ((index = nodeNames.indexOf("boards")) == -1)
+            return "tag <boards> missing";
+        else {
+            if (index != BOARDS_INDEX)
+                this.onXMLMinorError("tag <boards> out of order");
+
+            //Parse boards block
+            if ((error = this.parseBoards(nodes[index])) != null)
+                return error;
+        }
         this.log("all parsed");
     }
 
@@ -1243,7 +1255,7 @@ export class MySceneGraph {
 
     /**
    * Parses the <animations> block.
-   * @param {animations block element} componentsNode
+   * @param {animations block element} animationsNode
    */
     parseAnimations(animationsNode){
         var children = animationsNode.children
@@ -1372,25 +1384,46 @@ export class MySceneGraph {
 
     /**
    * Parses the <boards> block.
-   * @param {boards block element} componentsNode
+   * @param {boards block element} boardsNode
    */
     parseBoards(boardsNode){
-        var center_position = this.parseCoordinates3D(boardsNode)
-        var scale_factor_default = 1
-        var scale_factor = this.getFloat(boardsNode, 'scale_factor')
-        if (scale_factor === undefined){
-            scale_factor = scale_factor_default
+        var children = boardsNode.children;
+  
+        this.boards = [];
+  
+        for (let i = 0; i < children.length; i++){
+            var boardType = children[i].nodeName
+            if (boardType === "mainboard"){
+                var x1 = this.reader.getFloat(children[i], 'x1')
+                var x2 = this.reader.getFloat(children[i], 'x2')
+                if (!(x2 != null && !isNaN(x2) && x2 > x1))
+                    return "unable to parse x2 of " + boardType
+
+                var y1 = this.reader.getFloat(children[i], 'y1')
+                var y2 = this.reader.getFloat(children[i], 'y2')
+                if (!(x2 != null && !isNaN(x2) && x2 > x1))
+                    return "unable to parse y2 of " + boardType
+  
+                this.boards .push(new MainBoard(this.scene, boardType, x1, x2, y1, y2))
+            }else if (boardType === "auxiliarboard_1"){
+  
+            }else if (boardType === "auxiliarboard_2"){
+  
+            }else return "invalid board"
         }
-
-        this.board = new Board(center_position, scale_factor)
-    }
-
+        if (this.boards.length != 3) {
+            this.onXMLMinorError("Invalid number of boards")
+            //return "Invalid number of boards"
+        }
+        this.log("Parsed boards")
+    } 
+    
     /**
-   * Parses the <components> block.
-   * @param {components block element} componentsNode
-   */
+     * Parses the <components> block.
+     * @param {components block element} componentsNode
+    */
     parseComponents(componentsNode) {
-        var children = componentsNode.children;
+       var children = componentsNode.children;
 
         this.components = [];
 
@@ -1503,8 +1536,9 @@ export class MySceneGraph {
                     else if (this.materials[ID] == null)
                         return "Invalid material with ID " + ID;
                     else componentObject["MaterialIDs"].push(ID);
-                    
                 }
+                if (Object.keys(componentObject["MaterialIDs"]).length === 0)
+                    return "Components should have at least 1 material"
             }
             // Texture            
             if(textureIndex >= 0 && grandChildren[textureIndex] != null){
@@ -1576,6 +1610,15 @@ export class MySceneGraph {
                             this.components_graph.addNode(primitiveID, this.primitives[primitiveID]);
                             this.components_graph.addChild(componentID, primitiveID);
                             break;
+                        case 'mainboard':
+                            let board_index = 0
+                            break;
+                        case 'auxiliarboard_1':
+                            let board_index = 0
+                            break;
+                        case 'auxiliarboard_2':
+                            let board_index = 0
+                            break;
                     }
                 }
             }
@@ -1589,7 +1632,6 @@ export class MySceneGraph {
         this.log("Parsed components")
         //this.components_graph.print(this.idRoot)
     }
-
 
     /**
      * Parse the coordinates from a node with ID = id
@@ -1741,26 +1783,7 @@ export class MySceneGraph {
 
 
         //To test the parsing/creation of the primitives, call the display function directly
-		//this.primitives['demoCylinder'].display();
-
-        var vertexes =  [ // U = 0
-                        [ // V = 0..1;
-                          [-2.0, -2.0, 0.0, 1 ],
-                          [-2.0, 2.0, 0.0, 1 ]
-                        ],
-                        // U = 1
-                        [ // V = 0..1
-                          [ 2.0, -2.0, 0.0, 1 ],
-                          [ 2.0, 2.0, 0.0, 1 ]
-                        ],
-                        [ 
-                          [ - 2.0, -2.0, 0.0, 1 ],
-                          [ - 2.0, 2.0, 0.0, 1 ]
-                        ],
-                        ]
-        //var nurbsSurface = new CGFnurbsSurface(2, 1, vertexes);
-        //var obj = new CGFnurbsObject(this.scene, 20, 20, nurbsSurface );
-        var patch = new MyPatch(this.scene, "test", 2, 20, 1, 20, vertexes);
-        //patch.display();
+        this.boards[0].display()
+		
     }
 }
