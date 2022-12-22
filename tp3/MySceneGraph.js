@@ -6,7 +6,7 @@ import { MyTorus } from './primitives/MyTorus.js';
 import { MySphere } from './primitives/MySphere.js';
 import { MyPatch } from './primitives/MyPatch.js';
 import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
-import { MainBoard } from './primitives/MainBoard.js';
+import { MainBoard } from './objects/MainBoard.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;

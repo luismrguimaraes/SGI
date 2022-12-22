@@ -1,3 +1,4 @@
+import { Piece } from "./Piece.js"
 import { Tile } from "./Tile.js"
 
 /**
@@ -9,6 +10,7 @@ export class MainBoard {
         this.scene = scene
         this.id = id
         this.board = this.initBoard(x1, x2, y1, y2)
+        this.pieces = this.initPieces(x1, x2, y1, y2)
     }
 
     initBoard(x1, x2, y1, y2){
@@ -26,11 +28,24 @@ export class MainBoard {
                 let tile_y1 = parseFloat(y1 + j*height)
                 let tile_y2 = parseFloat(y1 + (j+1)*height)
 
-                board[i].push(new Tile(this.scene, this, color, this.id + `: ${i},${j}`, tile_x1, tile_x2, tile_y1, tile_y2))
+                board[i].push(new Tile(this.scene, this, color, this.id + ` ${j} ${i}`, tile_x1, tile_x2, tile_y1, tile_y2, j, i))    
             }
         }
 
+        //TEST
+        board[5][3].setPickable(true)
+
         return board
+    }
+
+    initPieces(){
+        var pieces = []
+        for (let i = 0; i < 8; i++){
+            for (let j = 0; j < 8; j++){
+                pieces.push(new Piece(this.scene, this.board, 0, this.id + ` ${i+j}`, this.board[i][j]))
+            }
+        }
+        return pieces
     }
 
     display(){
@@ -39,12 +54,18 @@ export class MainBoard {
                 this.board[i][j].display()
             }
         }
+        for (let i = 0; i < this.pieces.length; i++){
+            this.pieces[i].display()
+        }
     }
     updateTexCoords(s, t) {		
 		for (let i = 0; i < 8; i++){
             for (let j = 0; j < 8; j++){
                 this.board[i][j].updateTexCoords(s, t)
             }
+        }
+        for (let i = 0; i < this.pieces.length; i++){
+            this.pieces[i].updateTexCoords(s, t)
         }
 	}
 

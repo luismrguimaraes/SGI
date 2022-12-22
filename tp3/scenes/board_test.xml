@@ -133,12 +133,6 @@
             <diffuse r="0.7" g="0.7" b="0.7" a="0.7" />
             <specular r="0.5" g="0.5" b="0.5" a="0.7" />
         </material>
-        <material id="soft_green" shininess="10">
-            <emission r="1" g="1" b="1" a="1" />
-            <ambient r="0" g="0" b="0" a="0" />
-            <diffuse r="0.7" g="0.7" b="0.7" a="0.7" />
-            <specular r="0.5" g="0.5" b="0.5" a="0.5" />
-        </material>
         <material id="grey" shininess="10">
             <emission r="1" g="1" b="1" a="1" />
             <ambient r="0" g="0" b="0" a="0" />
@@ -274,16 +268,40 @@
     <components>
         <component id="root">
             <transformation>
-                <rotate axis="x" angle="25"/>
-                <scale x="1" y="15" z="1"/>
+
+                <scale x="10" y="10" z="10"/>
             </transformation>
             <materials>
                 <material id="blue"/>
             </materials>
             <texture id="none" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="NurbTent"/>
+                <componentref id="board"/>
+                <componentref id="piece"/>
+            </children>
+        </component>
+        <component id="board">
+            <transformation>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1"/>
+            <children>
                 <mainboard/>
+            </children>
+        </component>
+        <component id="piece">
+            <transformation>
+                <translate x="0" y="0" z="10"/>
+            </transformation>
+            <materials>
+                <material id="blue"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Invisible"/>
             </children>
         </component>
     </components>
