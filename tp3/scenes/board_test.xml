@@ -36,7 +36,7 @@
     </ambient>
 
     <lights>
-        <spot id="Unidentified" enabled="1" angle="13" exponent="16">
+        <spot id="Unidentified" enabled="0" angle="13" exponent="16">
             <target x="-20" y="10" z="-20" />
             <location x="20" y="30" z="20" w="1.0" />
             <ambient r="0" g="0.3" b="0" a="1.0" />
@@ -270,19 +270,21 @@
     <boards>
         <mainboard x1="-10" y1="-10" x2="10" y2="10"/>
     </boards>
-    
+
     <components>
         <component id="root">
             <transformation>
+                <rotate axis="x" angle="25"/>
+                <scale x="1" y="15" z="1"/>
             </transformation>
             <materials>
-                <material id="zero"/>
+                <material id="blue"/>
             </materials>
             <texture id="none" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="Invisible"/>
+                <primitiveref id="NurbTent"/>
+                <mainboard/>
             </children>
         </component>
     </components>
-
 </sxs>

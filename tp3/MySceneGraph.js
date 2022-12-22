@@ -108,7 +108,8 @@ class ComponentsGraph {
         }
         // Check if all leaves are primitives
         for (var nodeID in this.nodes){
-            if (this.children[nodeID] == null && !(nodeID in primitives))
+            if (this.children[nodeID] == null && !(nodeID in primitives || 
+                ['mainboard', 'auxiliarboard_1', 'auxiliarboard_2'].includes(nodeID)))
                 return nodeID + " is an invalid leaf";
         }
         return true;
@@ -402,6 +403,18 @@ export class MySceneGraph {
                 return error;
         }
 
+        // <boards>
+        if ((index = nodeNames.indexOf("boards")) == -1)
+            return "tag <boards> missing";
+        else {
+            if (index != BOARDS_INDEX)
+                this.onXMLMinorError("tag <boards> out of order");
+
+            //Parse boards block
+            if ((error = this.parseBoards(nodes[index])) != null)
+                return error;
+        }
+
         // <components>
         if ((index = nodeNames.indexOf("components")) == -1)
             return "tag <components> missing";
@@ -411,17 +424,6 @@ export class MySceneGraph {
 
             //Parse components block
             if ((error = this.parseComponents(nodes[index])) != null)
-                return error;
-        }
-        // <board>
-        if ((index = nodeNames.indexOf("boards")) == -1)
-            return "tag <boards> missing";
-        else {
-            if (index != BOARDS_INDEX)
-                this.onXMLMinorError("tag <boards> out of order");
-
-            //Parse boards block
-            if ((error = this.parseBoards(nodes[index])) != null)
                 return error;
         }
         this.log("all parsed");
@@ -1390,10 +1392,10 @@ export class MySceneGraph {
         var children = boardsNode.children;
   
         this.boards = [];
-  
+
         for (let i = 0; i < children.length; i++){
             var boardType = children[i].nodeName
-            if (boardType === "mainboard"){
+            if (boardType === "mainboard" && this.boards.length === 0){
                 var x1 = this.reader.getFloat(children[i], 'x1')
                 var x2 = this.reader.getFloat(children[i], 'x2')
                 if (!(x2 != null && !isNaN(x2) && x2 > x1))
@@ -1404,15 +1406,15 @@ export class MySceneGraph {
                 if (!(x2 != null && !isNaN(x2) && x2 > x1))
                     return "unable to parse y2 of " + boardType
   
-                this.boards .push(new MainBoard(this.scene, boardType, x1, x2, y1, y2))
-            }else if (boardType === "auxiliarboard_1"){
+                this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2))
+            }else if (boardType === "auxiliarboard_1" && this.boards.length === 1){
   
-            }else if (boardType === "auxiliarboard_2"){
+            }else if (boardType === "auxiliarboard_2" && this.boards.length === 2){
   
-            }else return "invalid board"
+            }else return "\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_2 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>"
         }
         if (this.boards.length != 3) {
-            this.onXMLMinorError("Invalid number of boards")
+            this.onXMLMinorError("\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_2 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>")
             //return "Invalid number of boards"
         }
         this.log("Parsed boards")
@@ -1611,13 +1613,15 @@ export class MySceneGraph {
                             this.components_graph.addChild(componentID, primitiveID);
                             break;
                         case 'mainboard':
-                            let board_index = 0
+                            var board = this.boards[0]
+                            this.components_graph.addNode('mainboard', board)
+                            this.components_graph.addChild(componentID, 'mainboard')
                             break;
                         case 'auxiliarboard_1':
-                            let board_index = 0
+                            var board_index = 1
                             break;
                         case 'auxiliarboard_2':
-                            let board_index = 0
+                            var board_index = 2
                             break;
                     }
                 }
@@ -1783,7 +1787,7 @@ export class MySceneGraph {
 
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.boards[0].display()
+        //this.boards[0].display()
 		
     }
 }

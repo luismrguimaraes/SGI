@@ -26,7 +26,6 @@ export class Tile{
     /**
 	 * @method updateTexCoords
 	 * Updates the list of texture coordinates of the rectangle
-	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(s, t) {		
 		this.rectangle.updateTexCoords(s, t)
