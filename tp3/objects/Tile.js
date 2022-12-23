@@ -6,13 +6,15 @@ import { CGFappearance, CGFobject } from '../../lib/CGF.js';
  * @constructor
  */
 export class Tile{
-    constructor (scene, board, color, id, x1, x2, y1, y2, board_x, board_y){
+    constructor (scene, board, color, id, x1, x2, y1, y2, board_x, board_y, texture){
         this.scene = scene
         this.board = board
         this.color = color
         this.id = id
+        this.texture = texture
         this.rectangle = new MyRectangle(scene, id, x1, x2, y1, y2)
-        this.rectangle.id = id
+        this.rectangle.parent = this
+
         this.isPickable = false
         this.board_x = board_x
         this.board_y = board_y
@@ -28,11 +30,15 @@ export class Tile{
     }
 
     display(){
+        var appearance = new CGFappearance(this.scene)
+        if (this.texture != 'none') 
+            appearance.setTexture(this.texture)
+
         if (this.isPickable){
-            var appearance = new CGFappearance(this.scene)
             if (this.color === 0){
-                appearance.setEmission(0,0.1,0,1)
-                appearance.setDiffuse(0.8,1,0.8,1)
+                appearance.setDiffuse(0,0.5,0.3, 1)
+                appearance.setEmission(0,0.5,0.2, 1)
+                appearance.setSpecular(0,5,0.3, 1)
             }
             else {
                 appearance.setDiffuse(0,0.2,0,1)
@@ -43,10 +49,15 @@ export class Tile{
             this.rectangle.display()
             this.scene.clearPickRegistration()
         }else{
-            var appearance = new CGFappearance(this.scene)
-            if (this.color === 0)
-                appearance.setDiffuse(1,1,1,1)
-            else appearance.setDiffuse(0,0,0,1)
+            if (this.color === 0){
+                appearance.setDiffuse(209/256, 166/256, 109/256,1)
+                appearance.setSpecular(0.2,0.2,0.2, 1)
+                //appearance.setDiffuse(0.5, 0.5, 0.5,1)
+            }
+            else {
+                appearance.setDiffuse(118/236, 52/236, 29/236,1)
+                appearance.setSpecular(0.2,0.2,0.2, 1)
+            }
             appearance.apply()
             this.rectangle.display()
         }

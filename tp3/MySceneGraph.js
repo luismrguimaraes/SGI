@@ -7,6 +7,7 @@ import { MySphere } from './primitives/MySphere.js';
 import { MyPatch } from './primitives/MyPatch.js';
 import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 import { MainBoard } from './objects/MainBoard.js';
+import { Board } from './objects/Board.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -160,8 +161,7 @@ class ComponentsGraph {
             this.appearance.setTexture(next_texture)
         }
     }
-     
-
+    
     display(currentNode){
         //console.log(currentNode);
         if (this.children[currentNode] == null){
@@ -1406,7 +1406,26 @@ export class MySceneGraph {
                 if (!(x2 != null && !isNaN(x2) && x2 > x1))
                     return "unable to parse y2 of " + boardType
   
-                this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2))
+                var textures = []
+
+                var whiteTileTextureID = this.reader.getString(children[i], 'whiteTileTexture')
+                var whiteTileTexture
+                if (whiteTileTextureID != null) 
+                    whiteTileTexture = this.textures[whiteTileTextureID]
+                else whiteTileTexture = 'none'
+
+                var blackTileTextureID = this.reader.getString(children[i], 'blackTileTexture')
+                var blackTileTexture
+                if (blackTileTextureID != null) 
+                    blackTileTexture = this.textures[blackTileTextureID]
+                else blackTileTexture = 'none'
+
+                textures.push(whiteTileTexture)
+                textures.push(blackTileTexture)
+
+                console.log(textures)
+
+                this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2, textures))
             }else if (boardType === "auxiliarboard_1" && this.boards.length === 1){
   
             }else if (boardType === "auxiliarboard_2" && this.boards.length === 2){
