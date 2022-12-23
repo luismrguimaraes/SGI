@@ -16,6 +16,7 @@ export class Tile{
         this.rectangle.parent = this
 
         this.isPickable = false
+        this.isFree = true
         this.board_x = board_x
         this.board_y = board_y
 
@@ -29,6 +30,10 @@ export class Tile{
         this.isPickable = value
     }
 
+    set_isFree(value){
+        this.isFree = value
+    }
+
     display(){
         var appearance = new CGFappearance(this.scene)
         if (this.texture != 'none') 
@@ -36,12 +41,14 @@ export class Tile{
 
         if (this.isPickable){
             if (this.color === 0){
-                appearance.setDiffuse(0,0.5,0.3, 1)
-                appearance.setEmission(0,0.5,0.2, 1)
-                appearance.setSpecular(0,5,0.3, 1)
+                appearance.setEmission(0,0.3,0, 1)
+                appearance.setDiffuse(129/256, 256/256, 29/256,1)
+                appearance.setSpecular(0,0,0, 1)
             }
             else {
-                appearance.setDiffuse(0,0.2,0,1)
+                appearance.setEmission(0,0.3,0, 1)
+                appearance.setDiffuse(118/256, 162/236, 29/236,1)
+                appearance.setSpecular(0,0,0, 1)
             }
             appearance.apply()
 
@@ -52,10 +59,9 @@ export class Tile{
             if (this.color === 0){
                 appearance.setDiffuse(209/256, 166/256, 109/256,1)
                 appearance.setSpecular(0.2,0.2,0.2, 1)
-                //appearance.setDiffuse(0.5, 0.5, 0.5,1)
             }
             else {
-                appearance.setDiffuse(118/236, 52/236, 29/236,1)
+                appearance.setDiffuse(118/256, 52/256, 29/256,1)
                 appearance.setSpecular(0.2,0.2,0.2, 1)
             }
             appearance.apply()

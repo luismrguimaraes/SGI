@@ -35,7 +35,15 @@ export class Piece{
     }
 
     move(x, y){
-        this.tile = this.board.get(x, y)
+        if (this.board.get(x, y).isFree){
+            this.tile.isFree = true
+            this.tile = this.board.get(x, y)
+            this.tile.isFree = false
+        }
+        else {
+            console.log("Tile occupied")
+            return "Tile " + x + ", " + y + " occupied"
+        }
     }
 
     display(){
@@ -47,25 +55,8 @@ export class Piece{
         this.scene.translate(0, 0, 1)
 
         var appearance = new CGFappearance(this.scene)
-        if (this.isPickable){
-            if (this.color === 0){
-                appearance.setEmission(0,0.8,0, 1)
-                appearance.setSpecular(0.25,0.25,0.25, 1)
-                appearance.setDiffuse(0.2,0.2,0.2, 1)
-            }
-            else {
-                appearance.setEmission(0,0.8,0, 1)
-                appearance.setSpecular(0.25,0.25,0.25, 1)
-                appearance.setDiffuse(0.1,0.1,0.1, 1)
-            }
-            appearance.apply()
-
-            this.scene.registerForPick(this.scene.pickId++, this.sphere)
-            this.sphere.display()
-            this.scene.clearPickRegistration()
-
-        }else if (this.isPicked){
-            console.log("is Picked")
+        if (this.isPicked){
+            // Picked pieces are not registered for picking
             if (this.color === 0){
                 appearance.setDiffuse(0.7,0.6,0.93, 1)
                 appearance.setSpecular(1,1,1, 1)
@@ -77,8 +68,25 @@ export class Piece{
             appearance.apply()
 
             this.scene.translate(0, 0, Math.abs(this.tile.x2 - this.tile.x1) + Math.abs(this.tile.y2 - this.tile.y1))
-
             this.sphere.display()
+
+        }else if (this.isPickable){
+            if (this.color === 0){
+                appearance.setEmission(0,0.25,0, 1)
+                appearance.setDiffuse(0.4,0.4,0.4, 1)
+                appearance.setSpecular(0.25,0.25,0.25, 1)
+            }
+            else {
+                appearance.setEmission(0,0.25,0, 1)
+                appearance.setDiffuse(0.25,0.25,0.25, 1)
+                appearance.setSpecular(0.25,0.25,0.25, 1)
+            }
+            appearance.apply()
+
+            this.scene.registerForPick(this.scene.pickId++, this.sphere)
+            this.sphere.display()
+            this.scene.clearPickRegistration()
+
         }else{
             //Not Picked or Pickable
             if (this.color === 0){

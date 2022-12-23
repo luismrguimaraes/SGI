@@ -12,7 +12,7 @@ export class Board {
         this.width = width
         this.height = height
         this.tile_textures = tile_textures
-        this.board = this.initBoard(x1, x2, y1, y2)
+        this.board = this.initBoard(x1, x2, y1, y2)  // tiles set
         this.pieces = this.initPieces()
     }
 

@@ -18,6 +18,7 @@ export class XMLscene extends CGFscene {
 
         this.interface = myinterface;
 		this.lightValues = {};
+        this.pickedPiece = null
     }
 
     /**
@@ -201,12 +202,23 @@ export class XMLscene extends CGFscene {
 					var obj = this.pickResults[i][0];
 					if (obj)
 					{
-						var customId = this.pickResults[i][1];				
+						var customId = this.pickResults[i][1];
+
 						console.log("Picked object: " + obj.parent + "(id: " + obj.parent.id + ") with pick id " + customId);
                         var split_id = obj.parent.id.split(' ')
                         if (split_id[0] === 'piece'){
                             console.log("picked piece " + split_id[1])
-                            this.graph.boards[0].pick(obj.parent.id)
+                            this.graph.boards[0].pick(obj.parent.id)  // (mainboard is at boards[0])
+                            this.pickedPiece = obj.parent
+                        }
+                        else if (split_id[0] === 'mainboard'){
+                            console.log("picked tile " + split_id[1] + ' ' + split_id[2])
+                            console.log(obj.parent.isFree)
+                            if (this.pickedPiece !== null){
+                                obj.parent.board.move(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
+                                this.pickedPiece.setPicked(false)
+                                this.pickedPiece = null
+                            }
                         }
 					}
 				}

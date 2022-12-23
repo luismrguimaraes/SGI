@@ -1423,9 +1423,8 @@ export class MySceneGraph {
                 textures.push(whiteTileTexture)
                 textures.push(blackTileTexture)
 
-                console.log(textures)
-
                 this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2, textures))
+
             }else if (boardType === "auxiliarboard_1" && this.boards.length === 1){
   
             }else if (boardType === "auxiliarboard_2" && this.boards.length === 2){
