@@ -110,7 +110,7 @@ class ComponentsGraph {
         // Check if all leaves are primitives
         for (var nodeID in this.nodes){
             if (this.children[nodeID] == null && !(nodeID in primitives || 
-                ['mainboard', 'auxiliarboard_1', 'auxiliarboard_2'].includes(nodeID)))
+                ['mainboard', 'auxiliarboard_0', 'auxiliarboard_1'].includes(nodeID)))
                 return nodeID + " is an invalid leaf";
         }
         return true;
@@ -1425,14 +1425,14 @@ export class MySceneGraph {
 
                 this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2, textures))
 
-            }else if (boardType === "auxiliarboard_1" && this.boards.length === 1){
+            }else if (boardType === "auxiliarboard_0" && this.boards.length === 1){
   
-            }else if (boardType === "auxiliarboard_2" && this.boards.length === 2){
+            }else if (boardType === "auxiliarboard_1" && this.boards.length === 2){
   
-            }else return "\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_2 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>"
+            }else return "\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_0 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>"
         }
         if (this.boards.length != 3) {
-            this.onXMLMinorError("\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_2 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>")
+            this.onXMLMinorError("\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_0 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>")
             //return "Invalid number of boards"
         }
         this.log("Parsed boards")
@@ -1635,10 +1635,10 @@ export class MySceneGraph {
                             this.components_graph.addNode('mainboard', board)
                             this.components_graph.addChild(componentID, 'mainboard')
                             break;
-                        case 'auxiliarboard_1':
+                        case 'auxiliarboard_0':
                             var board_index = 1
                             break;
-                        case 'auxiliarboard_2':
+                        case 'auxiliarboard_1':
                             var board_index = 2
                             break;
                     }

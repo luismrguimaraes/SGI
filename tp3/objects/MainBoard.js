@@ -57,6 +57,8 @@ export class MainBoard extends Board{
         //TEST
         pieces[2].setPickable(true)
         pieces[4].setPickable(true)
+        pieces[4].set_isKing(true)
+        pieces[15].set_isKing(true)
 
         return pieces
     }

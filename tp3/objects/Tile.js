@@ -46,7 +46,7 @@ export class Tile{
                 appearance.setSpecular(0,0,0, 1)
             }
             else {
-                appearance.setEmission(0,0.3,0, 1)
+                appearance.setEmission(0,0.2,0, 1)
                 appearance.setDiffuse(118/256, 162/236, 29/236,1)
                 appearance.setSpecular(0,0,0, 1)
             }
@@ -61,7 +61,7 @@ export class Tile{
                 appearance.setSpecular(0.2,0.2,0.2, 1)
             }
             else {
-                appearance.setDiffuse(118/256, 52/256, 29/256,1)
+                appearance.setDiffuse(148/256, 82/256, 59/256,1)
                 appearance.setSpecular(0.2,0.2,0.2, 1)
             }
             appearance.apply()
