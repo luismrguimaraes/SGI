@@ -19,6 +19,7 @@ export class Piece{
         this.isPickable = false
         this.isPicked = false
         this.isKing = false
+        this.hasMovedThisTurn = false
     }
 
     setPickable(value){
@@ -31,6 +32,10 @@ export class Piece{
 
     set_isKing(value){
         this.isKing = value
+    }
+
+    set_hasMovedThisTurn(value){
+        this.hasMovedThisTurn = value
     }
 
     getBoardPosition(){
