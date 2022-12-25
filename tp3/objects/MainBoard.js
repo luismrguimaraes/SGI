@@ -67,6 +67,7 @@ export class MainBoard extends Board{
         for (let i = 0; i < this.pieces.length; i++){
             if (this.pieces[i].id === piece_id){
                 this.pieces[i].setPicked(true)
+                this.pieces[i].triggerPickAnimation()
                 //this.pieces[i].setPickable(false)
                     
             }
@@ -108,5 +109,14 @@ export class MainBoard extends Board{
             }
         }
         return null
+    }
+
+    computeAnimations(ellapsedTime){
+        this.computeAnimations_rec(ellapsedTime)
+    }
+    computeAnimations_rec(ellapsedTime){
+        for (let i = 0; i < this.pieces.length; i++){
+            this.pieces[i].computeAnimation(ellapsedTime)
+        }   
     }
 }

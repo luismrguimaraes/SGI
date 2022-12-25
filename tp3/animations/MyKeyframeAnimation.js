@@ -78,6 +78,8 @@ export class MyKeyframeAnimation extends MyAnimation{
         }
         else mat4.scale(this.active_transformation, this.active_transformation, [0,0,0])
 
+        if (active_segment === "last")
+            return "animation over"
     }
   
     apply() {

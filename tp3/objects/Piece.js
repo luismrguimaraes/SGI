@@ -1,6 +1,7 @@
 import { MyRectangle} from "../primitives/MyRectangle.js"
 import { CGFappearance, CGFobject } from '../../lib/CGF.js';
 import { MySphere } from "../primitives/MySphere.js";
+import { MyKeyframeAnimation } from "../animations/MyKeyframeAnimation.js";
 
 /**
  * Piece
@@ -20,6 +21,9 @@ export class Piece{
         this.isPicked = false
         this.isKing = false
         this.hasMovedThisTurn = false
+
+        // animations
+        this.pickAnimation = null
     }
 
     setPickable(value){
@@ -56,19 +60,43 @@ export class Piece{
         }
     }
 
+    triggerPickAnimation(){
+        var startTime = (Date.now() - this.scene.startTime)/1000
+        this.pickAnimation = new MyKeyframeAnimation([ 
+            [[0,0,0], 0, 0, 0, [1,1,1]], 
+            [[0,0,0], 0, 0.2, 0.5, [1,1,1]],
+            [[0,0,0], 0, 0, -0.4, [1,1,1]],
+            [[0,0,0], 0, 0, 0, [1,1,1]] ], 
+            [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.5], this.scene)
+    }
+
+    computeAnimation(ellapsedTime){
+        if (this.pickAnimation !== null){
+            var res = this.pickAnimation.update(ellapsedTime)
+            if (res === "animation over"){
+                this.pickAnimation = null
+                console.log("pick animation over")
+            }
+        }
+    }
+
     displayPiece(appearance){
+        if (this.pickAnimation !== null){
+            this.scene.scale(1,1,1/0.3)
+            this.pickAnimation.apply()
+            this.scene.scale(1,1,0.3)
+        }
         if (this.isKing){
             appearance.apply()
             this.sphere.display()
             this.scene.translate(0, 0, this.sphere.radius*5/3)
-
+            
             appearance.setSpecular(1,1,1, 1)
             appearance.apply()
             this.sphere.display()
-        }else{
-            appearance.apply()
-            this.sphere.display()
         }
+        appearance.apply()
+        this.sphere.display()
     }
 
     display(){
@@ -134,6 +162,6 @@ export class Piece{
 	 * Updates the list of texture coordinates of the sphere
 	 */
 	updateTexCoords(s, t) {		
-
+        this.sphere.updateTexCoords(s, t)
 	}
 }

@@ -190,6 +190,7 @@ export class XMLscene extends CGFscene {
         if (this.sceneInited) {
             if (this.startTime === null) this.startTime = time;
             this.graph.components_graph.computeAnimations(time - this.startTime)
+            this.graph.boards[0].computeAnimations(time - this.startTime)
         }
     }
 
