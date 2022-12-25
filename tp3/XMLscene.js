@@ -204,7 +204,7 @@ export class XMLscene extends CGFscene {
 					{
 						var customId = this.pickResults[i][1];
 
-						console.log("Picked object: " + obj.parent + "(id: " + obj.parent.id + ") with pick id " + customId);
+						console.log("Picked object " + obj.parent.id + " with pick id " + customId);
                         var split_id = obj.parent.id.split(' ')
                         if (split_id[0] === 'piece'){
                             console.log("picked piece " + split_id[1])
@@ -219,6 +219,7 @@ export class XMLscene extends CGFscene {
                                 this.pickedPiece.setPicked(false)
                                 this.pickedPiece = null
                             }
+
                         }
 					}
 				}

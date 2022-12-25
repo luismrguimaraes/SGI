@@ -100,4 +100,13 @@ export class MainBoard extends Board{
             }
         }
     }
+
+    getPieceByPosition(x, y){
+        for (let i = 0; i < this.pieces.length; i++){
+            if (this.pieces[i].getBoardPosition() === `${x} ${y}`){
+                return this.pieces[i]
+            }
+        }
+        return null
+    }
 }

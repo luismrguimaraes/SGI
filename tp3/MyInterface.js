@@ -42,6 +42,21 @@ export class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
+        if(event.code == "Escape"){
+            if (this.scene.pickedPiece !== null){
+                this.scene.pickedPiece.setPicked(false)
+                this.scene.pickedPiece = null
+                
+                // update pickables
+                for (let i = 0; i < 8; i++){
+                    for (let j = 0; j < 8; j++){
+                        this.scene.graph.boards[0].get(j, i).setPickable(false)
+                    }
+                }
+            }else{
+                console.log(this.scene.graph.boards[0].getPieceByPosition(3,3))
+            }
+        }
         if (event.code == "KeyM"){
             console.log("M pressed")
             this.scene.graph.components_graph.increment_materialIndex()

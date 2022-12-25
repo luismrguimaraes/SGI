@@ -40,8 +40,8 @@ export class Piece{
 
     getBoardPosition(){
         if (this.board.id !== 'mainboard') 
-            return "not in main board"
-        return (this.tile.board_x, this.tile.board_y)        
+            return "not in mainboard"
+        return `${this.tile.board_x} ${this.tile.board_y}`
     }
 
     move(x, y){
