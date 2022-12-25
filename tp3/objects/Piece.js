@@ -89,14 +89,22 @@ export class Piece{
         }
         if (this.isKing){
             appearance.apply()
-            this.sphere.display()
-            this.scene.translate(0, 0, this.sphere.radius*5/3)
-            
+            if (this.isPicked){
+                this.scene.scale(1.17,1.17,1.17)
+                this.sphere.display()
+                this.scene.translate(0, 0, this.sphere.radius*5/3)
+                this.scene.scale(1/1.17, 1/1.17, 1/1.17)
+            }else{
+                this.sphere.display()
+                this.scene.translate(0, 0, this.sphere.radius*5/3)
+            }
             appearance.setSpecular(1,1,1, 1)
             appearance.apply()
             this.sphere.display()
-        }
+        }        
         appearance.apply()
+        if (this.isPicked)
+            this.scene.scale(1.2,1.2,1.2)
         this.sphere.display()
     }
 
