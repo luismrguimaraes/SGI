@@ -50,7 +50,7 @@ export class MyInterface extends CGFinterface {
                 // update pickables
                 for (let i = 0; i < 8; i++){
                     for (let j = 0; j < 8; j++){
-                        this.scene.graph.boards[0].get(j, i).setPickable(false)
+                        this.scene.graph.boards[0].getTile(j, i).setPickable(false)
                     }
                 }
             }

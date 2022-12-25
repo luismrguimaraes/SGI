@@ -205,10 +205,10 @@ export class XMLscene extends CGFscene {
 					{
 						var customId = this.pickResults[i][1];
 
-						console.log("Picked object " + obj.parent.id + " with pick id " + customId);
+						//console.log("Picked object " + obj.parent.id + " with pick id " + customId);
                         var split_id = obj.parent.id.split(' ')
                         if (split_id[0] === 'piece'){
-                            console.log("picked piece " + split_id[1])
+                            console.log("picked piece " + split_id[1] + " at " + obj.parent.getBoardPosition())
                             this.graph.boards[0].pick(obj.parent.id)  // (mainboard is at boards[0])
                             this.pickedPiece = obj.parent
                         }

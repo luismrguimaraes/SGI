@@ -49,9 +49,9 @@ export class Piece{
     }
 
     move(x, y){
-        if (this.board.get(x, y).isFree){
+        if (this.board.getTile(x, y).isFree){
             this.tile.isFree = true
-            this.tile = this.board.get(x, y)
+            this.tile = this.board.getTile(x, y)
             this.tile.isFree = false
         }
         else {
@@ -64,9 +64,9 @@ export class Piece{
         var startTime = (Date.now() - this.scene.startTime)/1000
         this.pickAnimation = new MyKeyframeAnimation([ 
             [[0,0,0], 0, 0, 0, [1,1,1]], 
-            [[0,0,0], 0, 0.2, 0.5, [1,1,1]],
-            [[0,0,0], 0, 0, -0.4, [1,1,1]],
-            [[0,0,0], 0, 0, 0.2, [1,1,1]],
+            [[0,0,0], 0, 0.3, 0.5, [1,1,1]],
+            [[0,0,0], 0, 0.2, -0.4, [1,1,1]],
+            [[0,0,0], 0, -0.1, 0.2, [1,1,1]],
             [[0,0,0], 0, 0, 0, [1,1,1]] ], 
             [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4, startTime + 0.6], this.scene)
     }

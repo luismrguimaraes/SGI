@@ -6,23 +6,27 @@ import { Tile } from "./Tile.js"
  * @constructor
  */
 export class Board {
+    /**
+     * 
+     * @param {*} tile_textures tile_textures[0] -> white piece; tile_textures[1] -> black piece
+     */
     constructor (scene, id, width, height, x1, x2, y1, y2, tile_textures){
         this.scene = scene
         this.id = id
         this.width = width
         this.height = height
         this.tile_textures = tile_textures
-        this.board = this.initBoard(x1, x2, y1, y2)  // tiles set
+        this.tiles = this.initTiles(x1, x2, y1, y2)
         this.pieces = this.initPieces()
     }
 
-    initBoard(x1, x2, y1, y2){
+    initTiles(x1, x2, y1, y2){
         var tile_width = Math.abs(x2 - x1)/this.width
         var tile_height = Math.abs(y2 - y1)/this.height
-        var board = []
+        var tiles = []
 
         for (let i = 0; i < this.height; i++){
-            board.push([])
+            tiles.push([])
             let color_mod = i%2
             for (let j = 0; j < this.width; j++){
                 let color = (j + color_mod) % 2
@@ -35,12 +39,12 @@ export class Board {
                 if (color === 0)
                     texture = this.tile_textures[0]
                 else texture = this.tile_textures[1]
-                board[i].push(new Tile(this.scene, this, color, 
+                tiles[i].push(new Tile(this.scene, this, color, 
                     this.id + ` ${j} ${i}`, tile_x1, tile_x2, tile_y1, tile_y2, 
                     j, i, texture))    
             }
         }
-        return board
+        return tiles
     }
 
     initPieces(){
@@ -50,7 +54,7 @@ export class Board {
     display(){
         for (let i = 0; i < this.height; i++){
             for (let j = 0; j < this.width; j++){
-                this.board[i][j].display()
+                this.tiles[i][j].display()
             }
         }
         for (let i = 0; i < this.pieces.length; i++){
@@ -60,7 +64,7 @@ export class Board {
     updateTexCoords(s, t) {		
 		for (let i = 0; i < this.height; i++){
             for (let j = 0; j < this.width; j++){
-                this.board[i][j].updateTexCoords(s, t)
+                this.tiles[i][j].updateTexCoords(s, t)
             }
         }
         for (let i = 0; i < this.pieces.length; i++){
@@ -68,11 +72,39 @@ export class Board {
         }
 	}
 
-    set(x, y, new_value){
-        this.board[y][x] = new_value
+    /**
+     * Get a piece by its position
+     */
+    getPieceAt(x, y){
+        for (let i = 0; i < this.pieces.length; i++){
+            if (this.pieces[i].getBoardPosition() === `${x} ${y}`){
+                return this.pieces[i]
+            }
+        }
+        return null
+    }
+    /**
+     * Get a piece by its ID
+     */
+    getPiece(id){
+        for (let i = 0; i < this.pieces.length; i++){
+            if (this.pieces[i].id === id){
+                return this.pieces[i]
+            }
+        }
+        return null
+    }
+    
+    getTile(x, y){
+        return this.tiles[y][x]
     }
 
-    get(x, y){
-        return this.board[y][x]
+    computeAnimations(ellapsedTime){
+        this.computeAnimations_rec(ellapsedTime)
+    }
+    computeAnimations_rec(ellapsedTime){
+        for (let i = 0; i < this.pieces.length; i++){
+            this.pieces[i].computeAnimation(ellapsedTime)
+        }   
     }
 }
