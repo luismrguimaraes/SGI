@@ -53,8 +53,6 @@ export class MyInterface extends CGFinterface {
                         this.scene.graph.boards[0].get(j, i).setPickable(false)
                     }
                 }
-            }else{
-                console.log(this.scene.graph.boards[0].getPieceByPosition(3,3))
             }
         }
         if (event.code == "KeyM"){
