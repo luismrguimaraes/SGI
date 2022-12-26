@@ -21,10 +21,10 @@ export class MainBoard extends Board{
             let color_mod = i%2
             for (let j = 0; j < 8; j++){
                 let color = (j + color_mod) % 2
-                let tile_x1 = parseFloat(x1 + i*tile_width)
-                let tile_x2 = parseFloat(x1 + (i+1)*tile_width)
-                let tile_y1 = parseFloat(y1 + j*tile_height)
-                let tile_y2 = parseFloat(y1 + (j+1)*tile_height)
+                let tile_x1 = parseFloat(x1 + j*tile_width)
+                let tile_x2 = parseFloat(x1 + (j+1)*tile_width)
+                let tile_y1 = parseFloat(y1 + i*tile_height)
+                let tile_y2 = parseFloat(y1 + (i+1)*tile_height)
 
                 var texture
                 if (color === 0)
@@ -41,14 +41,14 @@ export class MainBoard extends Board{
 
     initPieces(){
         var pieces = []
-        for (let i = 0; i < 3; i+=1){
-            for (let j = ((i+1)%2); j < 8; j+=2){
+        for (let j = 0; j < 3; j+=1){
+            for (let i = ((j+1)%2); i < 8; i+=2){
                 pieces.push(new Piece(this.scene, this, 1, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
                 this.tiles[i][j].set_isFree(false)
             }
         }
-        for (let i = 7; i > 4; i-=1){
-            for (let j = ((i+1)%2); j < 8; j+=2){
+        for (let j = 7; j > 4; j-=1){
+            for (let i = ((j+1)%2); i < 8; i+=2){
                 pieces.push(new Piece(this.scene, this, 0, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
                 this.tiles[i][j].set_isFree(false)
             }

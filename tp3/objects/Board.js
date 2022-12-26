@@ -30,10 +30,10 @@ export class Board {
             let color_mod = i%2
             for (let j = 0; j < this.width; j++){
                 let color = (j + color_mod) % 2
-                let tile_x1 = parseFloat(x1 + i*tile_width)
-                let tile_x2 = parseFloat(x1 + (i+1)*tile_width)
-                let tile_y1 = parseFloat(y1 + j*tile_height)
-                let tile_y2 = parseFloat(y1 + (j+1)*tile_height)
+                let tile_x1 = parseFloat(x1 + j*tile_width)
+                let tile_x2 = parseFloat(x1 + (j+1)*tile_width)
+                let tile_y1 = parseFloat(y1 + i*tile_height)
+                let tile_y2 = parseFloat(y1 + (i+1)*tile_height)
 
                 var texture
                 if (color === 0)

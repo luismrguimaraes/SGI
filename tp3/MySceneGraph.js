@@ -7,6 +7,7 @@ import { MySphere } from './primitives/MySphere.js';
 import { MyPatch } from './primitives/MyPatch.js';
 import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 import { MainBoard } from './objects/MainBoard.js';
+import { AuxiliarBoard } from './objects/AuxiliarBoard.js';
 import { Board } from './objects/Board.js';
 
 
@@ -509,7 +510,6 @@ export class MySceneGraph {
                 if (from == -1 || to == -1)
                     return "Invalid children in perspective " + id;
 
-                console.log(id, from, to)
                 var new_camera = new CGFcamera(angle, near, far, from, to)
                 new_camera.id = id
                 this.cameras.push(new_camera)
@@ -1385,6 +1385,10 @@ export class MySceneGraph {
         this.log("Parsed animations")
     }
 
+    boardUsage(){
+        return "Boards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\" [whiteTileTexture=\"...\"] [blackTileTexture=\"...\"]/>\n    <auxiliarboard_0 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\" [whiteTileTexture=\"...\"] [blackTileTexture=\"...\"]/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\" [whiteTileTexture=\"...\"] [blackTileTexture=\"...\"]/>\n</boards>"
+    }
+
     /**
    * Parses the <boards> block.
    * @param {boards block element} boardsNode
@@ -1396,44 +1400,46 @@ export class MySceneGraph {
 
         for (let i = 0; i < children.length; i++){
             var boardType = children[i].nodeName
-            if (boardType === "mainboard" && this.boards.length === 0){
+            if (boardType === "mainboard" && this.boards.length === 0 || 
+                boardType === "auxiliarboard_0" && this.boards.length === 1 ||
+                boardType === "auxiliarboard_1" && this.boards.length === 2){
                 var x1 = this.reader.getFloat(children[i], 'x1')
                 var x2 = this.reader.getFloat(children[i], 'x2')
                 if (!(x2 != null && !isNaN(x2) && x2 > x1))
-                    return "unable to parse x2 of " + boardType
-
+                return "unable to parse x2 of " + boardType
+                
                 var y1 = this.reader.getFloat(children[i], 'y1')
                 var y2 = this.reader.getFloat(children[i], 'y2')
                 if (!(x2 != null && !isNaN(x2) && x2 > x1))
-                    return "unable to parse y2 of " + boardType
-  
+                return "unable to parse y2 of " + boardType
+                
                 var textures = []
-
+                
                 var whiteTileTextureID = this.reader.getString(children[i], 'whiteTileTexture')
                 var whiteTileTexture
                 if (whiteTileTextureID != null) 
-                    whiteTileTexture = this.textures[whiteTileTextureID]
+                whiteTileTexture = this.textures[whiteTileTextureID]
                 else whiteTileTexture = 'none'
-
+                
                 var blackTileTextureID = this.reader.getString(children[i], 'blackTileTexture')
                 var blackTileTexture
                 if (blackTileTextureID != null) 
-                    blackTileTexture = this.textures[blackTileTextureID]
+                blackTileTexture = this.textures[blackTileTextureID]
                 else blackTileTexture = 'none'
-
+                
                 textures.push(whiteTileTexture)
                 textures.push(blackTileTexture)
-
-                this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2, textures))
-
-            }else if (boardType === "auxiliarboard_0" && this.boards.length === 1){
-  
-            }else if (boardType === "auxiliarboard_1" && this.boards.length === 2){
-  
-            }else return "\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_0 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>"
+                
+                if (boardType === "mainboard" && this.boards.length === 0){
+                    this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2, textures))
+                }else if (boardType === "auxiliarboard_0" && this.boards.length >= 1
+                        || boardType === "auxiliarboard_1" && this.boards.length >= 1){
+                    this.boards.push(new AuxiliarBoard(this.scene, boardType, x1, x2, y1, y2, textures))
+                }
+            }else return this.boardUsage()
         }
         if (this.boards.length != 3) {
-            this.onXMLMinorError("\nBoards specification:\n<boards>\n    <mainboard x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_0 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n    <auxiliarboard_1 x1=\"...\" x2=\"...\" y1=\"...\" y2=\"...\"/>\n</boards>")
+            this.onXMLMinorError(this.boardUsage())
             //return "Invalid number of boards"
         }
         this.log("Parsed boards")
@@ -1637,10 +1643,14 @@ export class MySceneGraph {
                             this.components_graph.addChild(componentID, 'mainboard')
                             break;
                         case 'auxiliarboard_0':
-                            var board_index = 1
+                            var board = this.boards[1]
+                            this.components_graph.addNode('auxiliarboard_0', board)
+                            this.components_graph.addChild(componentID, 'auxiliarboard_0')
                             break;
                         case 'auxiliarboard_1':
-                            var board_index = 2
+                            var board = this.boards[2]
+                            this.components_graph.addNode('auxiliarboard_1', board)
+                            this.components_graph.addChild(componentID, 'auxiliarboard_1')
                             break;
                     }
                 }
