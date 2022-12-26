@@ -111,10 +111,6 @@ export class MyInterface extends CGFinterface {
         this.scene.loadIdentity()
 
         this.scene.applyViewMatrix()
-
-
-        console.log(this.activeCameraName)
-
     }
     
     camera_method(value){
