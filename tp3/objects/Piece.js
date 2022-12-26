@@ -20,6 +20,7 @@ export class Piece{
         this.isPickable = false
         this.isPicked = false
         this.isKing = false
+        this.fusedPieceID = null
         this.hasMovedThisTurn = false
 
         // animations
@@ -34,8 +35,9 @@ export class Piece{
         this.isPicked = value
     }
 
-    set_isKing(value){
+    set_isKing(value, fusingPieceID = null){
         this.isKing = value
+        this.fusedPieceID = fusingPieceID
     }
 
     set_hasMovedThisTurn(value){

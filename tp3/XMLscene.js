@@ -214,7 +214,6 @@ export class XMLscene extends CGFscene {
                         }
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
-                            console.log(obj.parent.isFree)
                             if (this.pickedPiece !== null){
                                 obj.parent.board.move(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
                                 this.pickedPiece.setPicked(false)

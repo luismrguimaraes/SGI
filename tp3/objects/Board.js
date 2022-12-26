@@ -94,6 +94,46 @@ export class Board {
         }
         return null
     }
+
+    /**
+     * Remove a piece with its position
+     */
+    removePieceAt(x, y){
+        var new_pieces = []
+        var removedPiece = null
+        for (let i = 0; i < this.pieces.length; i++){
+            if (this.pieces[i].getBoardPosition() === `${x} ${y}`){
+                this.getTile(x, y).set_isFree(true)
+                removedPiece = this.pieces[i]
+                continue
+            }
+            else
+                new_pieces.push(this.pieces[i])
+        }
+        this.pieces = new_pieces
+        return removedPiece
+    }
+    /**
+     * Remove a piece with its ID
+     */
+    removePiece(id){
+        var new_pieces = []
+        var removedPiece = null
+        for (let i = 0; i < this.pieces.length; i++){
+            if (this.pieces[i].id === id){
+                let x = this.pieces[i].getBoardPosition().split(' ')[0]
+                let y = this.pieces[i].getBoardPosition().split(' ')[1]
+
+                this.getTile(x, y).set_isFree(true)
+                removedPiece = this.pieces[i]
+                continue
+            }
+            else
+                new_pieces.push(this.pieces[i])
+        }
+        this.pieces = new_pieces
+        return removedPiece
+    }
     
     getTile(x, y){
         return this.tiles[y][x]

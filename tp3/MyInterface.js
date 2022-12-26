@@ -54,6 +54,16 @@ export class MyInterface extends CGFinterface {
                     }
                 }
             }
+            else{
+                var removedPiece = this.scene.graph.boards[0].removePieceAt(0,0)
+                if (removedPiece){
+                    if (removedPiece.color === 0){
+                        this.scene.graph.boards[1].push(removedPiece)
+                    }else{
+                        this.scene.graph.boards[2].push(removedPiece)
+                    }
+                }
+            }
         }
         if (event.code == "KeyM"){
             console.log("M pressed")

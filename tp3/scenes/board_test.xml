@@ -290,9 +290,9 @@
     <boards>
         <mainboard x1="-1" y1="-1" x2="1" y2="1"
             whiteTileTexture="sand" blackTileTexture="trunk"/>
-        <auxiliarboard_0 x1="-1" y1="-1.3" x2="1" y2="-1.5"
+        <auxiliarboard_0 x1="-1" y1="-0.1" x2="1" y2="0.1"
             whiteTileTexture="sand" blackTileTexture="trunk"/>
-        <auxiliarboard_1 x1="-1" y1="1.1" x2="1" y2="1.3"
+        <auxiliarboard_1 x1="-1" y1="-0.1" x2="1" y2="0.1"
             whiteTileTexture="sand" blackTileTexture="trunk"/>
 
 
@@ -301,7 +301,6 @@
     <components>
         <component id="root">
             <transformation>
-
                 <scale x="8" y="8" z="8"/>
             </transformation>
             <materials>
@@ -328,6 +327,7 @@
         </component>
         <component id="auxboard_0">
             <transformation>
+                <translate x="0" y="0" z="1.2"/>
                 <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
@@ -340,7 +340,9 @@
         </component>
         <component id="auxboard_1">
             <transformation>
+                <translate x="0" y="0" z="-1.2"/>
                 <rotate axis="x" angle="-90"/>
+                <rotate axis="z" angle="-180"/>
             </transformation>
             <materials>
                 <material id="inherit"/>

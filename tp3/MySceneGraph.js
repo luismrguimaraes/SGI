@@ -1405,13 +1405,13 @@ export class MySceneGraph {
                 boardType === "auxiliarboard_1" && this.boards.length === 2){
                 var x1 = this.reader.getFloat(children[i], 'x1')
                 var x2 = this.reader.getFloat(children[i], 'x2')
-                if (!(x2 != null && !isNaN(x2) && x2 > x1))
-                return "unable to parse x2 of " + boardType
+                //if (!(x2 != null && !isNaN(x2) && x2 > x1))
+                //return "unable to parse x2 of " + boardType
                 
                 var y1 = this.reader.getFloat(children[i], 'y1')
                 var y2 = this.reader.getFloat(children[i], 'y2')
-                if (!(x2 != null && !isNaN(x2) && x2 > x1))
-                return "unable to parse y2 of " + boardType
+                //if (!(x2 != null && !isNaN(x2) && x2 > x1))
+                //return "unable to parse y2 of " + boardType
                 
                 var textures = []
                 
@@ -1434,7 +1434,7 @@ export class MySceneGraph {
                     this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2, textures))
                 }else if (boardType === "auxiliarboard_0" && this.boards.length >= 1
                         || boardType === "auxiliarboard_1" && this.boards.length >= 1){
-                    this.boards.push(new AuxiliarBoard(this.scene, boardType, x1, x2, y1, y2, textures))
+                    this.boards.push(new AuxiliarBoard(this.scene, boardType, x1, x2, y1, y2, textures, this.boards[0]))
                 }
             }else return this.boardUsage()
         }
