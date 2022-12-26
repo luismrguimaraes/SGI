@@ -410,5 +410,7 @@ export class Game{
 				availableTiles.push(targetedRightFreeTile);
 			}
 		}
+		return availableTiles;
 	}
+	
 }
