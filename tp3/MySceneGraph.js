@@ -509,6 +509,7 @@ export class MySceneGraph {
                 if (from == -1 || to == -1)
                     return "Invalid children in perspective " + id;
 
+                console.log(id, from, to)
                 var new_camera = new CGFcamera(angle, near, far, from, to)
                 new_camera.id = id
                 this.cameras.push(new_camera)
@@ -1802,8 +1803,6 @@ export class MySceneGraph {
      */
     displayScene() {
         this.components_graph.display(this.idRoot);
-
-
         //To test the parsing/creation of the primitives, call the display function directly
         //this.boards[0].display()
 		

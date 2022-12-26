@@ -1,7 +1,7 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="Animation_camera">
+    <views default="Game_camera_debug">
         <perspective id="Camera0" near="0.1" far="500" angle="45">
             <from x="30" y="12" z="50" />
             <to x="190" y="4" z="40" />
@@ -13,6 +13,18 @@
         <perspective id="Animation_camera" near="0.1" far="700" angle="0.4">
             <from x="290" y="15" z="180" />
             <to x="-40" y="66.8" z="-20" />
+        </perspective>
+        <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
+            <from x="20" y="50" z="0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+        <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
+            <from x="-20" y="50" z="0" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+        <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
+            <from x="20" y="50" z="0" />
+            <to x="0" y="0" z="0" />
         </perspective>
         <ortho id="SideOrtho1" near="-50" far="900" left="-90" right="90" bottom="-5" top="55">
             <from x="-50" y="5" z="0" />
@@ -71,6 +83,13 @@
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
 			<attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
+        </omni>
+        <omni id="light5" enabled="1">
+            <location x="0" y="15" z="0" w="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+			<attenuation constant="1" linear="0" quadratic="0.0"/>
         </omni>
     </lights>
 
@@ -262,7 +281,7 @@
     </animations>
 
     <boards>
-        <mainboard x1="-10" y1="-10" x2="10" y2="10"
+        <mainboard x1="-1" y1="-1" x2="1" y2="1"
             whiteTileTexture="sand" blackTileTexture="trunk"/>
     </boards>
 
@@ -283,9 +302,7 @@
         </component>
         <component id="board">
             <transformation>
-                <translate x="0" y="7" z="0"/>
                 <rotate axis="x" angle="-90"/>
-                <rotate axis="y" angle="90"/>
             </transformation>
             <materials>
                 <material id="inherit"/>
