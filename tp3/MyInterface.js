@@ -46,7 +46,7 @@ export class MyInterface extends CGFinterface {
         if(event.code == "Digit1"){
             // TEST
             var poppedPiece = this.scene.graph.boards[1].pop()
-            this.scene.graph.boards[0].addPiece(poppedPiece, 0, 0)
+            if (poppedPiece !== "board is empty") this.scene.graph.boards[0].addPiece(poppedPiece, 0, 0)
             console.log(poppedPiece)
         }
         if(event.code == "Escape"){
