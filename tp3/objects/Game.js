@@ -33,8 +33,8 @@ export class Game{
 			// King piece check for whites
 			// Left and right is oriented from the white's player view perspective
 			if (pieceColor == 0) {
-				var targetedYUpPosition = pieceYPosition - 1;
-				var targetedYDownPosition = pieceYPosition + 1;
+				var targetedYUpPosition = pieceYPosition + 1;
+				var targetedYDownPosition = pieceYPosition - 1;
 				var targetedXLeftPosition = pieceXPosition - 1;
 				var targetedXRightPosition = pieceXPosition + 1;
 				
@@ -49,7 +49,7 @@ export class Game{
 				var targetedXRightPositionForCapture = null;
 				
 				// Check up-left (northeast) diagonal
-				while (targetedYUpPosition > -1 && targetedXLeftPosition > -1) {
+				while (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
 					var leftTilePiece = mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -66,7 +66,7 @@ export class Game{
 							break;
 						}
 						else {
-							targetedYUpPositionForCapture = targetedYUpPosition--;
+							targetedYUpPositionForCapture = targetedYUpPosition++;
 							targetedXLeftPositionForCapture = targetedXLeftPosition--;
 							if (targetedYUpPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
 								targetedLeftFreeTile = mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
@@ -76,12 +76,12 @@ export class Game{
 							}
 						}
 					}
-					targetedYUpPosition--;
+					targetedYUpPosition++;
 					targetedXLeftPosition--;
 				}
 				
 				// Check up-right (northwest) diagonal
-				while (targetedYUpPosition > -1 && targetedXRightPosition < 8) {
+				while (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
 					var leftTilePiece = mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -98,7 +98,7 @@ export class Game{
 							break;
 						}
 						else {
-							targetedYUpPositionForCapture = targetedYUpPosition--;
+							targetedYUpPositionForCapture = targetedYUpPosition++;
 							targetedXRightPositionForCapture = targetedXRightPosition++;
 							if (targetedYUpPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
 								targetedLeftFreeTile = mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
@@ -108,12 +108,12 @@ export class Game{
 							}
 						}
 					}
-					targetedYUpPosition--;
+					targetedYUpPosition++;
 					targetedXRightPosition++;
 				}
 				
 				// Check down-left (southeast) diagonal
-				while (targetedYDownPosition < 8 && targetedXLeftPosition > -1) {
+				while (targetedYDownPosition > -1 && targetedXLeftPosition > -1) {
 					var leftTilePiece = mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -140,12 +140,12 @@ export class Game{
 							}
 						}
 					}
-					targetedYDownPosition++;
+					targetedYDownPosition--;
 					targetedXLeftPosition--;
 				}
 				
 				// Check down-right (southwest) diagonal
-				while (targetedYDownPosition < 8 && targetedXRightPosition < 8) {
+				while (targetedYDownPosition > -1 && targetedXRightPosition < 8) {
 					var leftTilePiece = mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -172,7 +172,7 @@ export class Game{
 							}
 						}
 					}
-					targetedYDownPosition++;
+					targetedYDownPosition--;
 					targetedXRightPosition++;
 				}				
 			}
@@ -180,8 +180,8 @@ export class Game{
 			// King piece check for blacks
 			// Left and right is oriented from the black's player view perspective
 			if (pieceColor == 1) {
-				var targetedYUpPosition = pieceYPosition - 1;
-				var targetedYDownPosition = pieceYPosition + 1;
+				var targetedYUpPosition = pieceYPosition + 1;
+				var targetedYDownPosition = pieceYPosition - 1;
 				var targetedXLeftPosition = pieceXPosition + 1;
 				var targetedXRightPosition = pieceXPosition - 1;
 				
@@ -196,7 +196,7 @@ export class Game{
 				var targetedXRightPositionForCapture = null;
 				
 				// Check up-left (northeast) diagonal
-				while (targetedYUpPosition > -1 && targetedXLeftPosition < 8) {
+				while (targetedYUpPosition < 8 && targetedXLeftPosition < 8) {
 					var leftTilePiece = mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -213,7 +213,7 @@ export class Game{
 							break;
 						}
 						else {
-							targetedYUpPositionForCapture = targetedYUpPosition--;
+							targetedYUpPositionForCapture = targetedYUpPosition++;
 							targetedXLeftPositionForCapture = targetedXLeftPosition++;
 							if (targetedYUpPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
 								targetedLeftFreeTile = mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
@@ -223,12 +223,12 @@ export class Game{
 							}
 						}
 					}
-					targetedYUpPosition--;
+					targetedYUpPosition++;
 					targetedXLeftPosition++;
 				}
 				
 				// Check up-right (northwest) diagonal
-				while (targetedYUpPosition > -1 && targetedXRightPosition > -1) {
+				while (targetedYUpPosition < 8 && targetedXRightPosition > -1) {
 					var leftTilePiece = mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -245,7 +245,7 @@ export class Game{
 							break;
 						}
 						else {
-							targetedYUpPositionForCapture = targetedYUpPosition--;
+							targetedYUpPositionForCapture = targetedYUpPosition++;
 							targetedXRightPositionForCapture = targetedXRightPosition--;
 							if (targetedYUpPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
 								targetedLeftFreeTile = mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
@@ -255,12 +255,12 @@ export class Game{
 							}
 						}
 					}
-					targetedYUpPosition--;
+					targetedYUpPosition++;
 					targetedXRightPosition--;
 				}
 				
 				// Check down-left (southeast) diagonal
-				while (targetedYDownPosition < 8 && targetedXLeftPosition < 8) {
+				while (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
 					var leftTilePiece = mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -287,7 +287,7 @@ export class Game{
 							}
 						}
 					}
-					targetedYDownPosition++;
+					targetedYDownPosition--;
 					targetedXLeftPosition++;
 				}
 				
@@ -319,7 +319,7 @@ export class Game{
 							}
 						}
 					}
-					targetedYDownPosition++;
+					targetedYDownPosition--;
 					targetedXRightPosition--;
 				}			
 			}
@@ -327,8 +327,8 @@ export class Game{
 		
 		// Normal piece check for whites
 		// Left and right is oriented from the white's player view perspective
-		if (pieceColor == 0) {
-			var targetedYUpPosition = pieceYPosition - 1;
+		if (pieceColor == 0 && !pieceIsKing) {
+			var targetedYUpPosition = pieceYPosition + 1;
 			var targetedXLeftPosition = pieceXPosition - 1;
 			var targetedXRightPosition = pieceXPosition + 1;
 			var targetedXLeftPositionForCapture = pieceXPosition - 2;
@@ -338,12 +338,12 @@ export class Game{
 			var leftTilePiece = null;
 			var rightTilePiece = null;
 			
-			if (targetedYUpPosition > -1 && targetedXLeftPosition > -1) {
+			if (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
 				canGoLeft = true;
 				leftTilePiece = mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
 			}
 			
-			if (targetedYUpPosition > -1 && targetedXRightPosition < 8) {
+			if (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
 				canGoRight = true;
 				rightTilePiece = mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition);
 			}
@@ -353,7 +353,7 @@ export class Game{
 				var targetedLeftFreeTile = mainboard.getTile(targetedXLeftPosition, targetedYUpPosition);
 				availableTiles.push(targetedLeftFreeTile);
 			}
-			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition > -1 && targetedXLeftPositionForCapture > -1) {
+			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition < 8 && targetedXLeftPositionForCapture > -1) {
 				var targetedLeftFreeTile = mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPosition);
 				availableTiles.push(targetedLeftFreeTile);
 			}
@@ -362,7 +362,7 @@ export class Game{
 				var targetedRightFreeTile = mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
 				availableTiles.push(targetedRightFreeTile);
 			}
-			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition > -1 && targetedXRightPositionForCapture < 8) {
+			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition < 8 && targetedXRightPositionForCapture < 8) {
 				var targetedRightFreeTile = mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPosition);
 				availableTiles.push(targetedRightFreeTile);
 			}
@@ -370,8 +370,8 @@ export class Game{
 		
 		// Normal piece check for blacks
 		// Left and right is oriented from the black's player view perspective
-		if (pieceColor == 1) {
-			var targetedYDownPosition = pieceYPosition + 1;
+		if (pieceColor == 1 && !pieceIsKing) {
+			var targetedYDownPosition = pieceYPosition - 1;
 			var targetedXLeftPosition = pieceXPosition + 1;
 			var targetedXRightPosition = pieceXPosition - 1;
 			var targetedXLeftPositionForCapture = pieceXPosition + 2;
@@ -381,12 +381,12 @@ export class Game{
 			var leftTilePiece = null;
 			var rightTilePiece = null;
 			
-			if (targetedYDownPosition < 8 && targetedXLeftPosition < 8) {
+			if (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
 				canGoLeft = true;
 				leftTilePiece = mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
 			}
 			
-			if (targetedYDownPosition < 8 && targetedXRightPosition > -1) {
+			if (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
 				canGoRight = true;
 				rightTilePiece = mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition);
 			}
@@ -396,7 +396,7 @@ export class Game{
 				var targetedLeftFreeTile = mainboard.getTile(targetedXLeftPosition, targetedYDownPosition);
 				availableTiles.push(targetedLeftFreeTile);
 			}
-			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPosition < 8 && targetedXLeftPositionForCapture < 8) {
+			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPosition > -1 && targetedXLeftPositionForCapture < 8) {
 				var targetedLeftFreeTile = mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPosition);
 				availableTiles.push(targetedLeftFreeTile);
 			}
@@ -405,7 +405,7 @@ export class Game{
 				var targetedRightFreeTile = mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
 				availableTiles.push(targetedRightFreeTile);
 			}
-			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPosition < 8 && targetedXRightPositionForCapture > -1) {
+			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPosition > -1 && targetedXRightPositionForCapture > -1) {
 				var targetedRightFreeTile = mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPosition);
 				availableTiles.push(targetedRightFreeTile);
 			}
