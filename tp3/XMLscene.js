@@ -134,6 +134,7 @@ export class XMLscene extends CGFscene {
         this.logPicking();
 		// this resets the picking buffer (association between objects and ids)
 		this.clearPickRegistration();
+        this.pickId = 1
 
         // ---- BEGIN Background, camera and axis setup
 
@@ -178,7 +179,6 @@ export class XMLscene extends CGFscene {
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
-            this.pickId = 1
             this.graph.displayScene();
         }
 
@@ -205,11 +205,12 @@ export class XMLscene extends CGFscene {
 					{
 						var customId = this.pickResults[i][1];
 
-						//console.log("Picked object " + obj.parent.id + " with pick id " + customId);
+						console.log(customId);
                         var split_id = obj.parent.id.split(' ')
                         if (split_id[0] === 'piece'){
                             console.log("picked piece " + split_id[1] + " at " + obj.parent.getBoardPosition())
-                            this.graph.boards[0].pick(obj.parent.id)  // (mainboard is at boards[0])
+                            // (mainboard is at boards[0])
+                            this.graph.boards[0].pick(obj.parent.id)  
                             this.pickedPiece = obj.parent
                         }
                         else if (split_id[0] === 'mainboard'){

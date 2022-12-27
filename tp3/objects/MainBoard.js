@@ -9,49 +9,21 @@ import { Board } from "./Board.js"
 export class MainBoard extends Board{
     constructor (scene, id, x1, x2, y1, y2, tile_textures){
         super(scene, id, 8, 8, x1, x2, y1, y2, tile_textures)
-        this.removePiece("piece 2")
-
     }
 
-    initTiles(x1, x2, y1, y2){
-        var tile_width = Math.abs(x2 - x1)/8
-        var tile_height = Math.abs(y2 - y1)/8
-        var tiles = []
 
-        for (let i = 0; i < 8; i++){
-            tiles.push([])
-            let color_mod = i%2
-            for (let j = 0; j < 8; j++){
-                let color = (j + color_mod) % 2
-                let tile_x1 = parseFloat(x1 + j*tile_width)
-                let tile_x2 = parseFloat(x1 + (j+1)*tile_width)
-                let tile_y1 = parseFloat(y1 + i*tile_height)
-                let tile_y2 = parseFloat(y1 + (i+1)*tile_height)
-
-                var texture
-                if (color === 0)
-                    texture = this.tile_textures[0]
-                else texture = this.tile_textures[1]
-                tiles[i].push(new Tile(this.scene, this, color, 
-                    this.id + ` ${j} ${i}`, tile_x1, tile_x2, tile_y1, tile_y2, 
-                    j, i, texture))    
-            }
-        }
-
-        return tiles
-    }
 
     initPieces(){
         var pieces = []
-        for (let j = 0; j < 3; j+=1){
-            for (let i = ((j+1)%2); i < 8; i+=2){
-                pieces.push(new Piece(this.scene, this, 1, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
+        for (let i = 0; i < 3; i+=1){
+            for (let j = (i%2); j < 8; j+=2){
+                pieces.push(new Piece(this.scene, this, 0, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
                 this.tiles[i][j].set_isFree(false)
             }
         }
-        for (let j = 7; j > 4; j-=1){
-            for (let i = ((j+1)%2); i < 8; i+=2){
-                pieces.push(new Piece(this.scene, this, 0, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
+        for (let i = 7; i > 4; i-=1){
+            for (let j = (i%2); j < 8; j+=2){
+                pieces.push(new Piece(this.scene, this, 1, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
                 this.tiles[i][j].set_isFree(false)
             }
         }

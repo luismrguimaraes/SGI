@@ -13,8 +13,8 @@ export class Board {
     constructor (scene, id, width, height, x1, x2, y1, y2, tile_textures){
         this.scene = scene
         this.id = id
-        this.width = width
-        this.height = height
+        this.width = width // number of x tiles
+        this.height = height // number of y tiles
         this.tile_textures = tile_textures
         this.tiles = this.initTiles(x1, x2, y1, y2)
         this.pieces = this.initPieces()
@@ -27,7 +27,7 @@ export class Board {
 
         for (let i = 0; i < this.height; i++){
             tiles.push([])
-            let color_mod = i%2
+            let color_mod = (i+1)%2
             for (let j = 0; j < this.width; j++){
                 let color = (j + color_mod) % 2
                 let tile_x1 = parseFloat(x1 + j*tile_width)

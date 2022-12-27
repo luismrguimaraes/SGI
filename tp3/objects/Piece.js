@@ -8,13 +8,17 @@ import { MyKeyframeAnimation } from "../animations/MyKeyframeAnimation.js";
  * @constructor
  */
 export class Piece{
-    constructor (scene, board, color, id, tile){
+    /**
+     * 
+     * @param {*} referenceTile (optional) Provides the piece size information
+     */
+    constructor (scene, board, color, id, tile, referenceTile = tile){
         this.scene = scene
         this.board = board
         this.color= color
         this.id = id
         this.tile = tile
-        this.sphere = new MySphere(this.scene, Math.min(Math.abs(tile.x2 - tile.x1), Math.abs(tile.y2 - tile.y1))/3, 25, 25)
+        this.sphere = new MySphere(this.scene, Math.min(Math.abs(referenceTile.x2 - referenceTile.x1), Math.abs(referenceTile.y2 - referenceTile.y1))/3, 25, 25)
         this.sphere.parent = this
 
         this.isPickable = false
@@ -36,6 +40,8 @@ export class Piece{
     }
 
     set_isKing(value, fusingPieceID = null){
+        if (value && fusingPieceID === null)
+            console.warn("Warning: fusingPieceID is null")
         this.isKing = value
         this.fusedPieceID = fusingPieceID
     }
@@ -57,7 +63,7 @@ export class Piece{
             this.tile.isFree = false
         }
         else {
-            console.log("Tile occupied")
+            console.warn("Tile " + this.tile.id + " occupied")
             return "Tile " + x + ", " + y + " occupied"
         }
     }
@@ -87,7 +93,7 @@ export class Piece{
         var pickedFactor = 1.15
 
         if (this.pickAnimation !== null){
-            this.scene.scale(1,1,1/0.3) // to make rotations visually relevant
+            this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
             this.pickAnimation.apply()
             this.scene.scale(1,1,0.3)
         }

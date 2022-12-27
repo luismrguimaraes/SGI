@@ -15,15 +15,15 @@
             <to x="-40" y="66.8" z="-20" />
         </perspective>
         <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
-            <from x="20" y="50" z="0" />
+            <from x="0" y="50" z="20" />
             <to x="0" y="0" z="0" />
         </perspective>
         <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
-            <from x="-20" y="50" z="0" />
+            <from x="0" y="50" z="-20" />
             <to x="0" y="0" z="0" />
         </perspective>
         <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
-            <from x="20" y="50" z="0" />
+            <from x="0.1" y="65" z="0" />
             <to x="0" y="0" z="0" />
         </perspective>
         <ortho id="SideOrtho1" near="-50" far="900" left="-90" right="90" bottom="-5" top="55">
@@ -102,6 +102,7 @@
 
     <textures>
         <texture id="trunk" file="scenes/images/trunk-image.jpg" />
+        <texture id="trunk_rotated" file="scenes/images/trunk-image-rotated.jpg" />
         <texture id="leaves" file="scenes/images/leaves.jpg" />
         <texture id="sand" file="scenes/images/bank.jpg" />
         <texture id="sphinx" file="scenes/images/sphinx_and_pyramids_scaled.jpeg" />
@@ -289,7 +290,7 @@
 
     <boards>
         <mainboard x1="-1" y1="-1" x2="1" y2="1"
-            whiteTileTexture="sand" blackTileTexture="trunk"/>
+            whiteTileTexture="sand" blackTileTexture="trunk_rotated"/>
         <auxiliarboard_0 x1="-1" y1="-0.1" x2="1" y2="0.1"
             whiteTileTexture="sand" blackTileTexture="trunk"/>
         <auxiliarboard_1 x1="-1" y1="-0.1" x2="1" y2="0.1"
@@ -327,8 +328,10 @@
         </component>
         <component id="auxboard_0">
             <transformation>
-                <translate x="0" y="0" z="1.2"/>
+                <translate x="1.2" y="0" z="0"/>
                 <rotate axis="x" angle="-90"/>
+                <rotate axis="z" angle="-90"/>
+
             </transformation>
             <materials>
                 <material id="inherit"/>
@@ -340,9 +343,9 @@
         </component>
         <component id="auxboard_1">
             <transformation>
-                <translate x="0" y="0" z="-1.2"/>
+                <translate x="-1.2" y="0" z="0"/>
                 <rotate axis="x" angle="-90"/>
-                <rotate axis="z" angle="-180"/>
+                <rotate axis="z" angle="-270"/>
             </transformation>
             <materials>
                 <material id="inherit"/>

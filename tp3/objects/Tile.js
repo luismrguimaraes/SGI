@@ -35,6 +35,7 @@ export class Tile{
     }
 
     display(){
+        this.scene.pushMatrix()
         var appearance = new CGFappearance(this.scene)
         if (this.texture != 'none') 
             appearance.setTexture(this.texture)
@@ -67,6 +68,7 @@ export class Tile{
             appearance.apply()
             this.rectangle.display()
         }
+        this.scene.popMatrix()
     }
 
     /**

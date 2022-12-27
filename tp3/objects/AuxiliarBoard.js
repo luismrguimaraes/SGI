@@ -22,7 +22,8 @@ export class AuxiliarBoard extends Board{
         piece.setPickable(false)
         this.pieces.push(piece)
         if (piece.isKing && piece.fusedPieceID !== null){
-            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPieceID, this.lastTile())
+            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPieceID, this.lastTile(), this.mainboard.getTile(0,0))
+            new_piece.board = this
             this.pieces.push(new_piece)
         }
         piece.set_isKing(false)
