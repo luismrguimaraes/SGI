@@ -11,8 +11,6 @@ export class MainBoard extends Board{
         super(scene, id, 8, 8, x1, x2, y1, y2, tile_textures)
     }
 
-
-
     initPieces(){
         var pieces = []
         for (let i = 0; i < 3; i+=1){
@@ -38,7 +36,7 @@ export class MainBoard extends Board{
         return pieces
     }
 
-    pick(piece_id){
+    pickPiece(piece_id){
         for (let i = 0; i < this.pieces.length; i++){
             if (this.pieces[i].id === piece_id){
                 this.pieces[i].setPicked(true)
@@ -62,7 +60,7 @@ export class MainBoard extends Board{
         }
     }
 
-    move(piece_id, x, y){
+    movePiece(piece_id, x, y){
         for (let i = 0; i < this.pieces.length; i++){
             if (this.pieces[i].id === piece_id){
                 this.pieces[i].move(x, y)
@@ -75,6 +73,16 @@ export class MainBoard extends Board{
                 this.getTile(j, i).setPickable(false)
             }
         }
+    }
+
+    addPiece(piece, x, y){
+        var tile = this.getTile(x, y)
+        if (!tile.isFree)
+            return console.warn(tile.id + " occupied, " + piece.id + " not added")
+
+        this.pieces.push(piece)
+        piece.board = this
+        piece.move(x, y)
     }
     
 }

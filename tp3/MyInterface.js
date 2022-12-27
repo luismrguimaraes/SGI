@@ -42,8 +42,16 @@ export class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
+        console.log(event.code)
+        if(event.code == "Digit1"){
+            // TEST
+            var poppedPiece = this.scene.graph.boards[1].pop()
+            this.scene.graph.boards[0].addPiece(poppedPiece, 0, 0)
+            console.log(poppedPiece)
+        }
         if(event.code == "Escape"){
             if (this.scene.pickedPiece !== null){
+                // "Unpick"
                 this.scene.pickedPiece.setPicked(false)
                 this.scene.pickedPiece = null
                 
@@ -55,6 +63,7 @@ export class MyInterface extends CGFinterface {
                 }
             }
             else{
+                // TEST
                 var removedPiece = this.scene.graph.boards[0].removePieceAt(0,0)
                 if (removedPiece){
                     if (removedPiece.color === 0){

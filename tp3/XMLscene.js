@@ -210,13 +210,13 @@ export class XMLscene extends CGFscene {
                         if (split_id[0] === 'piece'){
                             console.log("picked piece " + split_id[1] + " at " + obj.parent.getBoardPosition())
                             // (mainboard is at boards[0])
-                            this.graph.boards[0].pick(obj.parent.id)  
+                            this.graph.boards[0].pickPiece(obj.parent.id)  
                             this.pickedPiece = obj.parent
                         }
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
-                                obj.parent.board.move(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
+                                obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
                                 this.pickedPiece.setPicked(false)
                                 this.pickedPiece = null
                             }

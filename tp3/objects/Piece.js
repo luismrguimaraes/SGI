@@ -58,7 +58,8 @@ export class Piece{
 
     move(x, y){
         if (this.board.getTile(x, y).isFree){
-            this.tile.isFree = true
+            if (this.tile !== null)
+                this.tile.isFree = true
             this.tile = this.board.getTile(x, y)
             this.tile.isFree = false
         }
