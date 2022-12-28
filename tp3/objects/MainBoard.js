@@ -32,9 +32,8 @@ export class MainBoard extends Board{
         }
 
         //TEST
-        pieces[4].setPickable(true)
-        pieces[15].setPickable(true)
-        pieces[13].setPickable(true)
+        for (let i = 0; i < pieces.length; i++)
+            pieces[i].setPickable(true)
         pieces[15].set_isKing(true)
 
         return pieces
