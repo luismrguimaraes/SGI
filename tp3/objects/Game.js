@@ -8,8 +8,45 @@ export class Game{
     constructor (scene){
         this.scene = scene
     }
-
-    /**
+    
+	 /**
+	 * @method pieceHasBeenPicked
+	 * Main function to be run whenever a piece is picked
+	 * First it will make all tiles unpickable
+	 * Then it will get the available tiles where the piece is allowed to move and make them pickable
+	 */
+	 pieceHasBeenPicked(pickedPiece) {
+		 makeAllTilesUnpickable();
+		 makeAvailableTilesForPickedPiecePickable(pickedPiece);
+	 }
+	 
+	 /**
+	 * @method makeAllTilesUnpickable
+	 * Makes every tile in the mainboard unpickable
+	 */
+	 makeAllTilesUnpickable() {	 
+		 for(var i = 0; i < 8; i++) {
+			for(var j = 0; j < 8; j++) {
+				var tile = getTile(i, j)
+				tile.setPickable(false);
+			}
+		}
+	 }
+	 
+	 /**
+	 * @method makeAvailableTilesForPickedPiecePickable
+	 * Get the tiles where the piece is allowed to move and makes them pickable
+	 */
+	 makeAvailableTilesForPickedPiecePickable(pickedPiece) {
+		var availableTiles = [];
+		availableTiles = checkAvailableMoves(pickedPiece);
+		
+		for (const tile of availableTiles) {
+			tile.setPickable(true);
+		}
+	 }
+	 
+	/**
 	 * @method checkAvailableMoves
 	 * Checks the available moves for a picked piece
 	 */
