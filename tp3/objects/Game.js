@@ -27,7 +27,7 @@ export class Game{
 	* Then it will check if the piece captured anything on its move, if so checks if another adjacent piece can be captured
 	* Then it will change player
 	*/
-	pieceHasBeenMoved() {
+	pieceHasBeenMoved(originalBoardPosition, newBoardPosition) {
 		console.log("IM IN");
 		this.makeAllTilesUnpickable();
 		var shouldThePieceBeKing = this.checkIfPieceShouldBeKing(this.lastMovedPiece);
@@ -35,6 +35,7 @@ export class Game{
 		if (shouldThePieceBeKing) {
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
+		checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
 	}
 
 	/**
@@ -95,7 +96,15 @@ export class Game{
 		}
 		
 		pickedPiece.set_isKing(true, fusingPiece);
-	 }	
+	 }
+
+	/**
+	* @method checkIfCaptureAvailable
+	* Checks if a piece was captured during the move
+	*/
+	checkIfCaptureAvailable(originalBoardPosition, newBoardPosition) {	 
+		// TODO
+	}	
 	
 	
 	// -------------------------- BEFORE MOVEMENT LOGIC --------------------------
@@ -205,7 +214,7 @@ export class Game{
 							console.log("OLA?");
 							targetedYUpPositionForCapture = targetedYUpPosition + 1;
 							targetedXLeftPositionForCapture = targetedXLeftPosition - 1;
-							if (targetedYUpPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
+							if (targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
 								console.log("up " + targetedYUpPositionForCapture);
 								console.log("left " + targetedXLeftPositionForCapture);
 								leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
@@ -252,7 +261,7 @@ export class Game{
 						else {
 							targetedYUpPositionForCapture = targetedYUpPosition + 1;
 							targetedXRightPositionForCapture = targetedXRightPosition + 1;
-							if (targetedYUpPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
+							if (targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
 								rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
 								if (rightTilePiece == null) {
 									// If the tile is free
@@ -407,7 +416,7 @@ export class Game{
 						else {
 							targetedYUpPositionForCapture = targetedYUpPosition + 1;
 							targetedXLeftPositionForCapture = targetedXLeftPosition + 1;
-							if (targetedYUpPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
+							if (targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
 								leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
 								if (leftTilePiece == null) {
 									// If the tile is free
@@ -452,7 +461,7 @@ export class Game{
 						else {
 							targetedYUpPositionForCapture = targetedYUpPosition + 1;
 							targetedXRightPositionForCapture = targetedXRightPosition - 1;
-							if (targetedYUpPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
+							if (targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
 								rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
 								if (rightTilePiece == null) {
 									// If the tile is free

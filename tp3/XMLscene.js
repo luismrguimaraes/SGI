@@ -221,11 +221,13 @@ export class XMLscene extends CGFscene {
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
+								var originalBoardPosition = this.pickedPiece.getBoardPosition();
                                 obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
+								var newBoardPosition = this.pickedPiece.getBoardPosition();
 								this.game.set_lastMovedPiece(this.pickedPiece);
                                 this.pickedPiece.setPicked(false);
                                 this.pickedPiece = null;
-								this.game.pieceHasBeenMoved();
+								this.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
                             }
 
                         }
