@@ -8,6 +8,12 @@ export class Game{
     constructor (scene){
         this.scene = scene
     }
+
+	var lastMovedPiece = null;
+
+	set_lastMovedPiece(value){
+        this.lastMovedPiece = value
+    }
 	
 	// -------------------------- AFTER MOVEMENT LOGIC --------------------------
 	
@@ -17,11 +23,11 @@ export class Game{
 	* First it will check if the piece has to be promoted to a king, and if it is, then the piece is promoted to king
 	* Then it will check if the piece captured anything on its move
 	*/
-	pieceHasBeenMoved(pickedPiece) {
-		var shouldThePieceBeKing = checkIfPieceShouldBeKing(pickedPiece);
+	pieceHasBeenMoved(lastMovedPiece) {
+		var shouldThePieceBeKing = checkIfPieceShouldBeKing(lastMovedPiece);
 		
 		if (shouldThePieceBeKing) {
-			setPieceAsKing(pickedPiece);
+			setPieceAsKing(lastMovedPiece);
 		}
 	}
 	
@@ -29,14 +35,14 @@ export class Game{
 	* @method checkIfPieceShouldBeKing
 	* Checks if the piece has reached the end of the oposite direction of the board
 	*/
-	checkIfPieceShouldBeKing(pickedPiece) {
-		var pieceColor = pickedPiece.color;
-		var boardPosition = pickedPiece.getBoardPosition();
+	checkIfPieceShouldBeKing(lastMovedPiece) {
+		var pieceColor = lastMovedPiece.color;
+		var boardPosition = lastMovedPiece.getBoardPosition();
 		
 		var piecePositionValues = pieceBoardPosition.split(" ");
 		
-		var pieceXPosition = pickedPiece.piecePositionValues[0];
-		var pieceYPosition = pickedPiece.piecePositionValues[1];
+		var pieceXPosition = lastMovedPiece.piecePositionValues[0];
+		var pieceYPosition = lastMovedPiece.piecePositionValues[1];
 		 
 		if (pieceColor == 0 && pieceYPosition == 7) {
 			// Check if white piece has reached upper tiles
