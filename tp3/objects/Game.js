@@ -28,14 +28,13 @@ export class Game{
 	* Then it will change player
 	*/
 	pieceHasBeenMoved(originalBoardPosition, newBoardPosition) {
-		console.log("IM IN");
 		this.makeAllTilesUnpickable();
 		var shouldThePieceBeKing = this.checkIfPieceShouldBeKing(this.lastMovedPiece);
 		
 		if (shouldThePieceBeKing) {
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
-		checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
+		this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
 	}
 
 	/**
@@ -103,7 +102,6 @@ export class Game{
 	* Checks if a piece was captured during the move
 	*/
 	checkIfCaptureAvailable(originalBoardPosition, newBoardPosition) {	 
-		
 		var originalPositionValues = originalBoardPosition.split(" ");
 		
 		var pieceOriginalXPosition = parseInt(originalPositionValues[0]);
@@ -111,18 +109,22 @@ export class Game{
 
 		var newPositionValues = newBoardPosition.split(" ");
 		
-		var pieceNewXPosition = parseInt(originalPositionValues[0]);
-		var pieceNewYPosition = parseInt(originalPositionValues[1]);
+		var pieceNewXPosition = parseInt(newPositionValues[0]);
+		var pieceNewYPosition = parseInt(newPositionValues[1]);
 
 		var xDifference = pieceNewXPosition - pieceOriginalXPosition;
 		var yDifference = pieceNewYPosition - pieceOriginalYPosition;
+		
+		console.log("xDifference " + xDifference);
+		console.log("yDifference " + yDifference);
 
 		if (xDifference > 1 || xDifference < -1) {
-			var capturedPieceXPosition = pieceNewXPosition - xDifference;
-			var capturedPieceYPosition = pieceNewYPosition - yDifference;
+			console.log("Im in capture");
+			var capturedPieceXPosition = pieceNewXPosition - (xDifference / 2);
+			var capturedPieceYPosition = pieceNewYPosition - (yDifference / 2);
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
 	}
 
@@ -132,13 +134,18 @@ export class Game{
 	*/
 	capturePiece(capturedPieceXPosition, capturedPieceYPosition) {
 		var capturedPiece = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
-		var capturedPieceColor = this.lastMovedPiece;
+		console.log("capturedPiece ", capturedPiece);
+		var capturedPieceColor = capturedPiece.color;
+		
+		console.log("capturedPieceXPosition " + capturedPieceXPosition);
+		console.log("capturedPieceYPosition " + capturedPieceYPosition);
 
 		if (capturedPieceColor == 0) {
 			this.boards[1].push(capturedPiece);
 			this.mainboard.removePiece(capturedPiece);
 		}
 		else if (capturedPieceColor == 1) {
+			console.log("Captured black");
 			this.boards[2].push(capturedPiece);
 			this.mainboard.removePiece(capturedPiece);
 		}
