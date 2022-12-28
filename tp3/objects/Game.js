@@ -103,8 +103,54 @@ export class Game{
 	* Checks if a piece was captured during the move
 	*/
 	checkIfCaptureAvailable(originalBoardPosition, newBoardPosition) {	 
-		// TODO
-	}	
+		
+		var originalPositionValues = originalBoardPosition.split(" ");
+		
+		var pieceOriginalXPosition = parseInt(originalPositionValues[0]);
+		var pieceOriginalYPosition = parseInt(originalPositionValues[1]);
+
+		var newPositionValues = newBoardPosition.split(" ");
+		
+		var pieceNewXPosition = parseInt(originalPositionValues[0]);
+		var pieceNewYPosition = parseInt(originalPositionValues[1]);
+
+		var xDifference = pieceNewXPosition - pieceOriginalXPosition;
+		var yDifference = pieceNewYPosition - pieceOriginalYPosition;
+
+		if (xDifference > 1 || xDifference < -1) {
+			var capturedPieceXPosition = pieceNewXPosition - xDifference;
+			var capturedPieceYPosition = pieceNewYPosition - yDifference;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}
+	}
+
+	/**
+	* @method capturePiece
+	* Captures the piece standing in x and y position on the board
+	*/
+	capturePiece(capturedPieceXPosition, capturedPieceYPosition) {
+		var capturedPiece = = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
+		var capturedPieceColor = this.lastMovedPiece;
+
+		if (capturedPieceColor == 0) {
+			this.boards[1].push(capturedPiece);
+			this.mainboard.removePiece(capturedPiece);
+		}
+		else if (capturedPieceColor == 1) {
+			this.boards[2].push(capturedPiece);
+			this.mainboard.removePiece(capturedPiece);
+		}
+	}
+
+	/**
+	* @method checkIfAnotherCaptureMovementIsPossible
+	* Checks if it is possible to capture another piece
+	*/
+	checkIfAnotherCaptureMovementIsPossible(newBoardPosition) {
+		// TO DO
+	}
 	
 	
 	// -------------------------- BEFORE MOVEMENT LOGIC --------------------------
