@@ -14,6 +14,18 @@
             <from x="290" y="15" z="180" />
             <to x="-40" y="66.8" z="-20" />
         </perspective>
+        <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
+            <from x="70" y="8" z="73" />
+            <to x="70" y="2" z="70.05" />
+        </perspective>
+        <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
+            <from x="70" y="8" z="67" />
+            <to x="70" y="2" z="69.95" />
+        </perspective>
+        <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
+            <from x="70.1" y="10" z="70" />
+            <to x="70" y="2" z="70" />
+        </perspective>
         <ortho id="SideOrtho1" near="-50" far="900" left="-90" right="90" bottom="-5" top="55">
             <from x="-50" y="5" z="0" />
             <to x="40" y="5" z="0" />
@@ -26,18 +38,6 @@
             <from x="0" y="150" z="0" />
             <to x="0" y="0" z="20" />
         </ortho>
-        <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
-            <from x="70" y="60" z="90" />
-            <to x="70" y="2" z="70" />
-        </perspective>
-        <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
-            <from x="70" y="10" z="60" />
-            <to x="70" y="2" z="70" />
-        </perspective>
-        <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
-            <from x="70.1" y="10" z="70" />
-            <to x="70" y="2" z="70" />
-        </perspective>
     </views>
 
     <ambient>
@@ -83,6 +83,20 @@
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
 			<attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
+        </omni>
+        <omni id="game_0" enabled="1">
+            <location x="71.2" y="4" z="70" w="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+			<attenuation constant="0" linear="1" quadratic="0.0"/>
+        </omni>
+        <omni id="game_1" enabled="1">
+            <location x="68.8" y="4" z="70" w="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+			<attenuation constant="0" linear="1" quadratic="0.0"/>
         </omni>
     </lights>
 
@@ -153,6 +167,12 @@
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
         </material>
         <material id="grey" shininess="10">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.7" g="0.7" b="0.7" a="1" />
+        </material>
+        <material id="spaceship_base" shininess="10">
             <emission r="1" g="1" b="1" a="1" />
             <ambient r="0" g="0" b="0" a="0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1" />
@@ -569,7 +589,6 @@
                 <translate x="1.2" y="0" z="0"/>
                 <rotate axis="x" angle="-90"/>
                 <rotate axis="z" angle="-90"/>
-
             </transformation>
             <materials>
                 <material id="inherit"/>
@@ -1007,7 +1026,7 @@
                 <scale x="50" y="50" z="9"/>
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="spaceship_base" />
                 <material id="zero" />
                 <material id="light_blue" />
             </materials>
