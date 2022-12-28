@@ -66,7 +66,7 @@ export class Game{
 			fusingPiece = boards[1].pop();
 		}
 		else if (pieceColor == 1) {
-			fusingPiece = boards[1].pop();
+			fusingPiece = boards[2].pop();
 		}
 		
 		pieckedPiece.set_isKing(true, fusingPiece);
