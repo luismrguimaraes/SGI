@@ -8,6 +8,48 @@ export class Game{
     constructor (scene){
         this.scene = scene
     }
+	
+	// AFTER MOVEMENT LOGIC
+	
+	/**
+	 * @method pieceHasBeenMoved
+	 * Main function to be run whenever a piece is moved
+	 * First it will check if the piece has to be promoted to a king, and if it is, then the piece is promoted to king
+	 * Then it will check if the piece captured anything on its move
+	 */
+	 pieceHasBeenMoved(pickedPiece) {
+		var shouldThePieceBeKing = checkIfPieceShouldBeKing(pickedPiece);
+		pieckedPiece.set_isKing(shouldThePieceBeKing);
+	 }
+	 
+	 /**
+	 * @method checkIfPieceShouldBeKing
+	 * Checks if the piece has reached the end of the oposite direction of the board
+	 */
+	 checkIfPieceShouldBeKing(pickedPiece) {
+		var boardPosition = pickedPiece.getBoardPosition();
+		
+		var piecePositionValues = pieceBoardPosition.split(" ");
+		
+		var pieceXPosition = pickedPiece.piecePositionValues[0];
+		var pieceYPosition = pickedPiece.piecePositionValues[1];
+		 
+		if (pieceColor == 0 && pieceYPosition == 7) {
+			// Check if white piece has reached upper tiles
+			return true;
+		}
+		else if (pieceColor == 1 && pieceYPosition == 0) {
+			// Check if black piece has reached bottom tiles
+			return true;
+		}
+		else {
+			// In case of none of the above conditions are met
+			return false;
+		}
+	 }
+	
+	
+	// BEFORE MOVEMENT LOGIC
     
 	 /**
 	 * @method pieceHasBeenPicked
@@ -16,8 +58,8 @@ export class Game{
 	 * Then it will get the available tiles where the piece is allowed to move and make them pickable
 	 */
 	 pieceHasBeenPicked(pickedPiece) {
-		 makeAllTilesUnpickable();
-		 makeAvailableTilesForPickedPiecePickable(pickedPiece);
+		makeAllTilesUnpickable();
+		makeAvailableTilesForPickedPiecePickable(pickedPiece);
 	 }
 	 
 	 /**
@@ -25,7 +67,7 @@ export class Game{
 	 * Makes every tile in the mainboard unpickable
 	 */
 	 makeAllTilesUnpickable() {	 
-		 for(var i = 0; i < 8; i++) {
+		for(var i = 0; i < 8; i++) {
 			for(var j = 0; j < 8; j++) {
 				var tile = getTile(i, j)
 				tile.setPickable(false);
