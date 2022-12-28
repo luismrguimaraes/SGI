@@ -91,17 +91,17 @@ export class Piece{
     }
 
     displayPiece(appearance){
-        var pickedFactor = 1.15
-
         if (this.pickAnimation !== null){
             this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
             this.pickAnimation.apply()
             this.scene.scale(1,1,0.3)
         }
+        var pickedFactor = 1.15
+        if (this.isPicked)
+            this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
+
         if (this.isKing){
             appearance.apply()
-            if (this.isPicked)
-                this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
             this.sphere.display()
             //this.scene.scale(1/1.17, 1/1.17, 1/1.17)
             this.scene.translate(0, 0, this.sphere.radius*5/3)
@@ -109,8 +109,6 @@ export class Piece{
             this.sphere.display()
         }else{
             appearance.apply()
-            if (this.isPicked)
-                this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
             this.sphere.display()
         }
     }

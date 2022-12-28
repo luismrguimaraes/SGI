@@ -42,7 +42,6 @@ export class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
-        console.log(event.code)
         if(event.code == "Digit1"){
             // TEST
             var poppedPiece = this.scene.graph.boards[1].pop()
