@@ -179,6 +179,10 @@ export class Game{
 							targetedXLeftPositionForCapture = targetedXLeftPosition--;
 							if (targetedYUpPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
 								targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+								if (targetedLeftFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedLeftFreeTile);
+								}
 							}
 							else {
 								break;
@@ -191,11 +195,11 @@ export class Game{
 				
 				// Check up-right (northwest) diagonal
 				while (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
-					var leftTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
-					if (leftTilePiece == null) {
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+					if (rightTilePiece == null) {
 						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
-						availableTiles.push(targetedLeftFreeTile);
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
+						availableTiles.push(targetedRightFreeTile);
 					}
 					else {
 						//If the tile has a piece, get it (x, y) and check its color
@@ -210,7 +214,11 @@ export class Game{
 							targetedYUpPositionForCapture = targetedYUpPosition++;
 							targetedXRightPositionForCapture = targetedXRightPosition++;
 							if (targetedYUpPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
-								targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+								targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+								if (targetedRightFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedRightFreeTile);
+								}
 							}
 							else {
 								break;
@@ -243,6 +251,10 @@ export class Game{
 							targetedXLeftPositionForCapture = targetedXLeftPosition--;
 							if (targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
 								targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+								if (targetedLeftFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedLeftFreeTile);
+								}
 							}
 							else {
 								break;
@@ -255,11 +267,11 @@ export class Game{
 				
 				// Check down-right (southwest) diagonal
 				while (targetedYDownPosition > -1 && targetedXRightPosition < 8) {
-					var leftTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
-					if (leftTilePiece == null) {
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+					if (rightTilePiece == null) {
 						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
-						availableTiles.push(targetedLeftFreeTile);
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
+						availableTiles.push(targetedRightFreeTile);
 					}
 					else {
 						//If the tile has a piece, get it (x, y) and check its color
@@ -274,7 +286,11 @@ export class Game{
 							targetedYDownPositionForCapture = targetedYDownPosition--;
 							targetedXRightPositionForCapture = targetedXRightPosition++;
 							if (targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
-								targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+								targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+								if (targetedRightFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedRightFreeTile);
+								}
 							}
 							else {
 								break;
@@ -326,6 +342,10 @@ export class Game{
 							targetedXLeftPositionForCapture = targetedXLeftPosition++;
 							if (targetedYUpPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
 								targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+								if (targetedLeftFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedLeftFreeTile);
+								}
 							}
 							else {
 								break;
@@ -338,11 +358,11 @@ export class Game{
 				
 				// Check up-right (northwest) diagonal
 				while (targetedYUpPosition < 8 && targetedXRightPosition > -1) {
-					var leftTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
-					if (leftTilePiece == null) {
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+					if (rightTilePiece == null) {
 						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
-						availableTiles.push(targetedLeftFreeTile);
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
+						availableTiles.push(targetedRightFreeTile);
 					}
 					else {
 						//If the tile has a piece, get it (x, y) and check its color
@@ -357,7 +377,11 @@ export class Game{
 							targetedYUpPositionForCapture = targetedYUpPosition++;
 							targetedXRightPositionForCapture = targetedXRightPosition--;
 							if (targetedYUpPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
-								targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+								targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+								if (targetedRightFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedRightFreeTile);
+								}
 							}
 							else {
 								break;
@@ -390,6 +414,10 @@ export class Game{
 							targetedXLeftPositionForCapture = targetedXLeftPosition++;
 							if (targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
 								targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+								if (targetedLeftFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedLeftFreeTile);
+								}
 							}
 							else {
 								break;
@@ -402,11 +430,11 @@ export class Game{
 				
 				// Check down-right (southwest) diagonal
 				while (targetedYDownPosition < 8 && targetedXRightPosition > -1) {
-					var leftTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
-					if (leftTilePiece == null) {
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+					if (rightTilePiece == null) {
 						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
-						availableTiles.push(targetedLeftFreeTile);
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
+						availableTiles.push(targetedRightFreeTile);
 					}
 					else {
 						//If the tile has a piece, get it (x, y) and check its color
@@ -421,7 +449,11 @@ export class Game{
 							targetedYDownPositionForCapture = targetedYDownPosition--;
 							targetedXRightPositionForCapture = targetedXRightPosition--;
 							if (targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
-								targetedLeftFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+								targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+								if (targetedRightFreeTile == null) {
+									// If the tile is free
+									availableTiles.push(targetedRightFreeTile);
+								}
 							}
 							else {
 								break;
@@ -464,7 +496,10 @@ export class Game{
 			}
 			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition < 8 && targetedXLeftPositionForCapture > -1) {
 				var targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPosition);
-				availableTiles.push(targetedLeftFreeTile);
+				if (targetedLeftFreeTile == null) {
+					// If the tile is free
+					availableTiles.push(targetedLeftFreeTile);
+				}
 			}
 			
 			if(rightTilePiece == null && canGoRight) {
@@ -473,7 +508,10 @@ export class Game{
 			}
 			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition < 8 && targetedXRightPositionForCapture < 8) {
 				var targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPosition);
-				availableTiles.push(targetedRightFreeTile);
+				if (targetedRightFreeTile == null) {
+					// If the tile is free
+					availableTiles.push(targetedRightFreeTile);
+				}
 			}
 		}
 		
@@ -507,7 +545,10 @@ export class Game{
 			}
 			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPosition > -1 && targetedXLeftPositionForCapture < 8) {
 				var targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPosition);
-				availableTiles.push(targetedLeftFreeTile);
+				if (targetedLeftFreeTile == null) {
+					// If the tile is free
+					availableTiles.push(targetedLeftFreeTile);
+				}
 			}
 			
 			if(rightTilePiece == null && canGoRight) {
@@ -516,7 +557,10 @@ export class Game{
 			}
 			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPosition > -1 && targetedXRightPositionForCapture > -1) {
 				var targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPosition);
-				availableTiles.push(targetedRightFreeTile);
+				if (targetedRightFreeTile == null) {
+					// If the tile is free
+					availableTiles.push(targetedRightFreeTile);
+				}
 			}
 		}
 		return availableTiles;
