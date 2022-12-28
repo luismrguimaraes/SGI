@@ -131,7 +131,7 @@ export class Game{
 	* Captures the piece standing in x and y position on the board
 	*/
 	capturePiece(capturedPieceXPosition, capturedPieceYPosition) {
-		var capturedPiece = = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
+		var capturedPiece = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
 		var capturedPieceColor = this.lastMovedPiece;
 
 		if (capturedPieceColor == 0) {
