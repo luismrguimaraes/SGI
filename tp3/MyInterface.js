@@ -44,10 +44,14 @@ export class MyInterface extends CGFinterface {
     processKeyDown(event) {
         console.log(event.code)
         if(event.code == "Digit1"){
-            // TEST
-            var poppedPiece = this.scene.graph.boards[1].pop()
-            if (poppedPiece !== "board is empty") this.scene.graph.boards[0].addPiece(poppedPiece, 0, 0)
-            console.log(poppedPiece)
+            // TEST - pop from white auxiliar board and add to Tile (0,0)
+            if (!this.scene.graph.boards[0].getPieceAt(0, 0)){
+                var poppedPiece = this.scene.graph.boards[1].pop()
+                if (poppedPiece) this.scene.graph.boards[0].addPiece(poppedPiece, 0, 0)
+                console.log(poppedPiece)
+            }else{
+                console.log("mainboard 0 0 occupied")
+            }
         }
         if(event.code == "Escape"){
             if (this.scene.pickedPiece !== null){
@@ -63,7 +67,7 @@ export class MyInterface extends CGFinterface {
                 }
             }
             else{
-                // TEST
+                // TEST - push to auxiliar board
                 var removedPiece = this.scene.graph.boards[0].removePieceAt(0,0)
                 if (removedPiece){
                     if (removedPiece.color === 0){

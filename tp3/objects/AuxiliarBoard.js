@@ -21,9 +21,8 @@ export class AuxiliarBoard extends Board{
         piece.tile = this.lastTile()
         piece.setPickable(false)
         this.pieces.push(piece)
-        if (piece.isKing && piece.fusedPieceID !== null){
-            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPieceID, this.lastTile(), this.mainboard.getTile(0,0))
-            new_piece.board = this
+        if (piece.isKing && piece.fusedPiece !== null){
+            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPiece.id, this.lastTile(), this.mainboard.getTile(0,0))
             this.pieces.push(new_piece)
         }
         piece.set_isKing(false)
@@ -36,7 +35,7 @@ export class AuxiliarBoard extends Board{
             poppedPiece.tile = null
             return poppedPiece
         }
-        else return "board is empty"
+        else return null
     }
     
 }
