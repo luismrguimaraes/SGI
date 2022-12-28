@@ -9,24 +9,28 @@ export class Game{
         this.scene = scene
     }
 	
-	// AFTER MOVEMENT LOGIC
+	// -------------------------- AFTER MOVEMENT LOGIC --------------------------
 	
 	/**
-	 * @method pieceHasBeenMoved
-	 * Main function to be run whenever a piece is moved
-	 * First it will check if the piece has to be promoted to a king, and if it is, then the piece is promoted to king
-	 * Then it will check if the piece captured anything on its move
-	 */
-	 pieceHasBeenMoved(pickedPiece) {
+	* @method pieceHasBeenMoved
+	* Main function to be run whenever a piece is moved
+	* First it will check if the piece has to be promoted to a king, and if it is, then the piece is promoted to king
+	* Then it will check if the piece captured anything on its move
+	*/
+	pieceHasBeenMoved(pickedPiece) {
 		var shouldThePieceBeKing = checkIfPieceShouldBeKing(pickedPiece);
-		pieckedPiece.set_isKing(shouldThePieceBeKing);
-	 }
-	 
-	 /**
-	 * @method checkIfPieceShouldBeKing
-	 * Checks if the piece has reached the end of the oposite direction of the board
-	 */
-	 checkIfPieceShouldBeKing(pickedPiece) {
+		
+		if (shouldThePieceBeKing) {
+			setPieceAsKing(pickedPiece);
+		}
+	}
+	
+	/**
+	* @method checkIfPieceShouldBeKing
+	* Checks if the piece has reached the end of the oposite direction of the board
+	*/
+	checkIfPieceShouldBeKing(pickedPiece) {
+		var pieceColor = pickedPiece.color;
 		var boardPosition = pickedPiece.getBoardPosition();
 		
 		var piecePositionValues = pieceBoardPosition.split(" ");
@@ -46,47 +50,67 @@ export class Game{
 			// In case of none of the above conditions are met
 			return false;
 		}
-	 }
+	}
+	 
+	/**
+	* @method setPieceAsKing
+	* Makes the piece a king, checking if there is an available fusing piece
+	* If there is not a fusing piece available in the auxiliary board, then null is passed to set_IsKing function
+	*/
+	setPieceAsKing(pickedPiece) {
+		var pieceColor = pickedPiece.color;
+		var fusingPiece = null;
+		
+		// Check if piece is white or black, then tries to get the piece in the aux board of that color, will return null if it does not exist
+		if (pieceColor == 0) {
+			fusingPiece = boards[1].pop();
+		}
+		else if (pieceColor == 1) {
+			fusingPiece = boards[1].pop();
+		}
+		
+		pieckedPiece.set_isKing(true, fusingPiece);
+	 }	
 	
 	
-	// BEFORE MOVEMENT LOGIC
+	// -------------------------- BEFORE MOVEMENT LOGIC --------------------------
     
-	 /**
-	 * @method pieceHasBeenPicked
-	 * Main function to be run whenever a piece is picked
-	 * First it will make all tiles unpickable
-	 * Then it will get the available tiles where the piece is allowed to move and make them pickable
-	 */
-	 pieceHasBeenPicked(pickedPiece) {
+	/**
+	* @method pieceHasBeenPicked
+	* Main function to be run whenever a piece is picked
+	* First it will make all tiles unpickable
+	* Then it will get the available tiles where the piece is allowed to move and make them pickable
+	*/
+	pieceHasBeenPicked(pickedPiece) {
 		makeAllTilesUnpickable();
 		makeAvailableTilesForPickedPiecePickable(pickedPiece);
-	 }
-	 
-	 /**
-	 * @method makeAllTilesUnpickable
-	 * Makes every tile in the mainboard unpickable
-	 */
-	 makeAllTilesUnpickable() {	 
+	}
+	
+	/**
+	* @method makeAllTilesUnpickable
+	* Makes every tile in the mainboard unpickable
+	*/
+	makeAllTilesUnpickable() {	 
 		for(var i = 0; i < 8; i++) {
 			for(var j = 0; j < 8; j++) {
 				var tile = getTile(i, j)
 				tile.setPickable(false);
 			}
 		}
-	 }
-	 
-	 /**
-	 * @method makeAvailableTilesForPickedPiecePickable
-	 * Get the tiles where the piece is allowed to move and makes them pickable
-	 */
-	 makeAvailableTilesForPickedPiecePickable(pickedPiece) {
+	}
+	
+	/**
+	* @method makeAvailableTilesForPickedPiecePickable
+	* Get the tiles where the piece is allowed to move and makes them pickable
+	*/
+	makeAvailableTilesForPickedPiecePickable(pickedPiece) {
 		var availableTiles = [];
 		availableTiles = checkAvailableMoves(pickedPiece);
 		
 		for (const tile of availableTiles) {
 			tile.setPickable(true);
 		}
-	 }
+	}
 	 
 	/**
 	 * @method checkAvailableMoves
