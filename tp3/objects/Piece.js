@@ -24,7 +24,7 @@ export class Piece{
         this.isPickable = false
         this.isPicked = false
         this.isKing = false
-        this.fusedPieceID = null
+        this.fusedPiece = null
         this.hasMovedThisTurn = false
 
         // animations
@@ -39,11 +39,11 @@ export class Piece{
         this.isPicked = value
     }
 
-    set_isKing(value, fusingPieceID = null){
-        if (value && fusingPieceID === null)
-            console.warn("Warning: fusingPieceID is null")
+    set_isKing(value, fusingPiece = null){
+        if (value && fusingPiece)
+            console.warn("Warning: fusingPiece is null")
         this.isKing = value
-        this.fusedPieceID = fusingPieceID
+        this.fusedPiece = fusingPiece
     }
 
     set_hasMovedThisTurn(value){
@@ -51,8 +51,9 @@ export class Piece{
     }
 
     getBoardPosition(){
-        if (this.board.id !== 'mainboard') 
-            return "not in mainboard"
+        if (this.board.id !== 'mainboard'){ 
+            return null
+        }
         return `${this.tile.board_x} ${this.tile.board_y}`
     }
 
@@ -65,7 +66,7 @@ export class Piece{
         }
         else {
             console.warn("Tile " + this.tile.id + " occupied")
-            return "Tile " + x + ", " + y + " occupied"
+            return null
         }
     }
 

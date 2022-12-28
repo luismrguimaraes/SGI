@@ -9,6 +9,11 @@ import { Board } from "./Board.js"
 export class MainBoard extends Board{
     constructor (scene, id, x1, x2, y1, y2, tile_textures){
         super(scene, id, 8, 8, x1, x2, y1, y2, tile_textures)
+
+        // TEST
+        var piece_2 = this.getPiece("piece 2")
+        this.removePiece("piece 2")
+        this.pieces[4].set_isKing(true, piece_2)
     }
 
     initPieces(){
@@ -28,7 +33,6 @@ export class MainBoard extends Board{
 
         //TEST
         pieces[4].setPickable(true)
-        pieces[4].set_isKing(true, "piece 2")
         pieces[15].setPickable(true)
         pieces[13].setPickable(true)
         pieces[15].set_isKing(true)

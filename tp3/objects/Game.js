@@ -7,9 +7,9 @@ import { CGFappearance, CGFobject } from '../../lib/CGF.js';
 export class Game{
     constructor (scene){
         this.scene = scene
+		this.lastMovedPiece = null;
     }
 
-	var lastMovedPiece = null;
 
 	set_lastMovedPiece(value){
         this.lastMovedPiece = value
