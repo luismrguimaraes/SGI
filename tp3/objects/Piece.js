@@ -51,8 +51,9 @@ export class Piece{
     }
 
     getBoardPosition(){
-        if (this.board.id !== 'mainboard') 
-            return "not in mainboard"
+        if (this.board.id !== 'mainboard'){ 
+            return null
+        }
         return `${this.tile.board_x} ${this.tile.board_y}`
     }
 
@@ -65,7 +66,7 @@ export class Piece{
         }
         else {
             console.warn("Tile " + this.tile.id + " occupied")
-            return "Tile " + x + ", " + y + " occupied"
+            return null
         }
     }
 
