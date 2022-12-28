@@ -41,8 +41,8 @@ export class Game{
 		
 		var piecePositionValues = pieceBoardPosition.split(" ");
 		
-		var pieceXPosition = lastMovedPiece.piecePositionValues[0];
-		var pieceYPosition = lastMovedPiece.piecePositionValues[1];
+		var pieceXPosition = piecePositionValues[0];
+		var pieceYPosition = piecePositionValues[1];
 		 
 		if (pieceColor == 0 && pieceYPosition == 7) {
 			// Check if white piece has reached upper tiles
@@ -128,8 +128,8 @@ export class Game{
 		
 		var piecePositionValues = pieceBoardPosition.split(" ");
 		
-		var pieceXPosition = pickedPiece.piecePositionValues[0];
-		var pieceYPosition = pickedPiece.piecePositionValues[1];
+		var pieceXPosition = piecePositionValues[0];
+		var pieceYPosition = piecePositionValues[1];
 		
 		var pieceIsKing = pieckedPiece.isKing;
 		
