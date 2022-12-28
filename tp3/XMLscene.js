@@ -1,5 +1,6 @@
 import { CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
+import { Game } from './objects/Game.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -125,6 +126,9 @@ export class XMLscene extends CGFscene {
 
         this.setUpdatePeriod(updatePeriod);
         this.startTime = null;
+		
+		// Add initialization of Game instance
+		this.game = new Game(this);
     }
 
     /**
@@ -212,13 +216,18 @@ export class XMLscene extends CGFscene {
                             // (mainboard is at boards[0])
                             this.graph.boards[0].pickPiece(obj.parent.id)  
                             this.pickedPiece = obj.parent
+							this.game.pieceHasBeenPicked(this.pickedPiece);
                         }
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
+								var originalBoardPosition = this.pickedPiece.getBoardPosition();
                                 obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
-                                this.pickedPiece.setPicked(false)
-                                this.pickedPiece = null
+								var newBoardPosition = this.pickedPiece.getBoardPosition();
+								this.game.set_lastMovedPiece(this.pickedPiece);
+                                this.pickedPiece.setPicked(false);
+                                this.pickedPiece = null;
+								this.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
                             }
 
                         }
