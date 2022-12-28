@@ -118,14 +118,38 @@ export class Game{
 		console.log("xDifference " + xDifference);
 		console.log("yDifference " + yDifference);
 
-		if (xDifference > 1 || xDifference < -1) {
-			console.log("Im in capture");
-			var capturedPieceXPosition = pieceNewXPosition - (xDifference / 2);
-			var capturedPieceYPosition = pieceNewYPosition - (yDifference / 2);
+		// For up-left
+		if (xDifference < -1 && yDifference > 1) {
+			var capturedPieceXPosition = pieceNewXPosition + 1;
+			var capturedPieceYPosition = pieceNewYPosition - 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
 			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
+		// For up-right
+		else if (xDifference > 1 && yDifference > 1) {
+			var capturedPieceXPosition = pieceNewXPosition - 1;
+			var capturedPieceYPosition = pieceNewYPosition - 1;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}
+		// For down-left
+		else if (xDifference < -1 && yDifference < -1) {
+			var capturedPieceXPosition = pieceNewXPosition + 1;
+			var capturedPieceYPosition = pieceNewYPosition + 1;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}
+		// For down-right
+		else if (xDifference > 1 && yDifference < -1) {
+			var capturedPieceXPosition = pieceNewXPosition - 1;
+			var capturedPieceYPosition = pieceNewYPosition + 1;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}	
 	}
 
 	/**
@@ -141,13 +165,13 @@ export class Game{
 		console.log("capturedPieceYPosition " + capturedPieceYPosition);
 
 		if (capturedPieceColor == 0) {
+			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
 			this.boards[1].push(capturedPiece);
-			this.mainboard.removePiece(capturedPiece);
 		}
 		else if (capturedPieceColor == 1) {
 			console.log("Captured black");
+			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
 			this.boards[2].push(capturedPiece);
-			this.mainboard.removePiece(capturedPiece);
 		}
 	}
 
