@@ -222,8 +222,10 @@ export class XMLscene extends CGFscene {
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
                                 obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
-                                this.pickedPiece.setPicked(false)
-                                this.pickedPiece = null
+								this.game.set_lastMovedPiece(this.pickedPiece);
+                                this.pickedPiece.setPicked(false);
+                                this.pickedPiece = null;
+								this.game.pieceHasBeenMoved();
                             }
 
                         }
