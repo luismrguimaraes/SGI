@@ -7,6 +7,8 @@ import { CGFappearance, CGFobject } from '../../lib/CGF.js';
 export class Game{
     constructor (scene){
         this.scene = scene
+		this.mainboard = scene.graph.boards[0];
+		this.boards = scene.graph.boards;
 		this.lastMovedPiece = null;
     }
 
@@ -21,13 +23,14 @@ export class Game{
 	* @method pieceHasBeenMoved
 	* Main function to be run whenever a piece is moved
 	* First it will check if the piece has to be promoted to a king, and if it is, then the piece is promoted to king
-	* Then it will check if the piece captured anything on its move
+	* Then it will check if the piece captured anything on its move, if so checks if another adjacent piece can be captured
+	* Then it will change player
 	*/
 	pieceHasBeenMoved(lastMovedPiece) {
-		var shouldThePieceBeKing = checkIfPieceShouldBeKing(lastMovedPiece);
+		var shouldThePieceBeKing = this.checkIfPieceShouldBeKing(lastMovedPiece);
 		
 		if (shouldThePieceBeKing) {
-			setPieceAsKing(lastMovedPiece);
+			this.setPieceAsKing(lastMovedPiece);
 		}
 	}
 	
@@ -41,8 +44,8 @@ export class Game{
 		
 		var piecePositionValues = pieceBoardPosition.split(" ");
 		
-		var pieceXPosition = piecePositionValues[0];
-		var pieceYPosition = piecePositionValues[1];
+		var pieceXPosition = parseInt(piecePositionValues[0]);
+		var pieceYPosition = parseInt(piecePositionValues[1]);
 		 
 		if (pieceColor == 0 && pieceYPosition == 7) {
 			// Check if white piece has reached upper tiles
@@ -75,7 +78,7 @@ export class Game{
 			fusingPiece = this.boards[2].pop();
 		}
 		
-		pieckedPiece.set_isKing(true, fusingPiece);
+		pickedPiece.set_isKing(true, fusingPiece);
 	 }	
 	
 	
@@ -88,8 +91,8 @@ export class Game{
 	* Then it will get the available tiles where the piece is allowed to move and make them pickable
 	*/
 	pieceHasBeenPicked(pickedPiece) {
-		makeAllTilesUnpickable();
-		makeAvailableTilesForPickedPiecePickable(pickedPiece);
+		this.makeAllTilesUnpickable();
+		this.makeAvailableTilesForPickedPiecePickable(pickedPiece);
 	}
 	
 	/**
@@ -99,7 +102,7 @@ export class Game{
 	makeAllTilesUnpickable() {	 
 		for(var i = 0; i < 8; i++) {
 			for(var j = 0; j < 8; j++) {
-				var tile = getTile(i, j)
+				var tile = this.mainboard.getTile(i, j)
 				tile.setPickable(false);
 			}
 		}
@@ -111,7 +114,7 @@ export class Game{
 	*/
 	makeAvailableTilesForPickedPiecePickable(pickedPiece) {
 		var availableTiles = [];
-		availableTiles = checkAvailableMoves(pickedPiece);
+		availableTiles = this.checkAvailableMoves(pickedPiece);
 		
 		for (const tile of availableTiles) {
 			tile.setPickable(true);
@@ -124,14 +127,16 @@ export class Game{
 	 */
 	checkAvailableMoves(pickedPiece) {		
 		var pieceColor = pickedPiece.color;
+		var leftTilePieceColor = pieceColor;
+		var rightTilePieceColor = pieceColor;
 		var pieceBoardPosition = pickedPiece.getBoardPosition();
 		
 		var piecePositionValues = pieceBoardPosition.split(" ");
 		
-		var pieceXPosition = piecePositionValues[0];
-		var pieceYPosition = piecePositionValues[1];
+		var pieceXPosition = parseInt(piecePositionValues[0]);
+		var pieceYPosition = parseInt(piecePositionValues[1]);
 		
-		var pieceIsKing = pieckedPiece.isKing;
+		var pieceIsKing = pickedPiece.isKing;
 		
 		console.log("Piece color is " + pieceColor);
 		
@@ -156,13 +161,19 @@ export class Game{
 				var targetedYDownPositionForCapture = null;
 				var targetedXLeftPositionForCapture = null;
 				var targetedXRightPositionForCapture = null;
+
+				console.log(targetedYUpPosition + "YUp");
+				console.log(targetedYDownPosition + "YDown");
+				console.log(targetedXLeftPosition + "XLeft");
+				console.log(targetedXRightPosition + "XRight");
 				
 				// Check up-left (northeast) diagonal
 				while (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
-					var leftTilePiece = this.this.mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
+					console.log("Im up-left");
+					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
-						targetedLeftFreeTile = this.this.mainboard.getTile(targetedXLeftPosition, targetedYUpPosition);
+						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPosition, targetedYUpPosition);
 						availableTiles.push(targetedLeftFreeTile);
 					}
 					else {
@@ -192,10 +203,17 @@ export class Game{
 					targetedYUpPosition++;
 					targetedXLeftPosition--;
 				}
+
+				// Reset targeted positions
+				targetedYUpPosition = pieceYPosition + 1;					
+				targetedYDownPosition = pieceYPosition - 1;
+				targetedXLeftPosition = pieceXPosition - 1;
+				targetedXRightPosition = pieceXPosition + 1;
 				
 				// Check up-right (northwest) diagonal
 				while (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
-					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+					console.log("Im up-right");
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
 						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
@@ -228,10 +246,17 @@ export class Game{
 					targetedYUpPosition++;
 					targetedXRightPosition++;
 				}
+
+				// Reset targeted positions
+				targetedYUpPosition = pieceYPosition + 1;					
+				targetedYDownPosition = pieceYPosition - 1;
+				targetedXLeftPosition = pieceXPosition - 1;
+				targetedXRightPosition = pieceXPosition + 1;
 				
 				// Check down-left (southeast) diagonal
 				while (targetedYDownPosition > -1 && targetedXLeftPosition > -1) {
-					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
+					console.log("Im down-left");
+					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
 						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPosition, targetedYDownPosition);
@@ -264,12 +289,21 @@ export class Game{
 					targetedYDownPosition--;
 					targetedXLeftPosition--;
 				}
+
+				// Reset targeted positions
+				targetedYUpPosition = pieceYPosition + 1;					
+				targetedYDownPosition = pieceYPosition - 1;
+				targetedXLeftPosition = pieceXPosition - 1;
+				targetedXRightPosition = pieceXPosition + 1;
 				
 				// Check down-right (southwest) diagonal
 				while (targetedYDownPosition > -1 && targetedXRightPosition < 8) {
-					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+					console.log("Im down-right");
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
+						console.log("X" + targetedXRightPosition);
+						console.log("Y" + targetedYDownPosition);
 						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
 						availableTiles.push(targetedRightFreeTile);
 					}
@@ -299,7 +333,7 @@ export class Game{
 					}
 					targetedYDownPosition--;
 					targetedXRightPosition++;
-				}				
+				}			
 			}
 			
 			// King piece check for blacks
@@ -307,8 +341,8 @@ export class Game{
 			if (pieceColor == 1) {
 				var targetedYUpPosition = pieceYPosition + 1;
 				var targetedYDownPosition = pieceYPosition - 1;
-				var targetedXLeftPosition = pieceXPosition + 1;
-				var targetedXRightPosition = pieceXPosition - 1;
+				var targetedXLeftPosition = pieceXPosition - 1;
+				var targetedXRightPosition = pieceXPosition + 1;
 				
 				var leftTilePiece = null;
 				var rightTilePiece = null;
@@ -319,10 +353,16 @@ export class Game{
 				var targetedYDownPositionForCapture = null;
 				var targetedXLeftPositionForCapture = null;
 				var targetedXRightPositionForCapture = null;
+
+				console.log(targetedYUpPosition + "YUp");
+				console.log(targetedYDownPosition + "YDown");
+				console.log(targetedXLeftPosition + "XLeft");
+				console.log(targetedXRightPosition + "XRight");
 				
 				// Check up-left (northeast) diagonal
 				while (targetedYUpPosition < 8 && targetedXLeftPosition < 8) {
-					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
+					console.log("Im up-left");
+					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
 						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPosition, targetedYUpPosition);
@@ -355,10 +395,17 @@ export class Game{
 					targetedYUpPosition++;
 					targetedXLeftPosition++;
 				}
+
+				// Reset targeted positions
+				targetedYUpPosition = pieceYPosition + 1;					
+				targetedYDownPosition = pieceYPosition - 1;
+				targetedXLeftPosition = pieceXPosition + 1;
+				targetedXRightPosition = pieceXPosition - 1;
 				
 				// Check up-right (northwest) diagonal
 				while (targetedYUpPosition < 8 && targetedXRightPosition > -1) {
-					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+					console.log("Im up-right");
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
 						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
@@ -391,10 +438,17 @@ export class Game{
 					targetedYUpPosition++;
 					targetedXRightPosition--;
 				}
+
+				// Reset targeted positions
+				targetedYUpPosition = pieceYPosition + 1;					
+				targetedYDownPosition = pieceYPosition - 1;
+				targetedXLeftPosition = pieceXPosition + 1;
+				targetedXRightPosition = pieceXPosition - 1;
 				
 				// Check down-left (southeast) diagonal
 				while (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
-					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYPosition)
+					console.log("Im down-left");
+					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
 						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPosition, targetedYDownPosition);
@@ -427,10 +481,17 @@ export class Game{
 					targetedYDownPosition--;
 					targetedXLeftPosition++;
 				}
+
+				// Reset targeted positions
+				targetedYUpPosition = pieceYPosition + 1;					
+				targetedYDownPosition = pieceYPosition - 1;
+				targetedXLeftPosition = pieceXPosition + 1;
+				targetedXRightPosition = pieceXPosition - 1;
 				
 				// Check down-right (southwest) diagonal
-				while (targetedYDownPosition < 8 && targetedXRightPosition > -1) {
-					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYPosition)
+				while (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
+					console.log("Im down-right");
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
 						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
@@ -482,18 +543,27 @@ export class Game{
 			if (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
 				canGoLeft = true;
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
+				console.log(targetedYUpPosition);
+				console.log(targetedXLeftPosition);
 			}
 			
 			if (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
 				canGoRight = true;
 				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition);
+				console.log(targetedYUpPosition);
+				console.log(targetedXRightPosition);
 			}
-			
+
+			if (leftTilePiece != null) {
+				leftTilePieceColor = leftTilePiece.color;
+				console.log("There is a piece! Its color is: " + leftTilePieceColor);
+			}	
 			
 			if (leftTilePiece == null && canGoLeft) {
 				var targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPosition, targetedYUpPosition);
 				availableTiles.push(targetedLeftFreeTile);
 			}
+
 			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition < 8 && targetedXLeftPositionForCapture > -1) {
 				var targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPosition);
 				if (targetedLeftFreeTile == null) {
@@ -501,12 +571,18 @@ export class Game{
 					availableTiles.push(targetedLeftFreeTile);
 				}
 			}
+
+			if (rightTilePiece != null) {
+				rightTilePieceColor = rightTilePiece.color;
+				console.log("There is a piece! Its color is: " + rightTilePieceColor);
+			}
 			
 			if(rightTilePiece == null && canGoRight) {
 				var targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYUpPosition);
 				availableTiles.push(targetedRightFreeTile);
 			}
-			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition < 8 && targetedXRightPositionForCapture < 8) {
+
+			else if (rightTilePieceColor != pieceColor && canGoLeft && targetedYUpPosition < 8 && targetedXRightPositionForCapture < 8) {
 				var targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPosition);
 				if (targetedRightFreeTile == null) {
 					// If the tile is free
@@ -531,11 +607,15 @@ export class Game{
 			if (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
 				canGoLeft = true;
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
+				console.log(targetedYDownPosition);
+				console.log(targetedXLeftPosition);
 			}
 			
 			if (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
 				canGoRight = true;
 				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition);
+				console.log(targetedYDownPosition);
+				console.log(targetedXRightPosition);
 			}
 			
 			

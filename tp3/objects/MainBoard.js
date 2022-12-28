@@ -53,15 +53,6 @@ export class MainBoard extends Board{
                 this.pieces[i].setPickable(true)
             }
         }
-
-        // update pickables
-        for (let i = 0; i < 8; i++){
-            for (let j = 0; j < 8; j++){
-                if (this.getTile(j, i).isFree){
-                    this.getTile(j, i).setPickable(true)
-                } else this.getTile(j, i).setPickable(false)
-            }
-        }
     }
 
     movePiece(piece_id, x, y){
