@@ -13,7 +13,7 @@ export class MainBoard extends Board{
         // TEST
         var piece_2 = this.getPiece("piece 2")
         this.removePiece("piece 2")
-        this.pieces[4].set_isKing(true, piece_2)
+        this.pieces[20].set_isKing(true, piece_2)
     }
 
     initPieces(){
@@ -34,7 +34,7 @@ export class MainBoard extends Board{
         //TEST
         for (let i = 0; i < pieces.length; i++)
             pieces[i].setPickable(true)
-        pieces[15].set_isKing(true)
+        pieces[9].set_isKing(true)
 
         return pieces
     }

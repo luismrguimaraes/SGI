@@ -28,14 +28,13 @@ export class Game{
 	* Then it will change player
 	*/
 	pieceHasBeenMoved(originalBoardPosition, newBoardPosition) {
-		console.log("IM IN");
 		this.makeAllTilesUnpickable();
 		var shouldThePieceBeKing = this.checkIfPieceShouldBeKing(this.lastMovedPiece);
 		
 		if (shouldThePieceBeKing) {
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
-		checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
+		this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
 	}
 
 	/**
@@ -103,8 +102,86 @@ export class Game{
 	* Checks if a piece was captured during the move
 	*/
 	checkIfCaptureAvailable(originalBoardPosition, newBoardPosition) {	 
-		// TODO
-	}	
+		var originalPositionValues = originalBoardPosition.split(" ");
+		
+		var pieceOriginalXPosition = parseInt(originalPositionValues[0]);
+		var pieceOriginalYPosition = parseInt(originalPositionValues[1]);
+
+		var newPositionValues = newBoardPosition.split(" ");
+		
+		var pieceNewXPosition = parseInt(newPositionValues[0]);
+		var pieceNewYPosition = parseInt(newPositionValues[1]);
+
+		var xDifference = pieceNewXPosition - pieceOriginalXPosition;
+		var yDifference = pieceNewYPosition - pieceOriginalYPosition;
+		
+		console.log("xDifference " + xDifference);
+		console.log("yDifference " + yDifference);
+
+		// For up-left
+		if (xDifference < -1 && yDifference > 1) {
+			var capturedPieceXPosition = pieceNewXPosition + 1;
+			var capturedPieceYPosition = pieceNewYPosition - 1;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}
+		// For up-right
+		else if (xDifference > 1 && yDifference > 1) {
+			var capturedPieceXPosition = pieceNewXPosition - 1;
+			var capturedPieceYPosition = pieceNewYPosition - 1;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}
+		// For down-left
+		else if (xDifference < -1 && yDifference < -1) {
+			var capturedPieceXPosition = pieceNewXPosition + 1;
+			var capturedPieceYPosition = pieceNewYPosition + 1;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}
+		// For down-right
+		else if (xDifference > 1 && yDifference < -1) {
+			var capturedPieceXPosition = pieceNewXPosition - 1;
+			var capturedPieceYPosition = pieceNewYPosition + 1;
+
+			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
+			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}	
+	}
+
+	/**
+	* @method capturePiece
+	* Captures the piece standing in x and y position on the board
+	*/
+	capturePiece(capturedPieceXPosition, capturedPieceYPosition) {
+		var capturedPiece = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
+		console.log("capturedPiece ", capturedPiece);
+		var capturedPieceColor = capturedPiece.color;
+		
+		console.log("capturedPieceXPosition " + capturedPieceXPosition);
+		console.log("capturedPieceYPosition " + capturedPieceYPosition);
+
+		if (capturedPieceColor == 0) {
+			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+			this.boards[1].push(capturedPiece);
+		}
+		else if (capturedPieceColor == 1) {
+			console.log("Captured black");
+			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+			this.boards[2].push(capturedPiece);
+		}
+	}
+
+	/**
+	* @method checkIfAnotherCaptureMovementIsPossible
+	* Checks if it is possible to capture another piece
+	*/
+	checkIfAnotherCaptureMovementIsPossible(newBoardPosition) {
+		// TO DO
+	}
 	
 	
 	// -------------------------- BEFORE MOVEMENT LOGIC --------------------------
