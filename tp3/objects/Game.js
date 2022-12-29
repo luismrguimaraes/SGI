@@ -84,11 +84,15 @@ export class Game{
 		}
 		
 		if (this.lastMovedPiece.hasCapturedThisTurn || !this.lastMovedPiece.hasMovedThisTurn) {
+			this.lastMovedPiece.set_hasCapturedThisTurn(false);
 			this.lastMovedPiece.set_hasMovedThisTurn(true);
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
-			this.makeTilesPickable(availableCaptureTileArray);
-			this.lastMovedPiece.set_hasCapturedThisTurn(false);
+			if (availableCaptureTileArray != null) {
+				makeAllPiecesUnpickable();
+				lastMovedPiece.setPickable(true);
+				this.makeTilesPickable(availableCaptureTileArray);
+			}
 		}
 	}
 	
@@ -160,6 +164,8 @@ export class Game{
 		
 		console.log("xDifference " + xDifference);
 		console.log("yDifference " + yDifference);
+		
+		var availableTiles = null;
 
 		// For up-left
 		if (xDifference < -1 && yDifference > 1) {
@@ -167,7 +173,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition - 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For up-right
 		else if (xDifference > 1 && yDifference > 1) {
@@ -175,7 +181,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition - 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For down-left
 		else if (xDifference < -1 && yDifference < -1) {
@@ -183,7 +189,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition + 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For down-right
 		else if (xDifference > 1 && yDifference < -1) {
@@ -191,8 +197,10 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition + 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
-		}	
+			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+		}
+
+		return availableTiles;
 	}
 
 	/**
