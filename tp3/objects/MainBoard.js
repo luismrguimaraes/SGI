@@ -1,6 +1,7 @@
 import { Piece } from "./Piece.js"
 import { Tile } from "./Tile.js"
 import { Board } from "./Board.js"
+import { Game } from "./Game.js"
 
 /**
  * MainBoard
@@ -11,9 +12,9 @@ export class MainBoard extends Board{
         super(scene, id, 8, 8, x1, x2, y1, y2, tile_textures)
 
         // TEST
-        var piece_2 = this.getPiece("piece 2")
-        this.removePiece("piece 2")
-        this.pieces[20].set_isKing(true, piece_2)
+        var piece_19 = this.getPiece("piece 19")
+        this.removePiece("piece 19")
+        this.pieces[20].set_isKing(true, piece_19)
     }
 
     initPieces(){
@@ -45,7 +46,6 @@ export class MainBoard extends Board{
                 this.pieces[i].setPicked(true)
                 this.pieces[i].triggerPickAnimation()
                 //this.pieces[i].setPickable(false)
-                    
             }
             else{ 
                 this.pieces[i].setPicked(false)

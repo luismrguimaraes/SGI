@@ -49,6 +49,16 @@ export class Game{
 			}
 		}
 	}
+
+	/**
+	* @method makeAllPiecesUnpickable
+	* Makes every piece in the this.mainboard unpickable
+	*/
+	makeAllPiecesUnpickable() {	 
+		for(var i = 0; i < this.mainboard.pieces.length; i++) {
+			this.mainboard.pieces[i].setPickable(false)
+		}
+	}
 	
 	/**
 	* @method checkIfPieceShouldBeKing

@@ -1,6 +1,7 @@
-import { CGFscene } from '../lib/CGF.js';
+import { CGFappearance, CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
 import { Game } from './objects/Game.js';
+import { MyRectangle } from './primitives/MyRectangle.js';
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -209,8 +210,9 @@ export class XMLscene extends CGFscene {
 					{
 						var customId = this.pickResults[i][1];
 
-						console.log(customId);
+						console.log("Pick ID: " + customId);
                         var split_id = obj.parent.id.split(' ')
+                        // If a piece is picked
                         if (split_id[0] === 'piece'){
                             console.log("picked piece " + split_id[1] + " at " + obj.parent.getBoardPosition())
                             // (mainboard is at boards[0])
@@ -218,20 +220,27 @@ export class XMLscene extends CGFscene {
                             this.pickedPiece = obj.parent
 							this.game.pieceHasBeenPicked(this.pickedPiece);
                         }
+                        // If a tile is picked, move the picked piece 
+                        // and set this.pickedPiece.isPicked to false and this.pickedPiece to null
+                        // movePiece calls this.game.pieceHasBeenMoved after the move and capture
+                        // animations finish
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
 								var originalBoardPosition = this.pickedPiece.getBoardPosition();
                                 obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
 								var newBoardPosition = this.pickedPiece.getBoardPosition();
-								this.game.set_lastMovedPiece(this.pickedPiece);
-                                this.pickedPiece.setPicked(false);
+								//this.game.set_lastMovedPiece(this.pickedPiece);
+                                //this.pickedPiece.setPicked(false);
                                 this.pickedPiece = null;
-								this.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+								//this.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
                             }
-
                         }
 					}
+                    else
+                    {
+                        console.warn("Invalid Pick")
+                    }
 				}
 				this.pickResults.splice(0,this.pickResults.length);
 			}		
