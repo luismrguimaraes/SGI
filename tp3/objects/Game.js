@@ -86,6 +86,7 @@ export class Game{
 	*/
 	checkIfPieceShouldBeKing(lastMovedPiece) {
 		var pieceColor = lastMovedPiece.color;
+		var pieceIsKing = lastMovedPiece.isKing;
 		var pieceBoardPosition = lastMovedPiece.getBoardPosition();
 		
 		var piecePositionValues = pieceBoardPosition.split(" ");
@@ -93,11 +94,11 @@ export class Game{
 		var pieceXPosition = parseInt(piecePositionValues[0]);
 		var pieceYPosition = parseInt(piecePositionValues[1]);
 		 
-		if (pieceColor == 0 && pieceYPosition == 7) {
+		if (pieceColor == 0 && pieceYPosition == 7 && !pieceIsKing) {
 			// Check if white piece has reached upper tiles
 			return true;
 		}
-		else if (pieceColor == 1 && pieceYPosition == 0) {
+		else if (pieceColor == 1 && pieceYPosition == 0 !pieceIsKing) {
 			// Check if black piece has reached bottom tiles
 			return true;
 		}
