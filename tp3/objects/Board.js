@@ -139,12 +139,20 @@ export class Board {
                     // Check which piece is not moving and animate it
                     // to move to its auxiliar board
                     let pieceToAnimate = null
-                    if (piece_j.moveAnimation === null && piece_i.moveAnimation !== null)
+                    let pieceThatMayHaveCaptured = null
+                    if (piece_j.moveAnimation === null && piece_i.moveAnimation !== null){
                         pieceToAnimate = piece_j
-                    else if ((piece_i.moveAnimation === null && piece_j.moveAnimation !== null)) 
+                        pieceThatMayHaveCaptured = piece_i
+                    }
+                    else if ((piece_i.moveAnimation === null && piece_j.moveAnimation !== null)) {
                         pieceToAnimate = piece_i
-                    if (pieceToAnimate && pieceToAnimate.captureAnimation === null)
+                        pieceThatMayHaveCaptured = piece_j
+                    }
+                    if (pieceToAnimate && pieceToAnimate.captureAnimation === null){
+                        pieceToAnimate.set_hasCollided(true, pieceThatMayHaveCaptured)
                         pieceToAnimate.triggerCaptureAnimation()
+                        pieceThatMayHaveCaptured.set_hasCollided(true, pieceToAnimate)
+                    }
                 }
             }
         }

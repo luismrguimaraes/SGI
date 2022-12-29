@@ -30,6 +30,8 @@ export class Piece{
         this.fusedPiece = null
         this.hasMovedThisTurn = false
         this.hasCapturedThisTurn = false
+        this.hasCollided = false
+        this.collidedPiece = null
 
         // animations
         this.pickAnimation = null
@@ -60,6 +62,13 @@ export class Piece{
 
     set_hasCapturedThisTurn(value){
         this.hasCapturedThisTurn = value
+    }
+
+    set_hasCollided(value, collidedPiece = null){
+        if (value && collidedPiece === null)
+            console.warn("Warning: collidedPiece is null")
+        this.hasCollided = value
+        this.collidedPiece = collidedPiece
     }
 
     getBoardPosition(){
@@ -142,7 +151,18 @@ export class Piece{
         // Notify this.scene.game
         var newBoardPosition = this.getBoardPosition();
         this.scene.game.set_lastMovedPiece(this);
-        this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+        // Run this if no collisions happened
+        // or after collision/capture animation has ended:
+        // Otherwise this task is to be done by the other piece
+        if (!this.hasCollided) 
+            this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+        else if (this.hasCollided && this.collidedPiece.captureAnimation === null){
+            // Update the game and reset hasCollided parameters
+            // of both this one and the other piece
+            this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+            this.collidedPiece.set_hasCollided(false)
+            this.set_hasCollided(false)
+        }
         
         //TEST
         for (let i = 0; i < this.board.pieces.length; i++)
@@ -160,7 +180,13 @@ export class Piece{
             [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4, startTime + 0.6], this.scene)
     }
 
+    /** 
+     * Capture animation is triggered on collision, 
+     * which means that a capture may not have necessarily happened
+     */
     triggerCaptureAnimation(){
+        this.capturedByOriginalPosition = this.collidedPiece.getBoardPosition()
+
         var startTime = (Date.now() - this.scene.startTime)/1000
         
         var destTile
@@ -184,6 +210,20 @@ export class Piece{
             ], 
             [startTime, startTime + 0.2*dist, startTime + 0.3*dist, startTime + 0.4*dist, startTime + 0.5*dist], this.scene)
     }
+    captureAnimationOnEnd(){
+        // If this piece has not collided, return
+        if (!this.hasCollided) return
+
+        // Other piece animation ended before ours
+        if (this.collidedPiece.moveAnimation === null){
+            // Update the game and reset hasCollided parameters
+            // of both this one and the other piece
+            var newBoardPosition = this.collidedPiece.getBoardPosition();
+            this.scene.game.pieceHasBeenMoved(this.capturedByOriginalPosition, newBoardPosition);
+            this.collidedPiece.set_hasCollided(false)
+            this.set_hasCollided(false)
+        }
+    }
 
     /**
      * Callback for computing object animations
@@ -196,6 +236,7 @@ export class Piece{
             if (res === "animation over"){
                 this.captureAnimation = null
                 console.log("Capture animation over")
+                this.captureAnimationOnEnd()
                 // push piece to auxiliar board ??
             }
         }
