@@ -51,8 +51,18 @@ export class Game{
 			tile.setPickable(true);
 		}	
 	}
-
-
+	
+	/**
+	* @method makeAllPiecesPickable
+	* Makes every piece in the mainboard pickable
+	*/
+	makeAllPiecesPickable() {	 
+		for (let i = 0; i < this.mainboard.pieces.length; i++) {
+            this.mainboard.pieces[i].setPickable(true)
+		}
+	}
+	
+	
 	
 	// -------------------------- AFTER MOVEMENT LOGIC --------------------------
 	
@@ -65,6 +75,7 @@ export class Game{
 	* Then it will change player
 	*/
 	pieceHasBeenMoved(originalBoardPosition, newBoardPosition) {
+		this.makeAllPiecesPickable();
 		this.makeAllTilesUnpickable();
 		var shouldThePieceBeKing = this.checkIfPieceShouldBeKing(this.lastMovedPiece);
 		
@@ -98,7 +109,7 @@ export class Game{
 			// Check if white piece has reached upper tiles
 			return true;
 		}
-		else if (pieceColor == 1 && pieceYPosition == 0 !pieceIsKing) {
+		else if (pieceColor == 1 && pieceYPosition == 0 && !pieceIsKing) {
 			// Check if black piece has reached bottom tiles
 			return true;
 		}
