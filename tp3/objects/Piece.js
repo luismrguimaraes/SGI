@@ -28,6 +28,7 @@ export class Piece{
         this.isKing = false
         this.fusedPiece = null
         this.hasMovedThisTurn = false
+        this.hasCapturedThisTurn = false
 
         // animations
         this.pickAnimation = null
@@ -45,7 +46,7 @@ export class Piece{
     }
 
     set_isKing(value, fusingPiece = null){
-        if (value && fusingPiece)
+        if (value && fusingPiece === null)
             console.warn("Warning: fusingPiece is null")
         this.isKing = value
         this.fusedPiece = fusingPiece
@@ -53,6 +54,10 @@ export class Piece{
 
     set_hasMovedThisTurn(value){
         this.hasMovedThisTurn = value
+    }
+
+    set_hasCapturedThisTurn(value){
+        this.hasCapturedThisTurn = value
     }
 
     getBoardPosition(){
@@ -136,6 +141,7 @@ export class Piece{
         var newBoardPosition = this.getBoardPosition();
         this.scene.game.set_lastMovedPiece(this);
         this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+        
         //TEST
         for (let i = 0; i < this.board.pieces.length; i++)
             this.board.pieces[i].setPickable(true)
@@ -185,7 +191,7 @@ export class Piece{
             this.pickAnimation.apply()
             this.scene.scale(1,1,0.3)
         }
-        
+
         // Apply picked scale
         var pickedFactor = 1.15
         if (this.isPicked)
