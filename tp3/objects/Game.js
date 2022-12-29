@@ -83,7 +83,7 @@ export class Game{
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
 		
-		if (this.lastMovedPiece.hasCapturesThisTurn || !this.lastMovedPiece.hasMovedThisTurn) {
+		if (this.lastMovedPiece.hasCapturedThisTurn || !this.lastMovedPiece.hasMovedThisTurn) {
 			this.lastMovedPiece.set_hasMovedThisTurn(true);
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
@@ -213,11 +213,13 @@ export class Game{
 				this.boards[1].push(capturedPiece);
 			}
 			else if (capturedPieceColor == 1) {
-				console.log("Captured black");
 				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
 				this.boards[2].push(capturedPiece);
 			}
+			
+			this.lastMovedPiece.set_hasCapturedThisTurn(true);
 		}
+		
 	}
 
 	/**
