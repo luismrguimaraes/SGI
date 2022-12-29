@@ -42,7 +42,6 @@ export class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
-        console.log(event.code)
         if(event.code == "Digit1"){
             // TEST - pop from white auxiliar board and add to Tile (0,0)
             if (!this.scene.graph.boards[0].getPieceAt(0, 0)){

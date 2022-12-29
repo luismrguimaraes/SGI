@@ -1,7 +1,7 @@
 <sxs>
     <scene root="root" axis_length="5"/>
 
-    <views default="Animation_camera">
+    <views default="Game_camera_debug">
         <perspective id="Camera0" near="0.1" far="500" angle="45">
             <from x="30" y="12" z="50" />
             <to x="190" y="4" z="40" />
@@ -13,6 +13,18 @@
         <perspective id="Animation_camera" near="0.1" far="700" angle="0.4">
             <from x="290" y="15" z="180" />
             <to x="-40" y="66.8" z="-20" />
+        </perspective>
+        <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
+            <from x="70" y="8" z="73" />
+            <to x="70" y="2" z="70.05" />
+        </perspective>
+        <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
+            <from x="70" y="8" z="67" />
+            <to x="70" y="2" z="69.95" />
+        </perspective>
+        <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
+            <from x="70.1" y="10" z="70" />
+            <to x="70" y="2" z="70" />
         </perspective>
         <ortho id="SideOrtho1" near="-50" far="900" left="-90" right="90" bottom="-5" top="55">
             <from x="-50" y="5" z="0" />
@@ -72,10 +84,25 @@
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
 			<attenuation constant="1.0" linear="0.0" quadratic="0.0"/>
         </omni>
+        <omni id="game_0" enabled="1">
+            <location x="71.2" y="4" z="70" w="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+			<attenuation constant="0" linear="1" quadratic="0.0"/>
+        </omni>
+        <omni id="game_1" enabled="1">
+            <location x="68.8" y="4" z="70" w="1" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+			<attenuation constant="0" linear="1" quadratic="0.0"/>
+        </omni>
     </lights>
 
     <textures>
         <texture id="trunk" file="scenes/images/trunk-image.jpg" />
+        <texture id="trunk_rotated" file="scenes/images/trunk-image-rotated.jpg" />
         <texture id="leaves" file="scenes/images/leaves.jpg" />
         <texture id="sand" file="scenes/images/bank.jpg" />
         <texture id="sphinx" file="scenes/images/sphinx_and_pyramids_scaled.jpeg" />
@@ -140,6 +167,12 @@
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
         </material>
         <material id="grey" shininess="10">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0" g="0" b="0" a="0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1" />
+            <specular r="0.7" g="0.7" b="0.7" a="1" />
+        </material>
+        <material id="spaceship_base" shininess="10">
             <emission r="1" g="1" b="1" a="1" />
             <ambient r="0" g="0" b="0" a="0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1" />
@@ -500,6 +533,15 @@
         </keyframeanim>
     </animations>
 
+    <boards>
+        <mainboard x1="-1" y1="-1" x2="1" y2="1"
+            whiteTileTexture="sand" blackTileTexture="trunk_rotated"/>
+        <auxiliarboard_0 x1="-1" y1="-0.1" x2="1" y2="0.1"
+            whiteTileTexture="sand" blackTileTexture="trunk"/>
+        <auxiliarboard_1 x1="-1" y1="-0.1" x2="1" y2="0.1"
+            whiteTileTexture="sand" blackTileTexture="trunk"/>
+    </boards>
+
     <components>
         <component id="root">
             <transformation>
@@ -513,6 +555,61 @@
             <children>
                 <componentref id="spaceship_animated"/>
                 <componentref id="everything_but_the_spaceship"/>
+            </children>
+        </component>
+
+        <component id="checkers">
+            <transformation>
+                <translate x="70" y="2" z="70"/>
+            </transformation>
+            <materials>
+                <material id="blue"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="board"/>
+                <componentref id="auxboard_0"/>
+                <componentref id="auxboard_1"/>
+            </children>
+        </component>
+        <component id="board">
+            <transformation>
+                <rotate axis="x" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1"/>
+            <children>
+                <mainboard/>
+            </children>
+        </component>
+        <component id="auxboard_0">
+            <transformation>
+                <translate x="1.2" y="0" z="0"/>
+                <rotate axis="x" angle="-90"/>
+                <rotate axis="z" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1"/>
+            <children>
+                <auxiliarboard_0/>
+            </children>
+        </component>
+        <component id="auxboard_1">
+            <transformation>
+                <translate x="-1.2" y="0" z="0"/>
+                <rotate axis="x" angle="-90"/>
+                <rotate axis="z" angle="-270"/>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1"/>
+            <children>
+                <auxiliarboard_1/>
             </children>
         </component>
 
@@ -532,6 +629,8 @@
 
                 <componentref id="tents" />
                 <componentref id="barrels"/>
+
+                <componentref id="checkers"/>
 
                 <!--componentref id="NurbRectangleTest"-->
 
@@ -927,7 +1026,7 @@
                 <scale x="50" y="50" z="9"/>
             </transformation>
             <materials>
-                <material id="grey" />
+                <material id="spaceship_base" />
                 <material id="zero" />
                 <material id="light_blue" />
             </materials>
