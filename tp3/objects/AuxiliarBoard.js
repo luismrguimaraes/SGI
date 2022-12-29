@@ -12,17 +12,17 @@ export class AuxiliarBoard extends Board{
         this.mainboard = mainboard
     }
 
-    lastTile(){
+    nextTile(){
         return this.tiles[0][this.pieces.length]
     }
 
     push(piece){
         this.pieces.board = this
-        piece.changeTile(this.lastTile())
+        piece.changeTile(this.nextTile())
         piece.setPickable(false)
         this.pieces.push(piece)
         if (piece.isKing && piece.fusedPiece !== null){
-            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPiece.id, this.lastTile(), this.mainboard.getTile(0,0))
+            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPiece.id, this.nextTile(), this.mainboard.getTile(0,0))
             this.pieces.push(new_piece)
         }
         piece.set_isKing(false)

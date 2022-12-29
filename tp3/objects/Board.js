@@ -51,15 +51,78 @@ export class Board {
         return []
     }
 
+    /**
+     * 
+     * @param {*} a First mat4
+     * @param {*} b Second mat4
+     * @param {*} decimalPlaces Number of decimal places to convert to
+     */
+    mat4_equals (a, b, decimalPlaces = 3){
+        if (a.length !== 16 || b.length !== 16 ) {
+            return false
+        }
+        var length = a.length
+        for (let i = 0; i < length; i++){
+            if (a[i].toFixed(decimalPlaces) != b[i].toFixed(decimalPlaces)){
+                return false
+            }
+        }
+        return true
+    }
+
+    /**
+     * 
+     * @param {*} a First mat4
+     * @param {*} b Second mat4
+     * @param {*} decimalPlaces Number of decimal places to convert to
+     * @returns 
+     */
+    collisionComparison(a, b, decimalPlaces = 3){
+        if (a.length !== 16 || b.length !== 16 ) {
+            return false
+        }
+        if (a[12].toFixed(decimalPlaces) !== b[12].toFixed(decimalPlaces)
+        ||  a[13].toFixed(decimalPlaces) !== b[13].toFixed(decimalPlaces)){
+            return false
+        }
+        return true
+    }
+
     display(){
         for (let i = 0; i < this.height; i++){
             for (let j = 0; j < this.width; j++){
                 this.tiles[i][j].display()
             }
         }
+
         for (let i = 0; i < this.pieces.length; i++){
             this.pieces[i].display()
         }
+        // Check for colisions
+        /*
+        var piece_i = null
+        var piece_j = null
+        for(let i = 0; i < this.pieces.length; i++){
+            piece_i = this.pieces[i]
+            for (let j = 0; j < this.pieces.length; j++){
+                if (j === i) continue
+                piece_j = this.pieces[j]
+                mat4.create()
+                //console.log(piece_i.displayMatrix, piece_j. displayMatrix)
+                if (this.collisionComparison(piece_j.displayMatrix, piece_i.displayMatrix, 1)){
+                    console.log("Colision?")
+                    // Check which piece is not moving and animate it
+                    // to move to its auxiliar board
+                    let pieceToAnimate = null
+                    if (piece_j.moveAnimation === null)
+                        pieceToAnimate = piece_j
+                    else pieceToAnimate = piece_i
+                    if (pieceToAnimate.captureAnimation === null)
+                        pieceToAnimate.triggerCaptureAnimation()
+                }
+            }
+        }
+        */
     }
     updateTexCoords(s, t) {		
 		for (let i = 0; i < this.height; i++){

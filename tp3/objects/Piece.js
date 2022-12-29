@@ -22,6 +22,7 @@ export class Piece{
         this.sphere.parent = this
         this.displayCenterX = this.tile.x1 + (this.tile.x2 - this.tile.x1)/2
         this.displayCenterY = this.tile.y1 + (this.tile.y2 - this.tile.y1)/2
+        this.displayMatrix = mat4.clone(this.scene.activeMatrix)
 
         this.isPickable = false
         this.isPicked = false
@@ -35,6 +36,7 @@ export class Piece{
         this.moveAnimation = null
         this.moveDestX = null // move destination X
         this.moveDestY = null // move destination Y
+        this.captureAnimation = null
     }
 
     setPickable(value){
@@ -122,6 +124,8 @@ export class Piece{
         var ty = new_displayCenterY - this.displayCenterY
         var dist = Math.abs(tx) + Math.abs(ty)
 
+        //console.log(dist, tx, ty, new_displayCenterX, new_displayCenterY, this.displayCenterX, this.displayCenterY)
+
         this.moveAnimation = new MyKeyframeAnimation([ 
             [[0, 0, 0], 0, 0,0, [1,1,1]],  
             [[1.045*tx, 1.045*ty, 0], 0, 0, 0, [1,1,1]],
@@ -144,7 +148,7 @@ export class Piece{
         
         //TEST
         for (let i = 0; i < this.board.pieces.length; i++)
-            this.board.pieces[i].setPickable(true)
+            this.board.pieces[i].setPickable(true) 
     }
 
     triggerPickAnimation(){
@@ -155,10 +159,43 @@ export class Piece{
             [[0,0,0], 0, 0.2, -0.4, [1,1,1]],
             [[0,0,0], 0, -0.1, 0.2, [1,1,1]],
             [[0,0,0], 0, 0, 0, [1,1,1]] ], 
-            [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4, startTime + 0.6], this.scene)
+            [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4, startTime + 0.6], this.scene)        
+
+        //console.log(this.displayMatrix[12], this.displayMatrix[13], this.displayMatrix[14], this.sphere.radius)
+    }
+
+    triggerCaptureAnimation(){
+        var startTime = (Date.now() - this.scene.startTime)/1000
+        
+        var destTile = this.board.getTile(0, 0)
+        
+        var new_displayCenterX = destTile.x1 + (destTile.x2 - destTile.x1)/2
+        var new_displayCenterY = destTile.y1 + (destTile.y2 - destTile.y1)/2
+        // Translation parameters to get to destination
+        var tx = new_displayCenterX - this.displayCenterX
+        var ty = new_displayCenterY - this.displayCenterY
+        var dist = Math.abs(tx) + Math.abs(ty)
+
+        console.log(destTile.id, this.displayCenterX, this.displayCenterY, new_displayCenterX, new_displayCenterY)
+
+        this.captureAnimation = new MyKeyframeAnimation([ 
+            [[0, 0, 0], 0, 0,0, [1,1,1]],  
+            [[1.045*tx, 1.045*ty, 0], 0, 0, 0, [1,1,1]],
+            [[0.99*tx, 0.99*ty, 0], 0, 0, 0, [1,1,1]],
+            [[tx, ty, 0], 0, 0, 0, [1,1,1]],
+            ], 
+            [startTime, startTime + 0.6*dist, startTime + 0.6*dist + 0.1, startTime + 0.6*dist + 0.2], this.scene)
     }
 
     computeAnimation(ellapsedTime){
+        if (this.captureAnimation !== null){
+            var res = this.captureAnimation.update(ellapsedTime)
+            if (res === "animation over"){
+                this.captureAnimation = null
+                console.log("Capture animation over")
+                // push piece to auxiliar board ??
+            }
+        }
         if (this.pickAnimation !== null){
             var res = this.pickAnimation.update(ellapsedTime)
             if (res === "animation over"){
@@ -181,6 +218,7 @@ export class Piece{
      * Called by display() 
      */
     displayPiece(appearance){
+        // Animations
         if (this.moveAnimation !== null){
             this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
             this.moveAnimation.apply()
@@ -191,6 +229,14 @@ export class Piece{
             this.pickAnimation.apply()
             this.scene.scale(1,1,0.3)
         }
+        if (this.captureAnimation !== null){
+            this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
+            this.captureAnimation.apply()
+            this.scene.scale(1,1,0.3)
+        }
+
+        // Store displayMatrix for collision detection
+        this.displayMatrix = this.scene.getMatrix()
 
         // Apply picked scale
         var pickedFactor = 1.15
