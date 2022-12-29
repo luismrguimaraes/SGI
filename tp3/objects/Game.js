@@ -172,20 +172,22 @@ export class Game{
 	*/
 	capturePiece(capturedPieceXPosition, capturedPieceYPosition) {
 		var capturedPiece = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
-		console.log("capturedPiece ", capturedPiece);
-		var capturedPieceColor = capturedPiece.color;
-		
-		console.log("capturedPieceXPosition " + capturedPieceXPosition);
-		console.log("capturedPieceYPosition " + capturedPieceYPosition);
-
-		if (capturedPieceColor == 0) {
-			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
-			this.boards[1].push(capturedPiece);
-		}
-		else if (capturedPieceColor == 1) {
-			console.log("Captured black");
-			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
-			this.boards[2].push(capturedPiece);
+		if (capturedPiece != null) {
+			console.log("capturedPiece ", capturedPiece);
+			var capturedPieceColor = capturedPiece.color;
+			
+			console.log("capturedPieceXPosition " + capturedPieceXPosition);
+			console.log("capturedPieceYPosition " + capturedPieceYPosition);
+	
+			if (capturedPieceColor == 0) {
+				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+				this.boards[1].push(capturedPiece);
+			}
+			else if (capturedPieceColor == 1) {
+				console.log("Captured black");
+				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+				this.boards[2].push(capturedPiece);
+			}
 		}
 	}
 
