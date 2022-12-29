@@ -83,7 +83,7 @@ export class Game{
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
 		
-		if(this.lastMovedPiece.hasCapturesThisTurn) {
+		if (this.lastMovedPiece.hasCapturesThisTurn) {
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
 			this.makeTilesPickable(availableCaptureTileArray);
