@@ -118,13 +118,12 @@ export class Piece{
         var dist = Math.abs(tx) + Math.abs(ty)
 
         this.moveAnimation = new MyKeyframeAnimation([ 
-            [[0,0,              0], 0, 0,0, [1,1,1]], 
-            [[tx, ty, 0], 0, 0, 0, [1,1,1]],
+            [[0, 0, 0], 0, 0,0, [1,1,1]],  
             [[1.045*tx, 1.045*ty, 0], 0, 0, 0, [1,1,1]],
             [[0.99*tx, 0.99*ty, 0], 0, 0, 0, [1,1,1]],
             [[tx, ty, 0], 0, 0, 0, [1,1,1]],
             ], 
-            [startTime, startTime + 0.6*dist, startTime + 0.65*dist, startTime + 0.65*dist + 0.1, startTime + 0.65*dist + 0.2], this.scene)
+            [startTime, startTime + 0.6*dist, startTime + 0.6*dist + 0.1, startTime + 0.6*dist + 0.2], this.scene)
     }
     moveAnimationOnEnd(){
         // Store original position
@@ -141,8 +140,6 @@ export class Piece{
         for (let i = 0; i < this.board.pieces.length; i++)
             this.board.pieces[i].setPickable(true)
     }
-
-
 
     triggerPickAnimation(){
         var startTime = (Date.now() - this.scene.startTime)/1000
