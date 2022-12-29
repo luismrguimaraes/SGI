@@ -7,22 +7,22 @@ import { Board } from "./Board.js"
  * @constructor
  */
 export class AuxiliarBoard extends Board{
-    constructor (scene, id, x1, x2, y1, y2, tile_textures, mainboard){
-        super(scene, id, 12, 1, x1, x2, y1, y2, tile_textures)
+    constructor (scene, id, x1, x2, y1, y2, tile_textures, mainboard, inverted){
+        super(scene, id, 1, 12, x1, x2, y1, y2, tile_textures, inverted)
         this.mainboard = mainboard
     }
 
-    lastTile(){
-        return this.tiles[0][this.pieces.length]
+    nextTile(){
+        return this.tiles[this.pieces.length][0]
     }
 
     push(piece){
         this.pieces.board = this
-        piece.changeTile(this.lastTile())
+        piece.changeTile(this.nextTile())
         piece.setPickable(false)
         this.pieces.push(piece)
         if (piece.isKing && piece.fusedPiece !== null){
-            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPiece.id, this.lastTile(), this.mainboard.getTile(0,0))
+            var new_piece = new Piece(this.scene, this, piece.color, piece.fusedPiece.id, this.nextTile(), this.mainboard.getTile(0,0))
             this.pieces.push(new_piece)
         }
         piece.set_isKing(false)

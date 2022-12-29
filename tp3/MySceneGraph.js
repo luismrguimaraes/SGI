@@ -1432,9 +1432,10 @@ export class MySceneGraph {
                 
                 if (boardType === "mainboard" && this.boards.length === 0){
                     this.boards.push(new MainBoard(this.scene, boardType, x1, x2, y1, y2, textures))
-                }else if (boardType === "auxiliarboard_0" && this.boards.length >= 1
-                        || boardType === "auxiliarboard_1" && this.boards.length >= 1){
+                }else if (boardType === "auxiliarboard_0" && this.boards.length >= 1){
                     this.boards.push(new AuxiliarBoard(this.scene, boardType, x1, x2, y1, y2, textures, this.boards[0]))
+                }else if (boardType === "auxiliarboard_1" && this.boards.length >= 1){
+                    this.boards.push(new AuxiliarBoard(this.scene, boardType, x1, x2, y1, y2, textures, this.boards[0], true))
                 }
             }else return this.boardUsage()
         }

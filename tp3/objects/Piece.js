@@ -22,18 +22,23 @@ export class Piece{
         this.sphere.parent = this
         this.displayCenterX = this.tile.x1 + (this.tile.x2 - this.tile.x1)/2
         this.displayCenterY = this.tile.y1 + (this.tile.y2 - this.tile.y1)/2
+        this.displayMatrix = mat4.clone(this.scene.activeMatrix)
 
         this.isPickable = false
         this.isPicked = false
         this.isKing = false
         this.fusedPiece = null
         this.hasMovedThisTurn = false
+        this.hasCapturedThisTurn = false
+        this.hasCollided = false
+        this.collidedPiece = null
 
         // animations
         this.pickAnimation = null
         this.moveAnimation = null
         this.moveDestX = null // move destination X
         this.moveDestY = null // move destination Y
+        this.captureAnimation = null
     }
 
     setPickable(value){
@@ -45,7 +50,7 @@ export class Piece{
     }
 
     set_isKing(value, fusingPiece = null){
-        if (value && fusingPiece)
+        if (value && fusingPiece === null)
             console.warn("Warning: fusingPiece is null")
         this.isKing = value
         this.fusedPiece = fusingPiece
@@ -53,6 +58,17 @@ export class Piece{
 
     set_hasMovedThisTurn(value){
         this.hasMovedThisTurn = value
+    }
+
+    set_hasCapturedThisTurn(value){
+        this.hasCapturedThisTurn = value
+    }
+
+    set_hasCollided(value, collidedPiece = null){
+        if (value && collidedPiece === null)
+            console.warn("Warning: collidedPiece is null")
+        this.hasCollided = value
+        this.collidedPiece = collidedPiece
     }
 
     getBoardPosition(){
@@ -135,10 +151,22 @@ export class Piece{
         // Notify this.scene.game
         var newBoardPosition = this.getBoardPosition();
         this.scene.game.set_lastMovedPiece(this);
-        this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+        // Run this if no collisions happened
+        // or after collision/capture animation has ended:
+        // Otherwise this task is to be done by the other piece
+        if (!this.hasCollided) 
+            this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+        else if (this.hasCollided && this.collidedPiece.captureAnimation === null){
+            // Update the game and reset hasCollided parameters
+            // of both this one and the other piece
+            this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
+            this.collidedPiece.set_hasCollided(false)
+            this.set_hasCollided(false)
+        }
+        
         //TEST
         for (let i = 0; i < this.board.pieces.length; i++)
-            this.board.pieces[i].setPickable(true)
+            this.board.pieces[i].setPickable(true) 
     }
 
     triggerPickAnimation(){
@@ -152,7 +180,66 @@ export class Piece{
             [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4, startTime + 0.6], this.scene)
     }
 
+    /** 
+     * Capture animation is triggered on collision, 
+     * which means that a capture may not have necessarily happened
+     */
+    triggerCaptureAnimation(){
+        this.capturedByOriginalPosition = this.collidedPiece.getBoardPosition()
+
+        var startTime = (Date.now() - this.scene.startTime)/1000
+        
+        var destTile
+        if (this.color === 0)
+            destTile = this.scene.graph.boards[1].nextTile()
+        else destTile = this.scene.graph.boards[2].nextTile()
+        
+        var new_displayCenterX = destTile.x1 + (destTile.x2 - destTile.x1)/2
+        var new_displayCenterY = destTile.y1 + (destTile.y2 - destTile.y1)/2
+        // Translation parameters to get to destination
+        var tx = new_displayCenterX - this.displayCenterX
+        var ty = new_displayCenterY - this.displayCenterY
+        var dist = Math.abs(tx) + Math.abs(ty)
+
+        this.captureAnimation = new MyKeyframeAnimation([ 
+            [[0, 0, 0], 0, 0,0, [1,1,1]],  
+            [[0.25*tx, 0.25*ty, dist/3], 0, 0, 0, [1,1,1]],
+            [[0.5*tx, 0.5*ty, dist/2], 0, 0, 0, [1,1,1]],
+            [[0.75*tx, 0.75*ty, dist/3], 0, 0, 0, [1,1,1]],
+            [[tx, ty, 0], 0, 0, 0, [1,1,1]],
+            ], 
+            [startTime, startTime + 0.2*dist, startTime + 0.3*dist, startTime + 0.4*dist, startTime + 0.5*dist], this.scene)
+    }
+    captureAnimationOnEnd(){
+        // If this piece has not collided, return
+        if (!this.hasCollided) return
+
+        // Other piece animation ended before ours
+        if (this.collidedPiece.moveAnimation === null){
+            // Update the game and reset hasCollided parameters
+            // of both this one and the other piece
+            var newBoardPosition = this.collidedPiece.getBoardPosition();
+            this.scene.game.pieceHasBeenMoved(this.capturedByOriginalPosition, newBoardPosition);
+            this.collidedPiece.set_hasCollided(false)
+            this.set_hasCollided(false)
+        }
+    }
+
+    /**
+     * Callback for computing object animations
+     * @param {*} ellapsedTime 
+     */
+
     computeAnimation(ellapsedTime){
+        if (this.captureAnimation !== null){
+            var res = this.captureAnimation.update(ellapsedTime)
+            if (res === "animation over"){
+                this.captureAnimation = null
+                console.log("Capture animation over")
+                this.captureAnimationOnEnd()
+                // push piece to auxiliar board ??
+            }
+        }
         if (this.pickAnimation !== null){
             var res = this.pickAnimation.update(ellapsedTime)
             if (res === "animation over"){
@@ -172,19 +259,30 @@ export class Piece{
 
     /**
      * 
-     * Called by display() 
+     * Callback used by display() 
      */
     displayPiece(appearance){
-        if (this.pickAnimation !== null){
-            this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
-            this.pickAnimation.apply()
-            this.scene.scale(1,1,0.3)
-        }
+        // Animations
         if (this.moveAnimation !== null){
             this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
             this.moveAnimation.apply()
             this.scene.scale(1,1,0.3)
         }
+        if (this.pickAnimation !== null){
+            this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
+            this.pickAnimation.apply()
+            this.scene.scale(1,1,0.3)
+        }
+        if (this.captureAnimation !== null){
+            this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
+            this.captureAnimation.apply()
+            this.scene.scale(1,1,0.3)
+        }
+
+        // Store displayMatrix for collision detection
+        this.displayMatrix = this.scene.getMatrix()
+
+        // Apply picked scale
         var pickedFactor = 1.15
         if (this.isPicked)
             this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
@@ -200,6 +298,10 @@ export class Piece{
             appearance.apply()
             this.sphere.display()
         }
+
+        // Remove picked scale
+        if (this.isPicked)
+            this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
     }
 
     display(){
