@@ -175,16 +175,18 @@ export class Piece{
      * Called by display() 
      */
     displayPiece(appearance){
-        if (this.pickAnimation !== null){
-            this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
-            this.pickAnimation.apply()
-            this.scene.scale(1,1,0.3)
-        }
         if (this.moveAnimation !== null){
             this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
             this.moveAnimation.apply()
             this.scene.scale(1,1,0.3)
         }
+        if (this.pickAnimation !== null){
+            this.scene.scale(1,1,1/0.3) // "revert" scale to make rotations visually relevant
+            this.pickAnimation.apply()
+            this.scene.scale(1,1,0.3)
+        }
+        
+        // Apply picked scale
         var pickedFactor = 1.15
         if (this.isPicked)
             this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
@@ -200,6 +202,10 @@ export class Piece{
             appearance.apply()
             this.sphere.display()
         }
+
+        // Remove picked scale
+        if (this.isPicked)
+            this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
     }
 
     display(){
