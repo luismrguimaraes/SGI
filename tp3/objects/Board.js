@@ -1,5 +1,6 @@
 import { Piece } from "./Piece.js"
 import { Tile } from "./Tile.js"
+import { MyKeyframeAnimation } from "../animations/MyKeyframeAnimation.js"
 
 /**
  * Board
@@ -18,6 +19,14 @@ export class Board {
         this.tile_textures = tile_textures
         this.tiles = this.initTiles(x1, x2, y1, y2)
         this.pieces = this.initPieces()
+
+        this.x1 = x1
+        this.x2 = x2
+        this.y1 = y1
+        this.y2 = y2
+
+        // Animations
+        this.invalidPickAnimation = null
     }
 
     initTiles(x1, x2, y1, y2){
@@ -89,6 +98,9 @@ export class Board {
     }
 
     display(){
+        if (this.invalidPickAnimation !== null)
+            this.invalidPickAnimation.apply()
+
         for (let i = 0; i < this.height; i++){
             for (let j = 0; j < this.width; j++){
                 this.tiles[i][j].display()
@@ -98,7 +110,7 @@ export class Board {
         for (let i = 0; i < this.pieces.length; i++){
             this.pieces[i].display()
         }
-        // Check for colisions
+        // Check for collisions
         /*
         var piece_i = null
         var piece_j = null
@@ -202,12 +214,32 @@ export class Board {
         return this.tiles[y][x]
     }
 
-    computeAnimations(ellapsedTime){
-        this.computeAnimations_rec(ellapsedTime)
+    triggerInvalidPickAnimation(){
+        var startTime = (Date.now() - this.scene.startTime)/1000
+        this.invalidPickAnimation = new MyKeyframeAnimation([ 
+            [[0,0,0], 0, 0, 0, [1,1,1]], 
+            [[(Math.abs(this.x1) + Math.abs(this.x2))/50, (Math.abs(this.y1) + Math.abs(this.y2))/50,0], 0, 0, 0, [1,1,1]],
+            [[- (Math.abs(this.x1) + Math.abs(this.x2))/50, - (Math.abs(this.y1) + Math.abs(this.y2))/50,0], 0, 0, 0, [1,1,1]],
+            [[0,0,0], 0, 0, 0, [1,1,1]],
+            ], 
+            [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4], this.scene)        
     }
-    computeAnimations_rec(ellapsedTime){
+
+    computeAnimations(ellapsedTime){
         for (let i = 0; i < this.pieces.length; i++){
             this.pieces[i].computeAnimation(ellapsedTime)
-        }   
+        }
+        this.computeAnimation(ellapsedTime)
+    }
+
+    computeAnimation(ellapsedTime){
+        if (this.invalidPickAnimation !== null){
+            var res = this.invalidPickAnimation.update(ellapsedTime)
+            if (res === "animation over"){
+                this.invalidPickAnimation = null
+                console.log("Invalid Pick animation over")
+                // push piece to auxiliar board ??
+            }
+        }
     }
 }

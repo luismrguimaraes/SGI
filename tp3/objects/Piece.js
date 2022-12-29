@@ -124,8 +124,6 @@ export class Piece{
         var ty = new_displayCenterY - this.displayCenterY
         var dist = Math.abs(tx) + Math.abs(ty)
 
-        //console.log(dist, tx, ty, new_displayCenterX, new_displayCenterY, this.displayCenterX, this.displayCenterY)
-
         this.moveAnimation = new MyKeyframeAnimation([ 
             [[0, 0, 0], 0, 0,0, [1,1,1]],  
             [[1.045*tx, 1.045*ty, 0], 0, 0, 0, [1,1,1]],
@@ -175,8 +173,6 @@ export class Piece{
         var tx = new_displayCenterX - this.displayCenterX
         var ty = new_displayCenterY - this.displayCenterY
         var dist = Math.abs(tx) + Math.abs(ty)
-
-        console.log(destTile.id, this.displayCenterX, this.displayCenterY, new_displayCenterX, new_displayCenterY)
 
         this.captureAnimation = new MyKeyframeAnimation([ 
             [[0, 0, 0], 0, 0,0, [1,1,1]],  

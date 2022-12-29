@@ -1,5 +1,6 @@
 import { CGFappearance, CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
+import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 import { Game } from './objects/Game.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 
@@ -194,8 +195,13 @@ export class XMLscene extends CGFscene {
     update(time) {
         if (this.sceneInited) {
             if (this.startTime === null) this.startTime = time;
+            // components
             this.graph.components_graph.computeAnimations(time - this.startTime)
+
+            // boards
             this.graph.boards[0].computeAnimations(time - this.startTime)
+            this.graph.boards[1].computeAnimations(time - this.startTime)
+            this.graph.boards[2].computeAnimations(time - this.startTime)
         }
     }
 
@@ -240,6 +246,24 @@ export class XMLscene extends CGFscene {
                     else
                     {
                         console.warn("Invalid Pick")
+                        // If InGame shake the whole board (mainboard, auxiliar 0 and 1)
+                        if (this.graph.boards[0].invalidPickAnimation === null){
+                            //this.graph.boards[0].triggerInvalidPickAnimation()
+                            //this.graph.boards[1].triggerInvalidPickAnimation()
+                            //this.graph.boards[2].triggerInvalidPickAnimation()
+
+                            if (this.graph.components["checkers"]){
+                                var startTime = (Date.now() - this.startTime)/1000
+                                var mainboard = this.graph.boards[0]
+                                this.graph.components["checkers"]["Animation"][0] = new MyKeyframeAnimation([ 
+                                    [[0,0,0], 0, 0, 0, [1,1,1]], 
+                                    [[(Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
+                                    [[- (Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, - (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
+                                    [[0,0,0], 0, 0, 0, [1,1,1]],
+                                    ], 
+                                    [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.3], this)        
+                                }
+                        }
                     }
 				}
 				this.pickResults.splice(0,this.pickResults.length);
