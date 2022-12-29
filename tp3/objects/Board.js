@@ -10,13 +10,15 @@ export class Board {
     /**
      * 
      * @param {*} tile_textures tile_textures[0] -> white piece; tile_textures[1] -> black piece
+     * @param {*} inverted inits tiles in an inverted order
      */
-    constructor (scene, id, width, height, x1, x2, y1, y2, tile_textures){
+    constructor (scene, id, width, height, x1, x2, y1, y2, tile_textures, inverted = false){
         this.scene = scene
         this.id = id
         this.width = width // number of x tiles
         this.height = height // number of y tiles
         this.tile_textures = tile_textures
+        this.inverted = inverted
         this.tiles = this.initTiles(x1, x2, y1, y2)
         this.pieces = this.initPieces()
 
@@ -34,15 +36,27 @@ export class Board {
         var tile_height = Math.abs(y2 - y1)/this.height
         var tiles = []
 
+        console.log(this.id, this.inverted)
+
         for (let i = 0; i < this.height; i++){
             tiles.push([])
             let color_mod = (i+1)%2
             for (let j = 0; j < this.width; j++){
                 let color = (j + color_mod) % 2
-                let tile_x1 = parseFloat(x1 + j*tile_width)
-                let tile_x2 = parseFloat(x1 + (j+1)*tile_width)
-                let tile_y1 = parseFloat(y1 + i*tile_height)
-                let tile_y2 = parseFloat(y1 + (i+1)*tile_height)
+                if (!this.inverted){
+                    var tile_x1 = parseFloat(x1 + j*tile_width)
+                    var tile_x2 = parseFloat(x1 + (j+1)*tile_width)
+                }else{
+                    var tile_x1 = parseFloat(x2 - j*tile_width)
+                    var tile_x2 = parseFloat(x2 - (j+1)*tile_width)
+                }
+                if (!this.inverted){
+                    var tile_y1 = parseFloat(y1 + i*tile_height)
+                    var tile_y2 = parseFloat(y1 + (i+1)*tile_height)
+                }else{
+                    var tile_y1 = parseFloat(y2 - i*tile_height)
+                    var tile_y2 = parseFloat(y2 - (i+1)*tile_height)
+                }
 
                 var texture
                 if (color === 0)
@@ -111,7 +125,7 @@ export class Board {
             this.pieces[i].display()
         }
         // Check for collisions
-        /*
+        
         var piece_i = null
         var piece_j = null
         for(let i = 0; i < this.pieces.length; i++){
@@ -122,19 +136,19 @@ export class Board {
                 mat4.create()
                 //console.log(piece_i.displayMatrix, piece_j. displayMatrix)
                 if (this.collisionComparison(piece_j.displayMatrix, piece_i.displayMatrix, 1)){
-                    console.log("Colision?")
                     // Check which piece is not moving and animate it
                     // to move to its auxiliar board
                     let pieceToAnimate = null
-                    if (piece_j.moveAnimation === null)
+                    if (piece_j.moveAnimation === null && piece_i.moveAnimation !== null)
                         pieceToAnimate = piece_j
-                    else pieceToAnimate = piece_i
-                    if (pieceToAnimate.captureAnimation === null)
+                    else if ((piece_i.moveAnimation === null && piece_j.moveAnimation !== null)) 
+                        pieceToAnimate = piece_i
+                    if (pieceToAnimate && pieceToAnimate.captureAnimation === null)
                         pieceToAnimate.triggerCaptureAnimation()
                 }
             }
         }
-        */
+        
     }
     updateTexCoords(s, t) {		
 		for (let i = 0; i < this.height; i++){

@@ -157,15 +157,16 @@ export class Piece{
             [[0,0,0], 0, 0.2, -0.4, [1,1,1]],
             [[0,0,0], 0, -0.1, 0.2, [1,1,1]],
             [[0,0,0], 0, 0, 0, [1,1,1]] ], 
-            [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4, startTime + 0.6], this.scene)        
-
-        //console.log(this.displayMatrix[12], this.displayMatrix[13], this.displayMatrix[14], this.sphere.radius)
+            [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.4, startTime + 0.6], this.scene)
     }
 
     triggerCaptureAnimation(){
         var startTime = (Date.now() - this.scene.startTime)/1000
         
-        var destTile = this.board.getTile(0, 0)
+        var destTile
+        if (this.color === 0)
+            destTile = this.scene.graph.boards[1].nextTile()
+        else destTile = this.scene.graph.boards[2].nextTile()
         
         var new_displayCenterX = destTile.x1 + (destTile.x2 - destTile.x1)/2
         var new_displayCenterY = destTile.y1 + (destTile.y2 - destTile.y1)/2
@@ -176,12 +177,18 @@ export class Piece{
 
         this.captureAnimation = new MyKeyframeAnimation([ 
             [[0, 0, 0], 0, 0,0, [1,1,1]],  
-            [[1.045*tx, 1.045*ty, 0], 0, 0, 0, [1,1,1]],
-            [[0.99*tx, 0.99*ty, 0], 0, 0, 0, [1,1,1]],
+            [[0.25*tx, 0.25*ty, dist/3], 0, 0, 0, [1,1,1]],
+            [[0.5*tx, 0.5*ty, dist/2], 0, 0, 0, [1,1,1]],
+            [[0.75*tx, 0.75*ty, dist/3], 0, 0, 0, [1,1,1]],
             [[tx, ty, 0], 0, 0, 0, [1,1,1]],
             ], 
-            [startTime, startTime + 0.6*dist, startTime + 0.6*dist + 0.1, startTime + 0.6*dist + 0.2], this.scene)
+            [startTime, startTime + 0.2*dist, startTime + 0.3*dist, startTime + 0.4*dist, startTime + 0.5*dist], this.scene)
     }
+
+    /**
+     * Callback for computing object animations
+     * @param {*} ellapsedTime 
+     */
 
     computeAnimation(ellapsedTime){
         if (this.captureAnimation !== null){
@@ -211,7 +218,7 @@ export class Piece{
 
     /**
      * 
-     * Called by display() 
+     * Callback used by display() 
      */
     displayPiece(appearance){
         // Animations

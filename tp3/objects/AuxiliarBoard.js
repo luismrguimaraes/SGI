@@ -7,13 +7,13 @@ import { Board } from "./Board.js"
  * @constructor
  */
 export class AuxiliarBoard extends Board{
-    constructor (scene, id, x1, x2, y1, y2, tile_textures, mainboard){
-        super(scene, id, 12, 1, x1, x2, y1, y2, tile_textures)
+    constructor (scene, id, x1, x2, y1, y2, tile_textures, mainboard, inverted){
+        super(scene, id, 1, 12, x1, x2, y1, y2, tile_textures, inverted)
         this.mainboard = mainboard
     }
 
     nextTile(){
-        return this.tiles[0][this.pieces.length]
+        return this.tiles[this.pieces.length][0]
     }
 
     push(piece){
