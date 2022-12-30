@@ -2,6 +2,7 @@ import { MyRectangle} from "../primitives/MyRectangle.js"
 import { CGFappearance, CGFobject } from '../../lib/CGF.js';
 import { MySphere } from "../primitives/MySphere.js";
 import { MyKeyframeAnimation } from "../animations/MyKeyframeAnimation.js";
+import { MyCrown } from "../primitives/MyCrown.js";
 
 /**
  * Piece
@@ -26,6 +27,7 @@ export class Piece{
         this.isPickable = false
         this.isPicked = false
         this.isKing = false
+        this.crown = null
         this.fusedPiece = null
         this.hasMovedThisTurn = false
         this.hasCapturedThisTurn = false
@@ -52,6 +54,8 @@ export class Piece{
     set_isKing(value, fusingPiece = null){
         if (value && fusingPiece === null)
             console.warn("Warning: fusingPiece is null")
+        if (value)
+            this.crown = new MyCrown(this.scene, this.id + " crown", 5, 5, 6)
         this.isKing = value
         this.fusedPiece = fusingPiece
     }
@@ -318,6 +322,8 @@ export class Piece{
             this.sphere.display()
             this.scene.translate(0, 0, this.sphere.radius*5/3)
             this.sphere.display()
+            this.scene.translate(0, 0, this.sphere.radius*5)
+            this.crown.display()
             this.scene.scale(1/1.1, 1/1.1, 1/1.1)
         }else{
             appearance.apply()
