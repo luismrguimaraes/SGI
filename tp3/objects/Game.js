@@ -89,8 +89,8 @@ export class Game{
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
 			if (availableCaptureTileArray != null) {
-				makeAllPiecesUnpickable();
-				lastMovedPiece.setPickable(true);
+				this.makeAllPiecesUnpickable();
+				this.lastMovedPiece.setPickable(true);
 				this.makeTilesPickable(availableCaptureTileArray);
 			}
 		}
@@ -240,9 +240,9 @@ export class Game{
 		var pieceNewXPosition = parseInt(newPositionValues[0]);
 		var pieceNewYPosition = parseInt(newPositionValues[1]);
 		
-		piece = this.mainboard.getPieceAt(pieceNewXPosition, pieceNewYPosition);
-		pieceColor = piece.color;
-		pieceIsKing = piece.isKing;
+		var piece = this.mainboard.getPieceAt(pieceNewXPosition, pieceNewYPosition);
+		var pieceColor = piece.color;
+		var pieceIsKing = piece.isKing;
 		
 		var availableTiles = [];
 		
@@ -260,6 +260,8 @@ export class Game{
 			var canGoRight = false;
 			var leftTilePiece = null;
 			var rightTilePiece = null;
+			var targetedLeftFreeTile = null;
+			var targetedRightFreeTile = null;
 			
 			// Down check
 			// Left
@@ -383,6 +385,8 @@ export class Game{
 			var canGoRight = false;
 			var leftTilePiece = null;
 			var rightTilePiece = null;
+			var leftTilePieceColor = null;
+			var rightTilePieceColor = null;
 			
 			// Down check
 			
