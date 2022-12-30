@@ -495,12 +495,12 @@ export class Game{
 		}
 		// Check for normal white
 		else if (pieceColor == 0 && !pieceIsKing) {
-			var targetedYUpPosition = pieceYPosition + 1;
-			var targetedXLeftPosition = pieceXPosition - 1;
-			var targetedXRightPosition = pieceXPosition + 1;
-			var targetedYUpPositionForCapture = pieceYPosition + 2;
-			var targetedXLeftPositionForCapture = pieceXPosition - 2;
-			var targetedXRightPositionForCapture = pieceXPosition + 2;
+			var targetedYUpPosition = pieceNewYPosition + 1;
+			var targetedXLeftPosition = pieceNewXPosition - 1;
+			var targetedXRightPosition = pieceNewXPosition + 1;
+			var targetedYUpPositionForCapture = pieceNewYPosition + 2;
+			var targetedXLeftPositionForCapture = pieceNewXPosition - 2;
+			var targetedXRightPositionForCapture = pieceNewXPosition + 2;
 			var canGoLeft = false;
 			var canGoRight = false;
 			var leftTilePiece = null;
@@ -558,12 +558,12 @@ export class Game{
 		}
 		// Check for normal black
 		else if (pieceColor == 1 && !pieceIsKing) {
-			var targetedYDownPosition = pieceYPosition - 1;
-			var targetedXLeftPosition = pieceXPosition + 1;
-			var targetedXRightPosition = pieceXPosition - 1;
-			var targetedYDownPositionForCapture = pieceYPosition - 2;
-			var targetedXLeftPositionForCapture = pieceXPosition + 2;
-			var targetedXRightPositionForCapture = pieceXPosition - 2;
+			var targetedYDownPosition = pieceNewYPosition - 1;
+			var targetedXLeftPosition = pieceNewXPosition + 1;
+			var targetedXRightPosition = pieceNewXPosition - 1;
+			var targetedYDownPositionForCapture = pieceNewYPosition - 2;
+			var targetedXLeftPositionForCapture = pieceNewXPosition + 2;
+			var targetedXRightPositionForCapture = pieceNewXPosition - 2;
 			var canGoLeft = false;
 			var canGoRight = false;
 			var leftTilePiece = null;
