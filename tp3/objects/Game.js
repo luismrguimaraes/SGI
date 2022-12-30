@@ -10,11 +10,16 @@ export class Game{
 		this.mainboard = scene.graph.boards[0];
 		this.boards = scene.graph.boards;
 		this.lastMovedPiece = null;
+		this.lockMoveToCaptureOnly = false;
     }
 
 
 	set_lastMovedPiece(value){
         this.lastMovedPiece = value
+    }
+	
+	setLockMoveToCaptureOnly(value){
+        this.lockMoveToCaptureOnly = value
     }
 	
 	// -------------------------- COMMON LOGIC --------------------------
@@ -82,16 +87,23 @@ export class Game{
 		if (shouldThePieceBeKing) {
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
-		
+				
 		if (this.lastMovedPiece.hasCapturedThisTurn || !this.lastMovedPiece.hasMovedThisTurn) {
 			this.lastMovedPiece.set_hasCapturedThisTurn(false);
 			this.lastMovedPiece.set_hasMovedThisTurn(true);
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
-			if (availableCaptureTileArray != null) {
+			if (availableCaptureTileArray.length != 0) {
+				console.log("YOU SHOULD CAPTURE STUFF");
+				console.log(availableCaptureTileArray);
 				this.makeAllPiecesUnpickable();
 				this.lastMovedPiece.setPickable(true);
+				this.setLockMoveToCaptureOnly(true);
+				console.log("Picked piece id: ", this.lastMovedPiece.id);
 				this.makeTilesPickable(availableCaptureTileArray);
+			}
+			else {
+				this.setLockMoveToCaptureOnly(false);
 			}
 		}
 	}
@@ -165,7 +177,7 @@ export class Game{
 		console.log("xDifference " + xDifference);
 		console.log("yDifference " + yDifference);
 		
-		var availableTiles = null;
+		var availableTiles = [];
 
 		// For up-left
 		if (xDifference < -1 && yDifference > 1) {
@@ -173,7 +185,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition - 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			availableTiles = this.checkIfCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For up-right
 		else if (xDifference > 1 && yDifference > 1) {
@@ -181,7 +193,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition - 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			availableTiles = this.checkIfCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For down-left
 		else if (xDifference < -1 && yDifference < -1) {
@@ -189,7 +201,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition + 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			availableTiles = this.checkIfCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For down-right
 		else if (xDifference > 1 && yDifference < -1) {
@@ -197,7 +209,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition + 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			availableTiles = this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			availableTiles = this.checkIfCaptureMovementIsPossible(newBoardPosition);
 		}
 
 		return availableTiles;
@@ -231,10 +243,10 @@ export class Game{
 	}
 
 	/**
-	* @method checkIfAnotherCaptureMovementIsPossible
+	* @method checkIfCaptureMovementIsPossible
 	* Checks if it is possible to capture another piece
 	*/
-	checkIfAnotherCaptureMovementIsPossible(newBoardPosition) {
+	checkIfCaptureMovementIsPossible(newBoardPosition) {
 		var newPositionValues = newBoardPosition.split(" ");
 		
 		var pieceNewXPosition = parseInt(newPositionValues[0]);
@@ -667,12 +679,31 @@ export class Game{
 	/**
 	* @method pieceHasBeenPicked
 	* Main function to be run whenever a piece is picked
-	* First it will make all tiles unpickable
+	* First  it will check if the player moves are locked by being allowed a capture move only
+	* Then it will make all tiles unpickable
 	* Then it will get the available tiles where the piece is allowed to move and make them pickable
 	*/
 	pieceHasBeenPicked(pickedPiece) {
-		this.makeAllTilesUnpickable();
-		this.makeAvailableTilesForPickedPiecePickable(pickedPiece);
+		if(this.lockMoveToCaptureOnly == false) {
+			this.makeAllTilesUnpickable();
+			
+			var pieceBoardPosition = pickedPiece.getBoardPosition();
+			var availableCaptureTileArray = [];
+			availableCaptureTileArray = this.checkIfCaptureMovementIsPossible(pieceBoardPosition);
+			if (availableCaptureTileArray.length != 0) {
+				console.log("YOU SHOULD CAPTURE STUFF");
+				console.log(availableCaptureTileArray);
+				this.makeAllPiecesUnpickable();
+				pickedPiece.setPickable(true);
+				this.setLockMoveToCaptureOnly(true);
+				console.log("Picked piece id: ", pickedPiece.id);
+				this.makeTilesPickable(availableCaptureTileArray);
+			}
+			else {
+				this.setLockMoveToCaptureOnly(false);
+				this.makeAvailableTilesForPickedPiecePickable(pickedPiece);
+			}
+		}
 	}
 	
 	/**
