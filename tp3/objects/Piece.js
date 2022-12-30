@@ -340,24 +340,6 @@ export class Piece{
         if (this.isPicked){
             // (Picked pieces are not registered for picking)
             if (this.color === 0){
-                //appearance.setEmission(0,0,0.25, 1)
-                if (this.isKing)
-                    appearance.setDiffuse(0.65,0.65,0.4, 1)
-                else appearance.setDiffuse(0.65,0.65,0.65, 1)
-                appearance.setSpecular(0.2,0.2,0.2, 1)
-            }
-            else {
-                //appearance.setEmission(0,0,0.15, 1)
-                if (this.isKing)
-                    appearance.setDiffuse(0.2,0.2,0.03, 1)
-                else appearance.setDiffuse(0.1,0.1,0.1, 1)
-                appearance.setSpecular(0.6,0.6,0.6, 1)
-            }
-            this.scene.translate(0, 0, (Math.abs(this.tile.x2 - this.tile.x1) + Math.abs(this.tile.y2 - this.tile.y1))/2)
-            this.displayPiece(appearance)
-
-        }else if (this.isPickable){
-            if (this.color === 0){
                 appearance.setEmission(0,0.2,0, 1)
                 if (this.isKing)
                     appearance.setDiffuse(0.55,0.75,0.3, 1)
@@ -371,6 +353,24 @@ export class Piece{
                 else appearance.setDiffuse(0.1,0.3,0.1, 1)
                 appearance.setSpecular(0.6,0.8,0.6, 1)
 
+            }
+            this.scene.translate(0, 0, (Math.abs(this.tile.x2 - this.tile.x1) + Math.abs(this.tile.y2 - this.tile.y1))/2)
+            this.displayPiece(appearance)
+
+        }else if (this.isPickable){
+            if (this.color === 0){
+                //appearance.setEmission(0,0,0.25, 1)
+                if (this.isKing)
+                    appearance.setDiffuse(0.65,0.65,0.4, 1)
+                else appearance.setDiffuse(0.65,0.65,0.65, 1)
+                appearance.setSpecular(0.2,0.2,0.2, 1)
+            }
+            else {
+                //appearance.setEmission(0,0,0.15, 1)
+                if (this.isKing)
+                    appearance.setDiffuse(0.2,0.2,0.03, 1)
+                else appearance.setDiffuse(0.1,0.1,0.1, 1)
+                appearance.setSpecular(0.6,0.6,0.6, 1)
             }
             this.scene.registerForPick(this.scene.pickId++, this.sphere)
             this.displayPiece(appearance)
@@ -390,7 +390,7 @@ export class Piece{
                 else appearance.setDiffuse(0.1,0.1,0.1, 1)
                 appearance.setSpecular(0.6,0.6,0.6, 1)
             }
-
+            
             this.displayPiece(appearance)
         }
         this.scene.popMatrix()
