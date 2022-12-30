@@ -93,6 +93,7 @@ export class Game{
 			this.lastMovedPiece.set_hasMovedThisTurn(true);
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
+			console.log("availableCaptureTileArray", availableCaptureTileArray);
 			if (availableCaptureTileArray.length != 0) {
 				console.log("YOU SHOULD CAPTURE STUFF");
 				console.log(availableCaptureTileArray);
