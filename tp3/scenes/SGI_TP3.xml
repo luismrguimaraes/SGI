@@ -563,6 +563,18 @@
             </children>
         </component>
 
+        <component id="startButton">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none" length_s="1" length_t="1"/>
+            <children>
+                <componentref id ="barrels"/>
+            </children>
+        </component>
+
         <component id="checkers">
             <transformation>
 
@@ -603,7 +615,6 @@
         </component>
         <component id="auxboard_1">
             <transformation>
-                
             </transformation>
             <materials>
                 <material id="inherit"/>
@@ -632,6 +643,7 @@
                 <componentref id="barrels"/>
 
                 <componentref id="checkers"/>
+                <componentref id="startButton"/>
 
                 <!--componentref id="NurbRectangleTest"-->
 

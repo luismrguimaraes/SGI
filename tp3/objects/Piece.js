@@ -19,7 +19,6 @@ export class Piece{
         this.id = id
         this.tile = tile
         this.sphere = new MySphere(this.scene, Math.min(Math.abs(referenceTile.x2 - referenceTile.x1), Math.abs(referenceTile.y2 - referenceTile.y1))/3, 25, 25)
-        this.sphere.parent = this
         this.displayCenterX = this.tile.x1 + (this.tile.x2 - this.tile.x1)/2
         this.displayCenterY = this.tile.y1 + (this.tile.y2 - this.tile.y1)/2
         this.displayMatrix = mat4.clone(this.scene.activeMatrix)
@@ -372,7 +371,7 @@ export class Piece{
                 else appearance.setDiffuse(0.1,0.1,0.1, 1)
                 appearance.setSpecular(0.6,0.6,0.6, 1)
             }
-            this.scene.registerForPick(this.scene.pickId++, this.sphere)
+            this.scene.registerForPick(this.scene.pickId++, this)
             this.displayPiece(appearance)
             this.scene.clearPickRegistration()
 

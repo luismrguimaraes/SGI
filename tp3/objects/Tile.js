@@ -13,7 +13,6 @@ export class Tile{
         this.id = id
         this.texture = texture
         this.rectangle = new MyRectangle(scene, id, x1, x2, y1, y2)
-        this.rectangle.parent = this
 
         this.isPickable = false
         this.isFree = true
@@ -72,7 +71,7 @@ export class Tile{
             }
             appearance.apply()
 
-            this.scene.registerForPick(this.scene.pickId++, this.rectangle)
+            this.scene.registerForPick(this.scene.pickId++, this)
             this.rectangle.display()
             this.scene.clearPickRegistration()
         }else{

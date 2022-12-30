@@ -217,13 +217,21 @@ export class XMLscene extends CGFscene {
 						var customId = this.pickResults[i][1];
 
 						console.log("Pick ID: " + customId);
-                        var split_id = obj.parent.id.split(' ')
+                        if (obj.id)
+                            var split_id = obj.id.split(' ')
+                        else{
+                            // Not Piece or Tile
+                            if(obj["ID"] === "startButton"){
+                                // Start Game
+                            }
+                            continue
+                        }
                         // If a piece is picked
                         if (split_id[0] === 'piece'){
-                            console.log("picked piece " + split_id[1] + " at " + obj.parent.getBoardPosition())
+                            console.log("picked piece " + split_id[1] + " at " + obj.getBoardPosition())
                             // (mainboard is at boards[0])
-                            this.graph.boards[0].pickPiece(obj.parent.id)  
-                            this.pickedPiece = obj.parent
+                            this.graph.boards[0].pickPiece(obj.id)  
+                            this.pickedPiece = obj
 							this.game.pieceHasBeenPicked(this.pickedPiece);
                         }
                         // If a tile is picked, move the picked piece 
@@ -233,7 +241,7 @@ export class XMLscene extends CGFscene {
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
-                                obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
+                                obj.board.movePiece(this.pickedPiece.id, obj.board_x, obj.board_y)
                                 this.pickedPiece = null;
                             }
                         }
@@ -241,7 +249,8 @@ export class XMLscene extends CGFscene {
                     else
                     {
                         console.warn("Invalid Pick")
-                        // If InGame, shake the whole board (mainboard, auxiliar 0 and 1) after an invalid pick
+                        // If InGame
+                        // shake the whole board (mainboard, auxiliar 0 and 1) after an invalid pick
                         if (this.graph.boards[0].invalidPickAnimation === null){
                             if (this.graph.components["checkers"]){
                                 var startTime = (Date.now() - this.startTime)/1000

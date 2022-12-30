@@ -36,8 +36,6 @@ export class Board {
         var tile_height = Math.abs(y2 - y1)/this.height
         var tiles = []
 
-        console.log(this.id, this.inverted)
-
         for (let i = 0; i < this.height; i++){
             tiles.push([])
             let color_mod = (i+1)%2
@@ -258,7 +256,6 @@ export class Board {
             if (res === "animation over"){
                 this.invalidPickAnimation = null
                 console.log("Invalid Pick animation over")
-                // push piece to auxiliar board ??
             }
         }
     }
