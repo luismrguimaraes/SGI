@@ -34,11 +34,12 @@ export class Piece{
         this.collidedPiece = null
 
         // animations
-        this.pickAnimation = null
-        this.moveAnimation = null
+        this.pickAnimation = null // is null when animation ends
+        this.moveAnimation = null // is null when animation ends
         this.moveDestX = null // move destination X
         this.moveDestY = null // move destination Y
-        this.captureAnimation = null
+        this.captureAnimation = null // is NOT null when animation ends in order to preserve the last frama
+        this.captureAnimationHasFinished = false
     }
 
     setPickable(value){
@@ -69,6 +70,10 @@ export class Piece{
             console.warn("Warning: collidedPiece is null")
         this.hasCollided = value
         this.collidedPiece = collidedPiece
+    }
+
+    set_captureAnimationHasFinished(value){
+        this.captureAnimationHasFinished = value
     }
 
     getBoardPosition(){
@@ -147,18 +152,26 @@ export class Piece{
 
         // Update this.tile
         this.changeTile(this.board.getTile(this.moveDestX, this.moveDestY))
-
-        // Notify this.scene.game
-        var newBoardPosition = this.getBoardPosition();
-        this.scene.game.set_lastMovedPiece(this);
-        // Run this if no collisions happened
-        // or after collision/capture animation has ended:
+        
+        // If no collisions happened
+        // or after the other piece capture animation has ended, 
+        // notify this.scene.game.
         // Otherwise this task is to be done by the other piece
-        if (!this.hasCollided) 
+        // (on captureAnimationOnEnd())
+        if (!this.hasCollided){
+            var newBoardPosition = this.getBoardPosition();
+            this.scene.game.set_lastMovedPiece(this);
             this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
-        else if (this.hasCollided && this.collidedPiece.captureAnimation === null){
+        }
+        else if (this.hasCollided && this.collidedPiece.captureAnimationHasFinished){
+            console.log("On move animation end")
+            // Reset capture animation
+            this.collidedPiece.captureAnimation = null
+            this.collidedPiece.set_captureAnimationHasFinished(false)
             // Update the game and reset hasCollided parameters
             // of both this one and the other piece
+            var newBoardPosition = this.getBoardPosition();
+            this.scene.game.set_lastMovedPiece(this);
             this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
             this.collidedPiece.set_hasCollided(false)
             this.set_hasCollided(false)
@@ -214,11 +227,19 @@ export class Piece{
         // If this piece has not collided, return
         if (!this.hasCollided) return
 
-        // Other piece animation ended before ours
+        // If the other piece move animation ended before our capture animation,
+        // notify this.scene.game.
+        // Otherwise this task is to be done by the other piece
+        // (on moveAnimationOnEnd())
         if (this.collidedPiece.moveAnimation === null){
+            console.log("On capture animation end")
+            // Reset capture animation
+            this.captureAnimation = null
+            this.set_captureAnimationHasFinished(false)
             // Update the game and reset hasCollided parameters
             // of both this one and the other piece
             var newBoardPosition = this.collidedPiece.getBoardPosition();
+            this.scene.game.set_lastMovedPiece(this.collidedPiece);
             this.scene.game.pieceHasBeenMoved(this.capturedByOriginalPosition, newBoardPosition);
             this.collidedPiece.set_hasCollided(false)
             this.set_hasCollided(false)
@@ -234,15 +255,16 @@ export class Piece{
         if (this.captureAnimation !== null){
             var res = this.captureAnimation.update(ellapsedTime)
             if (res === "animation over"){
-                this.captureAnimation = null
+                // Capture animation finished
+                this.set_captureAnimationHasFinished(true)
                 console.log("Capture animation over")
                 this.captureAnimationOnEnd()
-                // push piece to auxiliar board ??
             }
         }
         if (this.pickAnimation !== null){
             var res = this.pickAnimation.update(ellapsedTime)
             if (res === "animation over"){
+                // Pick animation finished
                 this.pickAnimation = null
                 console.log("Pick animation over")
             }
@@ -250,6 +272,7 @@ export class Piece{
         if (this.moveAnimation !== null){
             var res = this.moveAnimation.update(ellapsedTime)
             if (res === "animation over"){
+                // Move animation finished
                 this.moveAnimation = null
                 console.log("Move animation over")
                 this.moveAnimationOnEnd()

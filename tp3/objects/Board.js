@@ -133,11 +133,9 @@ export class Board {
             for (let j = 0; j < this.pieces.length; j++){
                 if (j === i) continue
                 piece_j = this.pieces[j]
-                mat4.create()
-                //console.log(piece_i.displayMatrix, piece_j. displayMatrix)
                 if (this.collisionComparison(piece_j.displayMatrix, piece_i.displayMatrix, 1)){
                     // Check which piece is not moving and animate it
-                    // to move to its auxiliar board
+                    // (capture animation: move to its auxiliar board)
                     let pieceToAnimate = null
                     let pieceThatMayHaveCaptured = null
                     if (piece_j.moveAnimation === null && piece_i.moveAnimation !== null){

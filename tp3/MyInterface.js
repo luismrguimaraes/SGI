@@ -57,6 +57,8 @@ export class MyInterface extends CGFinterface {
                 // "Unpick"
                 this.scene.pickedPiece.setPicked(false)
                 this.scene.pickedPiece = null
+
+                //this.game.setLockMoveToCaptureOnly(false);
                 
                 // update pickables
                 for (let i = 0; i < 8; i++){
