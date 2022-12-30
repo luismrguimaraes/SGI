@@ -222,7 +222,7 @@ export class Game{
 	capturePiece(capturedPieceXPosition, capturedPieceYPosition) {
 		var capturedPiece = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
 		if (capturedPiece != null) {
-			console.log("capturedPiece ", capturedPiece);
+			console.log("Piece captured! Captured piece is ", capturedPiece);
 			var capturedPieceColor = capturedPiece.color;
 			
 			console.log("capturedPieceXPosition " + capturedPieceXPosition);
