@@ -577,7 +577,6 @@
 
         <component id="checkers">
             <transformation>
-
                 <translate x="70" y="2" z="70"/>
                 <rotate axis="x" angle="-90"/>
             </transformation>
@@ -586,41 +585,8 @@
             </materials>
             <texture id="none" length_s="1" length_t="1"/>
             <children>
-                <componentref id="board"/>
-                <componentref id="auxboard_0"/>
-                <componentref id="auxboard_1"/>
-            </children>
-        </component>
-        <component id="board">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none" length_s="1" length_t="1"/>
-            <children>
                 <mainboard/>
-            </children>
-        </component>
-        <component id="auxboard_0">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none" length_s="1" length_t="1"/>
-            <children>
                 <auxiliarboard_0/>
-            </children>
-        </component>
-        <component id="auxboard_1">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none" length_s="1" length_t="1"/>
-            <children>
                 <auxiliarboard_1/>
             </children>
         </component>
