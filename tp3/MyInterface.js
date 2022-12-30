@@ -53,6 +53,9 @@ export class MyInterface extends CGFinterface {
             }
         }
         if(event.code == "Escape"){
+			// Simulate end turn
+			this.scene.game.endTurn();
+
             if (this.scene.pickedPiece !== null){
                 // "Unpick"
                 this.scene.pickedPiece.setPicked(false)

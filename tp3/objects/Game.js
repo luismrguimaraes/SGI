@@ -66,6 +66,22 @@ export class Game{
             this.mainboard.pieces[i].setPickable(true)
 		}
 	}
+
+	/**
+	* @method endTurn
+	* Ends player turn
+	*/
+	endTurn() {	
+		console.log("Ending turn");
+		if (this.lastMovedPiece != null) {
+			this.lastMovedPiece.set_hasMovedThisTurn(false);
+			this.setLockMoveToCaptureOnly(false);
+			this.makeAllPiecesPickable();
+		}
+		else {
+			console.log("No piece has been moved. Cannot end turn!");
+		}
+	}
 	
 	
 	
@@ -102,7 +118,8 @@ export class Game{
 				console.log("YOU SHOULD CAPTURE STUFF");
 				console.log(availableCaptureTileArray);
 				this.makeAllPiecesUnpickable();
-				this.lastMovedPiece.setPickable(true);
+				this.lastMovedPiece.setPicked(true);
+				this.scene.pickedPiece = this.lastMovedPiece;
 				this.setLockMoveToCaptureOnly(true);
 				console.log("Picked piece id: ", this.lastMovedPiece.id);
 				this.makeTilesPickable(availableCaptureTileArray);
