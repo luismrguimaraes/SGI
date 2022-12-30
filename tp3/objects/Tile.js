@@ -1,5 +1,6 @@
 import { MyRectangle} from "../primitives/MyRectangle.js"
 import { CGFappearance, CGFobject } from '../../lib/CGF.js';
+import { MyRectangleContour } from "../primitives/MyRectangleContour.js";
 
 /**
  * Tile
@@ -13,6 +14,8 @@ export class Tile{
         this.id = id
         this.texture = texture
         this.rectangle = new MyRectangle(scene, id, x1, x2, y1, y2)
+        let contourWidth = Math.min(Math.abs(x2 - x1), Math.abs(y2 - y1))/25
+        this.contour = new MyRectangleContour(scene, this.id + " contour", contourWidth, x1, x2, y1, y2)
 
         this.isPickable = false
         this.isFree = true
@@ -38,6 +41,21 @@ export class Tile{
     }
 
     display(){
+        // If piece on it Pickable and not Picked
+        if (this.piece && this.piece.isPickable && !this.piece.isPicked){
+            // Display Contour
+            this.scene.pushMatrix()
+            var contourAppearance = new CGFappearance(this.scene)
+            contourAppearance.setDiffuse(0.5,0.5,0.5, 1)
+            contourAppearance.setSpecular(0.5,0.5,0.5, 1)
+            contourAppearance.setEmission(0.3,0.3,0.3, 1)
+            this.scene.translate(0, 0, 0.001)
+            contourAppearance.apply()
+            this.contour.display()
+            this.scene.popMatrix()
+        }
+
+        // Display Tile
         this.scene.pushMatrix()
         var appearance = new CGFappearance(this.scene)
         if (this.texture != 'none') 

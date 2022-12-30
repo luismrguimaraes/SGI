@@ -27,7 +27,7 @@ export class Piece{
         this.isPickable = false
         this.isPicked = false
         this.isKing = false
-        this.crown = null
+        this.crown = new MyCrown(this.scene, this.id + " crown", this.sphere.radius*1.7, this.sphere.radius*3.5, 6)
         this.fusedPiece = null
         this.hasMovedThisTurn = false
         this.hasCapturedThisTurn = false
@@ -54,8 +54,6 @@ export class Piece{
     set_isKing(value, fusingPiece = null){
         if (value && fusingPiece === null)
             console.warn("Warning: fusingPiece is null")
-        if (value)
-            this.crown = new MyCrown(this.scene, this.id + " crown", this.sphere.radius*1.7, this.sphere.radius*3.5, 6)
         this.isKing = value
         this.fusedPiece = fusingPiece
     }
@@ -316,17 +314,25 @@ export class Piece{
         if (this.isPicked)
             this.scene.scale(pickedFactor, pickedFactor, pickedFactor)
 
+        appearance.apply()
         if (this.isKing){
-            appearance.apply()
             this.scene.scale(1.1, 1.1, 1.1)
+
+            // Draw two spheres
             this.sphere.display()
             this.scene.translate(0, 0, this.sphere.radius*5/3)
             this.sphere.display()
+
+            // Draw crown
             //this.scene.translate(0, 0, this.sphere.radius)
+            appearance.setEmission(0,0,0, 1)
+            appearance.setDiffuse(0.65,0.65,0.4, 1)
+            appearance.setSpecular(1,1,0.5, 1)
+            appearance.apply()
             this.crown.display()
+
             this.scene.scale(1/1.1, 1/1.1, 1/1.1)
         }else{
-            appearance.apply()
             this.sphere.display()
         }
 
@@ -366,17 +372,11 @@ export class Piece{
         // If Pickable (and not Picked)
         }else if (this.isPickable){
             if (this.color === 0){
-                //appearance.setEmission(0,0,0.25, 1)
-                if (this.isKing)
-                    appearance.setDiffuse(0.65,0.65,0.4, 1)
-                else appearance.setDiffuse(0.65,0.65,0.65, 1)
+                appearance.setDiffuse(0.65,0.65,0.65, 1)
                 appearance.setSpecular(0.2,0.2,0.2, 1)
             }
             else {
-                //appearance.setEmission(0,0,0.15, 1)
-                if (this.isKing)
-                    appearance.setDiffuse(0.2,0.2,0.03, 1)
-                else appearance.setDiffuse(0.1,0.1,0.1, 1)
+                appearance.setDiffuse(0.1,0.1,0.1, 1)
                 appearance.setSpecular(0.6,0.6,0.6, 1)
             }
             this.scene.registerForPick(this.scene.pickId++, this)
@@ -386,15 +386,11 @@ export class Piece{
         // If not Picked or Pickable
         }else{
             if (this.color === 0){
-                if (this.isKing)
-                    appearance.setDiffuse(0.65,0.65,0.4, 1)
-                else appearance.setDiffuse(0.65,0.65,0.65, 1)
+                appearance.setDiffuse(0.65,0.65,0.65, 1)
                 appearance.setSpecular(0.2,0.2,0.2, 1)
             }
             else{
-                if (this.isKing)
-                    appearance.setDiffuse(0.2,0.2,0.03, 1)
-                else appearance.setDiffuse(0.1,0.1,0.1, 1)
+                appearance.setDiffuse(0.1,0.1,0.1, 1)
                 appearance.setSpecular(0.6,0.6,0.6, 1)
             }
             

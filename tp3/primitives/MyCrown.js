@@ -26,7 +26,6 @@ export class MyCrown extends CGFobject{
 	}
 	
 	initBuffers() {
-        this.rectangles = []
         this.triangles = []
 
         var r = this.width/2
