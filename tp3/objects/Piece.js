@@ -90,20 +90,23 @@ export class Piece{
      * @param {*} newTile 
      */
     changeTile(newTile){
-        if (this.tile !== null)
-            this.tile.isFree = true
+        if (this.tile !== null){
+            // Update old Tile
+            this.tile.set_isFree(true)
+        }
         if (newTile){
+            // Update new tile and this piece display positions
             this.tile = newTile
-            this.tile.isFree = false
+            this.tile.set_isFree (false, this)
             this.displayCenterX = this.tile.x1 + (this.tile.x2 - this.tile.x1)/2
             this.displayCenterY = this.tile.y1 + (this.tile.y2 - this.tile.y1)/2
         }
         else{
+            // New tile is not an object
             this.tile = null
             this.displayCenterX = null
             this.displayCenterY = null
         }
-        
     }
 
     move(x, y){

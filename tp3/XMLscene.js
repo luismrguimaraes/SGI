@@ -233,25 +233,16 @@ export class XMLscene extends CGFscene {
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
-								var originalBoardPosition = this.pickedPiece.getBoardPosition();
                                 obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
-								var newBoardPosition = this.pickedPiece.getBoardPosition();
-								//this.game.set_lastMovedPiece(this.pickedPiece);
-                                //this.pickedPiece.setPicked(false);
                                 this.pickedPiece = null;
-								//this.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
                             }
                         }
 					}
                     else
                     {
                         console.warn("Invalid Pick")
-                        // If InGame shake the whole board (mainboard, auxiliar 0 and 1)
+                        // If InGame, shake the whole board (mainboard, auxiliar 0 and 1) after an invalid pick
                         if (this.graph.boards[0].invalidPickAnimation === null){
-                            //this.graph.boards[0].triggerInvalidPickAnimation()
-                            //this.graph.boards[1].triggerInvalidPickAnimation()
-                            //this.graph.boards[2].triggerInvalidPickAnimation()
-
                             if (this.graph.components["checkers"]){
                                 var startTime = (Date.now() - this.startTime)/1000
                                 var mainboard = this.graph.boards[0]

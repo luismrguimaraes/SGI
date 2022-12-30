@@ -17,6 +17,7 @@ export class Tile{
 
         this.isPickable = false
         this.isFree = true
+        this.piece = null
         this.board_x = board_x
         this.board_y = board_y
 
@@ -30,8 +31,11 @@ export class Tile{
         this.isPickable = value
     }
 
-    set_isFree(value){
+    set_isFree(value, piece = null){
+        if (!value && piece === null)
+            console.warn("Tile " + this.id + " set to occupied but it piece is null")
         this.isFree = value
+        this.piece = piece
     }
 
     display(){
@@ -40,14 +44,29 @@ export class Tile{
         if (this.texture != 'none') 
             appearance.setTexture(this.texture)
 
-        if (this.isPickable){
+        if (this.piece && this.piece.isPicked){
             if (this.color === 0){
-                appearance.setEmission(0,0.3,0, 1)
+                appearance.setEmission(1,1,0, 1)
+                appearance.setDiffuse(209/256, 166/256, 109/256, 1)
+                appearance.setSpecular(0,0,0, 1)
+            }
+            else {
+                appearance.setEmission(1,1,0, 1)
+                appearance.setDiffuse(148/256, 82/256, 59/256,1)
+                appearance.setSpecular(0,0,0, 1)
+            }
+            appearance.apply()
+
+            this.rectangle.display()
+        }
+        else if (this.isPickable){
+            if (this.color === 0){
+                appearance.setEmission(0,1,0, 1)
                 appearance.setDiffuse(129/256, 256/256, 29/256,1)
                 appearance.setSpecular(0,0,0, 1)
             }
             else {
-                appearance.setEmission(0,0.2,0, 1)
+                appearance.setEmission(0,1,0, 1)
                 appearance.setDiffuse(118/256, 162/236, 29/236,1)
                 appearance.setSpecular(0,0,0, 1)
             }

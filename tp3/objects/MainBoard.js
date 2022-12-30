@@ -21,14 +21,16 @@ export class MainBoard extends Board{
         var pieces = []
         for (let i = 0; i < 3; i+=1){
             for (let j = (i%2); j < 8; j+=2){
-                pieces.push(new Piece(this.scene, this, 0, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
-                this.tiles[i][j].set_isFree(false)
+                let newPiece = new Piece(this.scene, this, 0, 'piece ' + `${pieces.length}`, this.tiles[i][j])
+                pieces.push(newPiece)
+                this.tiles[i][j].set_isFree(false, newPiece)
             }
         }
         for (let i = 7; i > 4; i-=1){
             for (let j = (i%2); j < 8; j+=2){
-                pieces.push(new Piece(this.scene, this, 1, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
-                this.tiles[i][j].set_isFree(false)
+                let newPiece = new Piece(this.scene, this, 1, 'piece ' + `${pieces.length}`, this.tiles[i][j])
+                pieces.push(newPiece)
+                this.tiles[i][j].set_isFree(false, newPiece)
             }
         }
 
