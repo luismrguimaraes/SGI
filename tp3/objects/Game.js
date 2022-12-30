@@ -46,6 +46,16 @@ export class Game{
 			this.mainboard.pieces[i].setPickable(false)
 		}
 	}
+
+	/**
+	* @method makeAllPiecesUnpickable
+	* Makes every piece in the this.mainboard unmoved on this turn
+	*/
+	makeAllPiecesNotMovedThisTurn() {	 
+		for(var i = 0; i < this.mainboard.pieces.length; i++) {
+			this.mainboard.pieces[i].set_hasMovedThisTurn(false);
+		}
+	}
 	
 	/**
 	* @method makeTilesPickable
@@ -72,9 +82,10 @@ export class Game{
 	* Ends player turn
 	*/
 	endTurn() {	
-		console.log("Ending turn");
+		console.log("lastMovedPiece id", this.lastMovedPiece.id);
 		if (this.lastMovedPiece != null) {
-			this.lastMovedPiece.set_hasMovedThisTurn(false);
+			console.log("Ending turn");
+			this.makeAllPiecesNotMovedThisTurn();
 			this.setLockMoveToCaptureOnly(false);
 			this.makeAllPiecesPickable();
 		}
