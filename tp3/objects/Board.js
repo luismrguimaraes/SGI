@@ -110,6 +110,7 @@ export class Board {
     }
 
     display(){
+        this.scene.pushMatrix()
         if (this.invalidPickAnimation !== null)
             this.invalidPickAnimation.apply()
 
@@ -152,7 +153,7 @@ export class Board {
                 }
             }
         }
-        
+        this.scene.popMatrix()
     }
     updateTexCoords(s, t) {		
 		for (let i = 0; i < this.height; i++){

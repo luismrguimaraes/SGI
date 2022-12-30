@@ -15,7 +15,6 @@
   - (relative link to the scene)
 ----
 ## Limitations
-- Boards shouldn't share a component with other primitives/components.
 - Camera names for player 1 and 2 must be:
 	- 1: "Game_camera_p0"
 	- 2: "Game_camera_p1"

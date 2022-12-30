@@ -1,4 +1,5 @@
 import { CGFobject } from '../../lib/CGF.js';
+import { MyTriangle } from './MyTriangle.js';
 
 /**
  * MyCrown
@@ -27,60 +28,119 @@ export class MyCrown extends CGFobject{
 	initBuffers() {
         this.rectangles = []
         this.triangles = []
-        
+
         var r = this.width/2
         var theta = 2*Math.PI/this.slices
 
         // Vertices
         for (var i = 0; i < this.slices; i++) {
             /*
-                Vertices:
-                         2
-                      /     \
-                      - - - - 1
-                    |         |
-                    |         |
-                      - - - - 0
+                One triangle and one rectangle:
+                         v2
+                         /\
+                       /    \
+                   v3 -------- v1
+                     |        |
+                     |        |
+                   v4 -------- v0
             */
-			this.vertices.push(
-				r * Math.cos(i * theta),
-				r * Math.sin(i * theta),
-				0
-			);
-            this.normals.push(
-				r * Math.cos(i * theta),
-				r * Math.sin(i * theta),
-				0
-			);
-            this.vertices.push(
-				r * Math.cos(i * theta),
-				r * Math.sin(i * theta),
-				this.height/2
-			);
-            this.vertices.push(
-				r * Math.cos((i + 0.5) * theta), 
-				r * Math.sin((i + 0.5) * theta),
-				this.height
-			);
-        }
+            var v0 = [
+                r * Math.cos(i * theta),
+                r * Math.sin(i * theta),
+                0
+            ]
+            var v1 = [
+                r * Math.cos(i * theta),
+                r * Math.sin(i * theta),
+                this.height/1.8
+            ]
+            var v2 = [
+                r*1.1 * Math.cos((i+0.5) * theta),
+                r*1.1 * Math.sin((i+0.5) * theta),
+                this.height
+            ]
+            var v3 = [
+                r * Math.cos((i+1) * theta),
+                r * Math.sin((i+1) * theta),
+                this.height/1.8
+            ]
+            var v4 = [
+                r * Math.cos((i+1) * theta),
+                r * Math.sin((i+1) * theta),
+                0
+            ]
+            
+            // Triangle
+            this.triangles.push(
+                new MyTriangle(this.scene, this.id + " triangle " + i, 
+                    // v1
+                    v1[0], v1[1], v1[2],
+                    // v2
+                    v2[0], v2[1], v2[2],
+                    // v3
+                    v3[0], v3[1], v3[2]
+                ),
+                new MyTriangle(this.scene, this.id + " triangle " + i, 
+                    // v1
+                    v1[0], v1[1], v1[2],
+                    // v3
+                    v3[0], v3[1], v3[2],
+                    // v2
+                    v2[0], v2[1], v2[2]
+                )
+            )
+            
+            // Rectangles Part 1
+            this.triangles.push(
+                new MyTriangle(this.scene, this.id + " triangle " + i, 
+                    // v0
+                    v0[0], v0[1], v0[2],
+                    // v1
+                    v1[0], v1[1], v1[2],
+                    // v4
+                    v4[0], v4[1], v4[2]
+                ),
+                new MyTriangle(this.scene, this.id + " triangle " + i, 
+                    // v0
+                    v0[0], v0[1], v0[2],
+                    // v4
+                    v4[0], v4[1], v4[2],
+                    // v1
+                    v1[0], v1[1], v1[2]
+                )
+            )
+            // Rectangles Part 2
+            this.triangles.push(
+                new MyTriangle(this.scene, this.id + " triangle " + i, 
+                    // v1
+                    v1[0], v1[1], v1[2],
+                    // v3
+                    v3[0], v3[1], v3[2],
+                    // v4
+                    v4[0], v4[1], v4[2]
+                ),
+                new MyTriangle(this.scene, this.id + " triangle " + i, 
+                    // v1
+                    v1[0], v1[1], v1[2],
+                    // v4
+                    v4[0], v4[1], v4[2],
+                    // v3
+                    v3[0], v3[1], v3[2]
+                )
+            )
+	    }
+    }
 
-        // Indices
-        for (var i = 0; i < this.slices; i++) {
-            console.log(i)
-            let startIndex = i*3
-            this.indices.push(startIndex + 0, startIndex + 1, startIndex + 4)
-            this.indices.push(startIndex + 0, startIndex + 4, startIndex + 1) // (other side)
-            this.indices.push(startIndex + 1, startIndex + 3, startIndex + 4)
-            this.indices.push(startIndex + 1, startIndex + 4, startIndex + 3) // (other side)
-            this.indices.push(startIndex + 1, startIndex + 2, startIndex + 3)
-            this.indices.push(startIndex + 1, startIndex + 3, startIndex + 2) // (other side)
+    display(){
+        for (let i = 0; i < this.triangles.length; i++){
+            this.triangles[i].display()
         }
-
-		this.primitiveType = this.scene.gl.TRIANGLES;
-		this.initGLBuffers();		
-	}
+    }
 	
 	updateTexCoords(s, t) {
+        for (let i = 0; i < this.triangles.length; i++){
+            this.triangles[i].updateTexCoords(s, t)
+        }
 		this.updateTexCoordsGLBuffers();
 	}
 }

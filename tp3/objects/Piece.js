@@ -55,7 +55,7 @@ export class Piece{
         if (value && fusingPiece === null)
             console.warn("Warning: fusingPiece is null")
         if (value)
-            this.crown = new MyCrown(this.scene, this.id + " crown", 5, 5, 6)
+            this.crown = new MyCrown(this.scene, this.id + " crown", this.sphere.radius*1.7, this.sphere.radius*3.5, 6)
         this.isKing = value
         this.fusedPiece = fusingPiece
     }
@@ -322,7 +322,7 @@ export class Piece{
             this.sphere.display()
             this.scene.translate(0, 0, this.sphere.radius*5/3)
             this.sphere.display()
-            this.scene.translate(0, 0, this.sphere.radius*5)
+            //this.scene.translate(0, 0, this.sphere.radius)
             this.crown.display()
             this.scene.scale(1/1.1, 1/1.1, 1/1.1)
         }else{
@@ -342,8 +342,9 @@ export class Piece{
         this.scene.translate(0, 0, this.sphere.radius)
 
         var appearance = new CGFappearance(this.scene)
+        // If Picked
+        // (Picked pieces are not registered for picking)
         if (this.isPicked){
-            // (Picked pieces are not registered for picking)
             if (this.color === 0){
                 appearance.setEmission(0,0.2,0, 1)
                 if (this.isKing)
@@ -362,6 +363,7 @@ export class Piece{
             this.scene.translate(0, 0, (Math.abs(this.tile.x2 - this.tile.x1) + Math.abs(this.tile.y2 - this.tile.y1))/2)
             this.displayPiece(appearance)
 
+        // If Pickable (and not Picked)
         }else if (this.isPickable){
             if (this.color === 0){
                 //appearance.setEmission(0,0,0.25, 1)
@@ -381,8 +383,8 @@ export class Piece{
             this.displayPiece(appearance)
             this.scene.clearPickRegistration()
 
+        // If not Picked or Pickable
         }else{
-            //Not Picked or Pickable
             if (this.color === 0){
                 if (this.isKing)
                     appearance.setDiffuse(0.65,0.65,0.4, 1)

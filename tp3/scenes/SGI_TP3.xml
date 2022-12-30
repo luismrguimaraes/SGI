@@ -52,7 +52,7 @@
     </ambient>
 
     <lights>
-        <spot id="Unidentified" enabled="1" angle="13" exponent="16">
+        <spot id="Unidentified" enabled="0" angle="13" exponent="16">
             <target x="-20" y="10" z="-20" />
             <location x="20" y="30" z="20" w="1.0" />
             <ambient r="0" g="0.3" b="0" a="1.0" />
