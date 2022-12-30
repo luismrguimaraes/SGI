@@ -41,9 +41,9 @@ export class Tile{
     }
 
     display(){
-        // If piece on it Pickable and not Picked
+        // If piece on it Pickable and not Picked,
+        // Display Contour
         if (this.piece && this.piece.isPickable && !this.piece.isPicked){
-            // Display Contour
             this.scene.pushMatrix()
             var contourAppearance = new CGFappearance(this.scene)
             contourAppearance.setDiffuse(0.5,0.5,0.5, 1)

@@ -27,7 +27,7 @@ export class Piece{
         this.isPickable = false
         this.isPicked = false
         this.isKing = false
-        this.crown = new MyCrown(this.scene, this.id + " crown", this.sphere.radius*1.7, this.sphere.radius*3.5, 6)
+        this.crown = new MyCrown(this.scene, this.id + " crown", this.sphere.radius*1.65, this.sphere.radius*3.5, 6)
         this.fusedPiece = null
         this.hasMovedThisTurn = false
         this.hasCapturedThisTurn = false
@@ -318,15 +318,19 @@ export class Piece{
         if (this.isKing){
             this.scene.scale(1.1, 1.1, 1.1)
 
-            // Draw two spheres
+            // Display two spheres
             this.sphere.display()
             this.scene.translate(0, 0, this.sphere.radius*5/3)
             this.sphere.display()
 
-            // Draw crown
+            // Display crown
             //this.scene.translate(0, 0, this.sphere.radius)
             appearance.setEmission(0,0,0, 1)
-            appearance.setDiffuse(0.65,0.65,0.4, 1)
+            if (this.color === 0)
+                appearance.setDiffuse(0.85,0.85,0.5, 1)
+            else 
+                appearance.setDiffuse(0.65,0.65,0.3, 1)
+
             appearance.setSpecular(1,1,0.5, 1)
             appearance.apply()
             this.crown.display()
@@ -369,32 +373,24 @@ export class Piece{
             this.scene.translate(0, 0, (Math.abs(this.tile.x2 - this.tile.x1) + Math.abs(this.tile.y2 - this.tile.y1))/2)
             this.displayPiece(appearance)
 
-        // If Pickable (and not Picked)
-        }else if (this.isPickable){
+        }else {
             if (this.color === 0){
-                appearance.setDiffuse(0.65,0.65,0.65, 1)
+                appearance.setDiffuse(0.55,0.55,0.55, 1)
                 appearance.setSpecular(0.2,0.2,0.2, 1)
             }
             else {
                 appearance.setDiffuse(0.1,0.1,0.1, 1)
                 appearance.setSpecular(0.6,0.6,0.6, 1)
             }
+            // If Pickable (and not Picked)
+            if (this.isPickable){
             this.scene.registerForPick(this.scene.pickId++, this)
             this.displayPiece(appearance)
             this.scene.clearPickRegistration()
-
-        // If not Picked or Pickable
-        }else{
-            if (this.color === 0){
-                appearance.setDiffuse(0.65,0.65,0.65, 1)
-                appearance.setSpecular(0.2,0.2,0.2, 1)
+            // If not Picked or Pickable
+            }else{
+                this.displayPiece(appearance)
             }
-            else{
-                appearance.setDiffuse(0.1,0.1,0.1, 1)
-                appearance.setSpecular(0.6,0.6,0.6, 1)
-            }
-            
-            this.displayPiece(appearance)
         }
         this.scene.popMatrix()
     }
