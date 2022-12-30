@@ -87,7 +87,11 @@ export class Game{
 		if (shouldThePieceBeKing) {
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
-				
+		
+		console.log("lastMovedPiece", this.lastMovedPiece);
+		console.log("hasCapturedThisTurn", this.lastMovedPiece.hasCapturedThisTurn);	
+		console.log("hasMovedThisTurn", this.lastMovedPiece.hasMovedThisTurn);
+
 		if (this.lastMovedPiece.hasCapturedThisTurn || !this.lastMovedPiece.hasMovedThisTurn) {
 			this.lastMovedPiece.set_hasCapturedThisTurn(false);
 			this.lastMovedPiece.set_hasMovedThisTurn(true);
