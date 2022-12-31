@@ -183,7 +183,7 @@ class ComponentsGraph {
 
                 if (this.appearance == null){
                     console.log(materialID)
-                    console.log(material_index + " " + this.materialIDs.length)
+                    console.log(this.materialIndex + " " + this.materialIDs.length)
                     console.log(this.appearance)
                 }
             }
@@ -207,8 +207,18 @@ class ComponentsGraph {
                 this.nodes[currentNode]["Animation"][0].apply()
             }
 
-            for (var child of this.children[currentNode]) {
-                this.display(child);
+            // If we are displaying startButton make it pickable
+            // else, just display.
+            if (currentNode === "checkers" && this.scene.game === null){
+                this.scene.registerForPick(this.scene.pickId++, this.nodes[currentNode])
+                for (var child of this.children[currentNode]) {
+                    this.display(child);
+                }
+                this.scene.clearPickRegistration()
+            }else{
+                for (var child of this.children[currentNode]) {
+                    this.display(child);
+                }
             }
             this.popMaterial();
             this.popTexture();
@@ -1480,6 +1490,7 @@ export class MySceneGraph {
 
             grandChildren = children[i].children;
             var componentObject = {}
+            componentObject["ID"] = componentID
 
             nodeNames = [];
             for (var j = 0; j < grandChildren.length; j++) {

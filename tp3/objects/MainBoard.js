@@ -11,24 +11,22 @@ export class MainBoard extends Board{
     constructor (scene, id, x1, x2, y1, y2, tile_textures){
         super(scene, id, 8, 8, x1, x2, y1, y2, tile_textures)
 
-        // TEST
-        var piece_19 = this.getPiece("piece 19")
-        this.removePiece("piece 19")
-        this.pieces[20].set_isKing(true, piece_19)
     }
 
     initPieces(){
         var pieces = []
         for (let i = 0; i < 3; i+=1){
             for (let j = (i%2); j < 8; j+=2){
-                pieces.push(new Piece(this.scene, this, 0, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
-                this.tiles[i][j].set_isFree(false)
+                let newPiece = new Piece(this.scene, this, 0, 'piece ' + `${pieces.length}`, this.tiles[i][j])
+                pieces.push(newPiece)
+                this.tiles[i][j].set_isFree(false, newPiece)
             }
         }
         for (let i = 7; i > 4; i-=1){
             for (let j = (i%2); j < 8; j+=2){
-                pieces.push(new Piece(this.scene, this, 1, 'piece ' + `${pieces.length}`, this.tiles[i][j]))
-                this.tiles[i][j].set_isFree(false)
+                let newPiece = new Piece(this.scene, this, 1, 'piece ' + `${pieces.length}`, this.tiles[i][j])
+                pieces.push(newPiece)
+                this.tiles[i][j].set_isFree(false, newPiece)
             }
         }
 
@@ -37,7 +35,12 @@ export class MainBoard extends Board{
             pieces[i].setPickable(true)
         pieces[9].set_isKing(true)**/
 
-        return pieces
+        this.pieces = pieces
+
+        // TEST
+        var piece_19 = this.getPiece("piece 19")
+        this.removePiece("piece 19")
+        this.pieces[20].set_isKing(true, piece_19)
     }
 
     pickPiece(piece_id){

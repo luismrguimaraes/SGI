@@ -15,16 +15,16 @@
             <to x="-40" y="66.8" z="-20" />
         </perspective>
         <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
-            <from x="70" y="8" z="73" />
-            <to x="70" y="2" z="70.05" />
+            <from x="70" y="8.5" z="73" />
+            <to x="70" y="2.5" z="70.05" />
         </perspective>
         <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
-            <from x="70" y="8" z="67" />
-            <to x="70" y="2" z="69.95" />
+            <from x="70" y="8.5" z="67" />
+            <to x="70" y="2.5" z="69.95" />
         </perspective>
         <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
-            <from x="70.1" y="10" z="70" />
-            <to x="70" y="2" z="70" />
+            <from x="70.1" y="11.5" z="70" />
+            <to x="70" y="2.5" z="70" />
         </perspective>
         <perspective id="Game_camera_debug_capture" near="0.1" far="700" angle="0.32">
             <from x="1" y="7" z="0" />
@@ -52,7 +52,7 @@
     </ambient>
 
     <lights>
-        <spot id="Unidentified" enabled="1" angle="13" exponent="16">
+        <spot id="Unidentified" enabled="0" angle="13" exponent="16">
             <target x="-20" y="10" z="-20" />
             <location x="20" y="30" z="20" w="1.0" />
             <ambient r="0" g="0.3" b="0" a="1.0" />
@@ -159,13 +159,13 @@
             <specular r="0.35" g="0.55" b="1" a="0.9" />
         </material>
         <material id="zero" shininess="10">
-            <emission r="0" g="0.3" b="0.2" a="0.2" />
+            <emission r="0" g="0" b="0" a="0" />
             <ambient r="0" g="0" b="0" a="0" />
             <diffuse r="0.7" g="0.7" b="0.7" a="0.7" />
             <specular r="0.5" g="0.5" b="0.5" a="0.7" />
         </material>
         <material id="soft_green" shininess="10">
-            <emission r="1" g="1" b="1" a="1" />
+            <emission r="0" g="0" b="0" a="1" />
             <ambient r="0" g="0" b="0" a="0" />
             <diffuse r="0.7" g="0.7" b="0.7" a="0.7" />
             <specular r="0.5" g="0.5" b="0.5" a="0.5" />
@@ -182,6 +182,12 @@
             <diffuse r="0.5" g="0.5" b="0.5" a="1" />
             <specular r="0.7" g="0.7" b="0.7" a="1" />
         </material>
+        <material id="boards_wood" shininess="10">
+            <emission r="0" g="0" b="0" a="1" />
+            <ambient r="0.2" g="0.2" b="0.2" a="1" />
+            <diffuse r="0.778125" g="0.5203125" b="0.43046875" a="1" />
+            <specular r="0" g="0" b="0" a="1" />
+        </material>
     </materials>
 
     <transformations>    
@@ -190,6 +196,9 @@
     <primitives>
         <primitive id="Rectangle">
             <rectangle x1="-2" x2="2" y1="-2" y2="2"  />
+        </primitive>
+        <primitive id="Rectangle_1">
+            <rectangle x1="-1" x2="1" y1="-1" y2="1"  />
         </primitive>
         <primitive id="Sphere">
             <sphere radius="2" slices="20" stacks="20" />
@@ -215,10 +224,10 @@
         </primitive>
         <primitive id="NurbRectangle">
             <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20" >
-            <controlpoint x="-1" y="0" z="-1" />
-            <controlpoint x="-1" y="0" z="1" />
-            <controlpoint x="1" y="0" z="-1" />
-            <controlpoint x="1" y="0" z="1" />
+            <controlpoint x="-1" y="-1" z="0" />
+            <controlpoint x="-1" y="1" z="0" />
+            <controlpoint x="1" y="-1" z="0" />
+            <controlpoint x="1" y="1" z="0" />
             </patch>
         </primitive>
         <primitive id="NurbTent">
@@ -565,8 +574,7 @@
 
         <component id="checkers">
             <transformation>
-
-                <translate x="70" y="2" z="70"/>
+                <translate x="70" y="2.5" z="70"/>
                 <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
@@ -574,45 +582,274 @@
             </materials>
             <texture id="none" length_s="1" length_t="1"/>
             <children>
-                <componentref id="board"/>
-                <componentref id="auxboard_0"/>
-                <componentref id="auxboard_1"/>
-            </children>
-        </component>
-        <component id="board">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none" length_s="1" length_t="1"/>
-            <children>
                 <mainboard/>
-            </children>
-        </component>
-        <component id="auxboard_0">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none" length_s="1" length_t="1"/>
-            <children>
                 <auxiliarboard_0/>
+                <auxiliarboard_1/>
+                <componentref id="boards_wood"/>
             </children>
         </component>
-        <component id="auxboard_1">
+
+        <component id="boards_wood">
             <transformation>
-                
             </transformation>
             <materials>
-                <material id="inherit"/>
+                <material id="boards_wood" />
             </materials>
-            <texture id="none" length_s="1" length_t="1"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
             <children>
-                <auxiliarboard_1/>
+                <componentref id="boards_wood_bottom"/>
+                <componentref id="boards_wood_mainboard_sides"/>
+                <componentref id="boards_wood_auxiliar_0_sides"/>
+                <componentref id="boards_wood_auxiliar_1_sides"/>
+
+                <componentref id="boards_wood_interiors"/>
             </children>
         </component>
+        <component id="boards_wood_bottom">
+            <transformation>
+                <!-- z here represents board_wood width-->
+                <translate x="0" y="0" z="-0.1"/>
+                <scale x="1.3" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="boards_wood" />
+            </materials>
+            <texture id="trunk" length_s="1" length_t="1"/>
+            <children>
+                <!--componentref id="boards_wood_bottom_1"-->
+                <componentref id="boards_wood_bottom_2"/>
+            </children>
+        </component>
+        <component id="boards_wood_bottom_1">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_bottom_2">
+            <transformation>
+                <rotate axis="x" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_mainboard_sides">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_mainboard_side_1"/>
+                <componentref id="boards_wood_mainboard_side_2"/>
+                <componentref id="boards_wood_mainboard_side_3"/>
+                <componentref id="boards_wood_mainboard_side_4"/>
+            </children>
+        </component>
+        <component id="boards_wood_mainboard_side_1">
+            <transformation>
+                <rotate axis="z" angle="0"/>
+                <translate x="1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_mainboard_side_2">
+            <transformation>
+                <rotate axis="z" angle="90"/>
+                <translate x="1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_mainboard_side_3">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_mainboard_side_4">
+            <transformation>
+                <rotate axis="z" angle="270"/>
+                <translate x="1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_auxiliar_0_sides">
+            <transformation>
+                <rotate axis="z" angle="0"/>
+                <translate x="1.2" y="0" z="0"/>
+                <scale x="0.1" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_mainboard_sides"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_auxiliar_1_sides">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1.2" y="0" z="0"/>
+                <scale x="0.1" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_mainboard_sides"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_interiors">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_interior_1"/>
+
+                <componentref id="boards_wood_interior_2"/>
+                
+            </children>
+        </component>
+
+        <component id="boards_wood_interior_1">
+            <transformation>
+                <rotate axis="z" angle="0"/>
+                <translate x="1.05" y="0" z="-0.05"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_interior_1.0"/>
+                <componentref id="boards_wood_interior_aux_1"/>
+                <componentref id="boards_wood_interior_aux_2"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_1.0">
+            <transformation>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_aux_1">
+            <transformation>
+                <translate x="0" y="1" z="-0.025"/>
+                <rotate axis="x" angle="-90"/>
+                <rotate axis="z" angle="-90"/>
+                <scale x="0.025" y="0.05" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_aux_2">
+            <transformation>
+                <translate x="0" y="-1" z="-0.025"/>
+                <rotate axis="x" angle="90"/>
+                <rotate axis="z" angle="-90"/>
+                <scale x="0.025" y="0.05" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_interior_2">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1.05" y="0" z="-0.05"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_interior_2.0"/>
+                <componentref id="boards_wood_interior_aux_1"/>
+                <componentref id="boards_wood_interior_aux_2"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_2.0">
+            <transformation>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+
 
         <component id="everything_but_the_spaceship">
             <transformation>
@@ -633,25 +870,8 @@
 
                 <componentref id="checkers"/>
 
-                <!--componentref id="NurbRectangleTest"-->
-
             </children>
             <animation id="ground_shake"/>
-        </component>
-
-        <component id="NurbRectangleTest">
-            <transformation>
-                <translate x="0" y="50" z="20"/>
-                <rotate axis="x" angle="90"/>
-                <scale x="200" y="200" z="200"/>
-            </transformation>
-            <materials>
-                <material id="grey" />
-            </materials>
-            <texture id="none" length_s="1" length_t="1"/>
-            <children>
-                <primitiveref id="NurbRectangle"/>
-            </children>
         </component>
 
         <component id="tents">
@@ -785,14 +1005,16 @@
             <texture id="inherit"/>
             <children>
                 <componentref id="NurbBarrel_1"/>
-                <componentref id="NurbBarrel_2"/>
+                <componentref id="BoardStand"/>
+                <componentref id="BoardChair_1"/>
+                <componentref id="BoardChair_2"/>
             </children>
         </component>
-        <component id="NurbBarrel_2">
+        <component id="BoardStand">
             <transformation>
-                <translate x="70" y="2.05" z="65.6"/>
+                <translate x="70" y="1.55" z="70"/>
                 <rotate angle="90" axis="x"/>
-                <scale x="0.6" y="0.6" z="0.3"/>
+                <scale x="0.5" y="0.5" z="0.3"/>
             </transformation>
             <materials>
                 <material id="grey" />
@@ -800,6 +1022,44 @@
             <texture id="barrel" length_s="1" length_t="1"/>
             <children>
                 <componentref id="NurbBarrel"/>
+            </children>
+        </component>
+        <component id="BoardChair">
+            <transformation>
+                <rotate angle="180" axis="x"/>
+                <rotate angle="90" axis="y"/>
+                <scale x="0.5" y="0.5" z="0.3"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="NurbBarrel"/>
+            </children>
+        </component>
+        <component id="BoardChair_1">
+            <transformation>
+                <translate x="70" y="1.45" z="68"/>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="barrel" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="BoardChair"/>
+            </children>
+        </component>
+        <component id="BoardChair_2">
+            <transformation>
+                <translate x="70" y="1.45" z="72"/>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="barrel" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="BoardChair"/>
             </children>
         </component>
         <component id="NurbBarrel_1">

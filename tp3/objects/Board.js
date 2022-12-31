@@ -19,8 +19,8 @@ export class Board {
         this.height = height // number of y tiles
         this.tile_textures = tile_textures
         this.inverted = inverted
-        this.tiles = this.initTiles(x1, x2, y1, y2)
-        this.pieces = this.initPieces()
+        this.initTiles(x1, x2, y1, y2)
+        this.pieces = []
 
         this.x1 = x1
         this.x2 = x2
@@ -35,8 +35,6 @@ export class Board {
         var tile_width = Math.abs(x2 - x1)/this.width
         var tile_height = Math.abs(y2 - y1)/this.height
         var tiles = []
-
-        console.log(this.id, this.inverted)
 
         for (let i = 0; i < this.height; i++){
             tiles.push([])
@@ -67,11 +65,11 @@ export class Board {
                     j, i, texture))    
             }
         }
-        return tiles
+        this.tiles = tiles
     }
 
     initPieces(){
-        return []
+        this.pieces = []
     }
 
     /**
@@ -112,6 +110,7 @@ export class Board {
     }
 
     display(){
+        this.scene.pushMatrix()
         if (this.invalidPickAnimation !== null)
             this.invalidPickAnimation.apply()
 
@@ -133,11 +132,9 @@ export class Board {
             for (let j = 0; j < this.pieces.length; j++){
                 if (j === i) continue
                 piece_j = this.pieces[j]
-                mat4.create()
-                //console.log(piece_i.displayMatrix, piece_j. displayMatrix)
                 if (this.collisionComparison(piece_j.displayMatrix, piece_i.displayMatrix, 1)){
                     // Check which piece is not moving and animate it
-                    // to move to its auxiliar board
+                    // (capture animation: move to its auxiliar board)
                     let pieceToAnimate = null
                     let pieceThatMayHaveCaptured = null
                     if (piece_j.moveAnimation === null && piece_i.moveAnimation !== null){
@@ -156,7 +153,7 @@ export class Board {
                 }
             }
         }
-        
+        this.scene.popMatrix()
     }
     updateTexCoords(s, t) {		
 		for (let i = 0; i < this.height; i++){
@@ -260,7 +257,6 @@ export class Board {
             if (res === "animation over"){
                 this.invalidPickAnimation = null
                 console.log("Invalid Pick animation over")
-                // push piece to auxiliar board ??
             }
         }
     }
