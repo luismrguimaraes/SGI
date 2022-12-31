@@ -572,18 +572,6 @@
             </children>
         </component>
 
-        <component id="startButton">
-            <transformation>
-            </transformation>
-            <materials>
-                <material id="inherit"/>
-            </materials>
-            <texture id="none" length_s="1" length_t="1"/>
-            <children>
-                <componentref id ="barrels"/>
-            </children>
-        </component>
-
         <component id="checkers">
             <transformation>
                 <translate x="70" y="2" z="70"/>
@@ -811,7 +799,7 @@
                 <componentref id="barrels"/>
 
                 <componentref id="checkers"/>
-                <componentref id="startButton"/>
+                <componentref id="barrels"/>
 
             </children>
             <animation id="ground_shake"/>

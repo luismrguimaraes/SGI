@@ -19,8 +19,8 @@ export class Board {
         this.height = height // number of y tiles
         this.tile_textures = tile_textures
         this.inverted = inverted
-        this.tiles = this.initTiles(x1, x2, y1, y2)
-        this.pieces = this.initPieces()
+        this.initTiles(x1, x2, y1, y2)
+        this.pieces = []
 
         this.x1 = x1
         this.x2 = x2
@@ -65,11 +65,11 @@ export class Board {
                     j, i, texture))    
             }
         }
-        return tiles
+        this.tiles = tiles
     }
 
     initPieces(){
-        return []
+        this.pieces = []
     }
 
     /**

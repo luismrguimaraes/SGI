@@ -209,7 +209,7 @@ class ComponentsGraph {
 
             // If we are displaying startButton make it pickable
             // else, just display.
-            if (currentNode === "startButton"){
+            if (currentNode === "checkers" && this.scene.game === null){
                 this.scene.registerForPick(this.scene.pickId++, this.nodes[currentNode])
                 for (var child of this.children[currentNode]) {
                     this.display(child);

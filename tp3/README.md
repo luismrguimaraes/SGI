@@ -19,7 +19,7 @@
 	- 1: "Game_camera_p0"
 	- 2: "Game_camera_p1"
 - Component with boards must have ID "checkers"
-- Start button component must have ID "startButton"
+- The start button is the game board (before the game has started)
 
 ## Issues/Bugs:
 - Clicking on pieces' corners, when a tile is visible and close to the mouse cursor, results in different ids being picked than the one expected.

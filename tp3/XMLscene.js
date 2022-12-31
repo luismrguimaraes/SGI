@@ -129,8 +129,8 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(updatePeriod);
         this.startTime = null;
 		
-		// Add initialization of Game instance
-		this.game = new Game(this);
+        // Don't initialize Game yet
+		this.game = null
     }
 
     /**
@@ -221,8 +221,13 @@ export class XMLscene extends CGFscene {
                             var split_id = obj.id.split(' ')
                         else{
                             // Not Piece or Tile
-                            if(obj["ID"] === "startButton"){
-                                // Start Game
+                            // If "checkers", Start the game
+                            if(obj["ID"] === "checkers"){
+                                console.log("Starting Game")
+                                // Add initialization of Game instance
+                                this.game = new Game(this);
+                                // Init MainBoard pieces
+                                this.graph.boards[0].initPieces()
                             }
                             continue
                         }
@@ -246,7 +251,8 @@ export class XMLscene extends CGFscene {
                             }
                         }
 					}
-                    else
+                    // If game has started, warn about invalid Pick
+                    else if (this.game !== null)
                     {
                         console.warn("Invalid Pick")
                         // If InGame

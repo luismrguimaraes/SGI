@@ -11,10 +11,6 @@ export class MainBoard extends Board{
     constructor (scene, id, x1, x2, y1, y2, tile_textures){
         super(scene, id, 8, 8, x1, x2, y1, y2, tile_textures)
 
-        // TEST
-        var piece_19 = this.getPiece("piece 19")
-        this.removePiece("piece 19")
-        this.pieces[20].set_isKing(true, piece_19)
     }
 
     initPieces(){
@@ -39,7 +35,12 @@ export class MainBoard extends Board{
             pieces[i].setPickable(true)
         pieces[9].set_isKing(true)
 
-        return pieces
+        this.pieces = pieces
+
+        // TEST
+        var piece_19 = this.getPiece("piece 19")
+        this.removePiece("piece 19")
+        this.pieces[20].set_isKing(true, piece_19)
     }
 
     pickPiece(piece_id){
