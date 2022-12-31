@@ -165,8 +165,8 @@ export class Piece{
         }
         
         //TEST
-        for (let i = 0; i < this.board.pieces.length; i++)
-            this.board.pieces[i].setPickable(true) 
+        //for (let i = 0; i < this.board.pieces.length; i++)
+          //  this.board.pieces[i].setPickable(true) 
     }
 
     triggerPickAnimation(){

@@ -131,8 +131,11 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(updatePeriod);
         this.startTime = null;
 		
-		// Add initialization of Game instance
+		// Add initialization of Game instance, players, and starts new game
 		this.game = new Game(this);
+		this.player1 = new Player(this, 0);
+		this.player2 = new Player(this, 1);
+		this.game.startGame();
     }
 
     /**

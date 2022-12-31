@@ -23,7 +23,7 @@ export class Game{
         this.lockMoveToCaptureOnly = value;
     }
 	
-	// '0' for player 1 and '1' for player 2
+	// '0' for 'player1', '1' for 'player2'
 	setPlayerTurn(value){
         this.playerTurn = value;
     }
@@ -44,6 +44,16 @@ export class Game{
 	}
 	
 	/**
+	* @method makeTilesPickable
+	* Makes every tile in the array pickable
+	*/
+	makeTilesPickable(tileArray) {	 
+		for (const tile of tileArray) {
+			tile.setPickable(true);
+		}	
+	}
+	
+	/**
 	* @method makeAllPiecesUnpickable
 	* Makes every piece in the this.mainboard unpickable
 	*/
@@ -54,23 +64,13 @@ export class Game{
 	}
 
 	/**
-	* @method makeAllPiecesUnpickable
+	* @method makeAllPiecesNotMovedThisTurn
 	* Makes every piece in the this.mainboard unmoved on this turn
 	*/
 	makeAllPiecesNotMovedThisTurn() {	 
 		for(var i = 0; i < this.mainboard.pieces.length; i++) {
 			this.mainboard.pieces[i].set_hasMovedThisTurn(false);
 		}
-	}
-	
-	/**
-	* @method makeTilesPickable
-	* Makes every tile in the array pickable
-	*/
-	makeTilesPickable(tileArray) {	 
-		for (const tile of tileArray) {
-			tile.setPickable(true);
-		}	
 	}
 	
 	/**
@@ -82,6 +82,74 @@ export class Game{
             this.mainboard.pieces[i].setPickable(true)
 		}
 	}
+	
+	/**
+	* @method makePlayerPiecesPickable
+	* Checks what player turn is
+	* Then gets the player alivePieces and calls function to set those pickable
+	*/
+	makePlayerPiecesPickable(value) {
+		var pieces = [];
+		if (this.playerTurn == 0) {
+			pieces = this.scene.player1.alivePieces;
+			console.log(pieces);
+			this.makePiecesPickable(pieces)
+		}
+		else if (this.playerTurn == 1) {
+			pieces = this.scene.player2.alivePieces;
+			this.makePiecesPickable(pieces)
+		}
+	}
+	
+	/**
+	* @method makePiecesPickable
+	* Makes given array of pieces pickable
+	*/
+	makePiecesPickable(pieceArray) {	 
+		for (const piece of pieceArray) {
+			piece.setPickable(true);
+		}
+	}
+	
+	/**
+	* @method startGame
+	* Intiializes everything needed to start the game
+	*/
+	startGame() {
+		this.initializePlayer1Pieces();
+		this.initializePlayer2Pieces();
+		this.startTurn();
+	}
+	
+	/**
+	* @method initializePlayer1Pieces
+	* Creates all player 1 alive pieces
+	*/
+	initializePlayer1Pieces() {
+		for(var i = 0; i < 12; i++) {
+			this.scene.player1.addPieceAlivePieces(this.mainboard.pieces[i]);
+		}
+	}
+	
+	/**
+	* @method initializePlayer2Pieces
+	* Creates all player 1 alive pieces
+	*/
+	initializePlayer2Pieces() {
+		for(var i = 13; i < 24; i++) {
+			this.scene.player2.addPieceAlivePieces(this.mainboard.pieces[i]);
+		}
+	}
+	
+	/**
+	* @method startTurn
+	* Start player turn
+	* Starts at player 1 by default (passes value 0 at first run)
+	*/
+	startTurn() {
+		console.log("Player with id " + this.playerTurn + " turn");
+		this.makePlayerPiecesPickable(this.playerTurn);
+	}
 
 	/**
 	* @method endTurn
@@ -92,7 +160,8 @@ export class Game{
 			console.log("Ending turn");
 			this.makeAllPiecesNotMovedThisTurn();
 			this.setLockMoveToCaptureOnly(false);
-			this.makeAllPiecesPickable();
+			this.setPlayerTurn(!(this.playerTurn));
+			this.startTurn();
 		}
 		else {
 			console.log("No piece has been moved. Cannot end turn!");
@@ -112,7 +181,7 @@ export class Game{
 	* Then it will change player
 	*/
 	pieceHasBeenMoved(originalBoardPosition, newBoardPosition) {
-		this.makeAllPiecesPickable();
+		this.makePlayerPiecesPickable(this.playerTurn);
 		this.makeAllTilesUnpickable();
 		var shouldThePieceBeKing = this.checkIfPieceShouldBeKing(this.lastMovedPiece);
 		
