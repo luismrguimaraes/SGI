@@ -169,6 +169,10 @@ export class Game{
 		}
 		else {
 			console.log("No piece has been moved. Cannot end turn!");
+			this.setLockMoveToCaptureOnly(false);
+			this.setPlayerTurn((this.playerTurn));
+			this.set_lastMovedPiece(null);
+			this.startTurn();
 		}
 	}
 	
@@ -214,7 +218,7 @@ export class Game{
 				this.makeTilesPickable(availableCaptureTileArray);
 			}
 			else {
-				this.setLockMoveToCaptureOnly(false);
+				this.endTurn();
 			}
 		}
 	}
