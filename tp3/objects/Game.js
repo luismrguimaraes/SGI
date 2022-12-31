@@ -11,7 +11,6 @@ export class Game{
 		this.boards = scene.graph.boards;
 		this.lastMovedPiece = null;
 		this.lockMoveToCaptureOnly = false;
-		this.hasStarted = false;
     }
 
 
@@ -21,10 +20,6 @@ export class Game{
 	
 	setLockMoveToCaptureOnly(value){
         this.lockMoveToCaptureOnly = value;
-    }
-	
-	setHasStarted(value){
-        this.hasStarted = value;
     }
 	
 	// -------------------------- COMMON LOGIC --------------------------
