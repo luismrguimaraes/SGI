@@ -602,7 +602,7 @@
                 <componentref id="boards_wood_auxiliar_0_sides"/>
                 <componentref id="boards_wood_auxiliar_1_sides"/>
 
-                <!--componentref id="boards_wood_interiors"-->
+                <componentref id="boards_wood_interiors"/>
             </children>
         </component>
         <component id="boards_wood_bottom">
@@ -749,8 +749,6 @@
             </children>
         </component>
 
-
-
         <component id="boards_wood_interiors">
             <transformation>
             </transformation>
@@ -761,16 +759,14 @@
             <children>
                 <componentref id="boards_wood_interior_1"/>
                 <componentref id="boards_wood_interior_2"/>
-                <componentref id="boards_wood_interior_3"/>
-                <componentref id="boards_wood_interior_4"/>
             </children>
         </component>
 
         <component id="boards_wood_interior_1">
             <transformation>
                 <rotate axis="z" angle="0"/>
-                <translate x="1" y="0" z="-0.05"/>
-                <rotate axis="y" angle="90"/>
+                <translate x="1.05" y="0" z="-0.05"/>
+                <rotate axis="y" angle="0"/>
                 <scale x="0.05" y="1" z="1"/>
             </transformation>
             <materials>
@@ -781,11 +777,13 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
+
+
         <component id="boards_wood_interior_2">
             <transformation>
                 <rotate axis="z" angle="180"/>
-                <translate x="1" y="0" z="-0.05"/>
-                <rotate axis="y" angle="90"/>
+                <translate x="1.05" y="0" z="-0.05"/>
+                <rotate axis="y" angle="0"/>
                 <scale x="0.05" y="1" z="1"/>
             </transformation>
             <materials>
