@@ -221,7 +221,7 @@ export class XMLscene extends CGFscene {
                             var split_id = obj.id.split(' ')
                         else{
                             // Not Piece or Tile
-                            // If "checkers", Start the game
+                            // If component is "checkers" (the board), Start the game.
                             if(obj["ID"] === "checkers"){
                                 console.log("Starting Game")
                                 // Add initialization of Game instance
@@ -239,10 +239,12 @@ export class XMLscene extends CGFscene {
                             this.pickedPiece = obj
 							this.game.pieceHasBeenPicked(this.pickedPiece);
                         }
-                        // If a tile is picked, call move on the picked piece 
-                        // and set this.pickedPiece to null
-                        // this.game.pieceHasBeenMoved is either called by movePiece, after the move animation 
-                        // or after the capture animation, whichever executes last
+                        /* 
+                            If a tile is picked, call move on the picked piece 
+                            and set this.pickedPiece to null
+                            this.game.pieceHasBeenMoved is either called by movePiece, after the move animation 
+                            or after the capture animation, whichever executes last
+                        */
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
