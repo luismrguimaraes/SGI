@@ -16,12 +16,13 @@ export class Player{
         this.isPlayerTurn = value;
     }
 	
-	addPieceAlivePieces(piece){
+	addPieceAlivePiece(piece){
         this.alivePieces.push(piece)
     }
 	
-	removePieceAlivePieces(piece){
-		var index = this.alivePieces.findIndex(piece);
-        this.alivePieces.slice(piece, 1);
+	removePieceAlivePiece(piece){
+		var index = this.alivePieces.indexOf(piece);
+        var x = this.alivePieces.splice(index, 1);
+		console.log(this.alivePieces);
     }
 }

@@ -130,7 +130,7 @@ export class Game{
 	*/
 	initializePlayer1Pieces() {
 		for(var i = 0; i < 12; i++) {
-			this.scene.player1.addPieceAlivePieces(this.mainboard.pieces[i]);
+			this.scene.player1.addPieceAlivePiece(this.mainboard.pieces[i]);
 		}
 	}
 	
@@ -140,7 +140,7 @@ export class Game{
 	*/
 	initializePlayer2Pieces() {
 		for(var i = 12; i < 23; i++) {
-			this.scene.player2.addPieceAlivePieces(this.mainboard.pieces[i]);
+			this.scene.player2.addPieceAlivePiece(this.mainboard.pieces[i]);
 		}
 	}
 	
@@ -340,10 +340,12 @@ export class Game{
 	
 			if (capturedPieceColor == 0) {
 				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+				this.scene.player1.removePieceAlivePiece(capturedPiece);
 				this.boards[1].push(capturedPiece);
 			}
 			else if (capturedPieceColor == 1) {
 				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+				this.scene.player2.removePieceAlivePiece(capturedPiece);
 				this.boards[2].push(capturedPiece);
 			}
 			
