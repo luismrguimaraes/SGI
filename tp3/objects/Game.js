@@ -17,6 +17,33 @@ export class Game{
         this.lastMovedPiece = value
     }
 	
+	// -------------------------- COMMON LOGIC --------------------------
+	
+	/**
+	* @method makeAllTilesUnpickable
+	* Makes every tile in the this.mainboard unpickable
+	*/
+	makeAllTilesUnpickable() {	 
+		for(var i = 0; i < 8; i++) {
+			for(var j = 0; j < 8; j++) {
+				var tile = this.mainboard.getTile(i, j)
+				tile.setPickable(false);
+			}
+		}
+	}
+	
+	/**
+	* @method makeAllPiecesUnpickable
+	* Makes every piece in the this.mainboard unpickable
+	*/
+	makeAllPiecesUnpickable() {	 
+		for(var i = 0; i < this.mainboard.pieces.length; i++) {
+			this.mainboard.pieces[i].setPickable(false)
+		}
+	}
+
+
+	
 	// -------------------------- AFTER MOVEMENT LOGIC --------------------------
 	
 	/**
@@ -35,29 +62,6 @@ export class Game{
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
 		this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
-	}
-
-	/**
-	* @method makeAllTilesUnpickable
-	* Makes every tile in the this.mainboard unpickable
-	*/
-	makeAllTilesUnpickable() {	 
-		for(var i = 0; i < 8; i++) {
-			for(var j = 0; j < 8; j++) {
-				var tile = this.mainboard.getTile(i, j)
-				tile.setPickable(false);
-			}
-		}
-	}
-
-	/**
-	* @method makeAllPiecesUnpickable
-	* Makes every piece in the this.mainboard unpickable
-	*/
-	makeAllPiecesUnpickable() {	 
-		for(var i = 0; i < this.mainboard.pieces.length; i++) {
-			this.mainboard.pieces[i].setPickable(false)
-		}
 	}
 	
 	/**
@@ -134,7 +138,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition - 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For up-right
 		else if (xDifference > 1 && yDifference > 1) {
@@ -142,7 +146,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition - 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For down-left
 		else if (xDifference < -1 && yDifference < -1) {
@@ -150,7 +154,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition + 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}
 		// For down-right
 		else if (xDifference > 1 && yDifference < -1) {
@@ -158,7 +162,7 @@ export class Game{
 			var capturedPieceYPosition = pieceNewYPosition + 1;
 
 			this.capturePiece(capturedPieceXPosition, capturedPieceYPosition);
-			//checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
+			this.checkIfAnotherCaptureMovementIsPossible(newBoardPosition);
 		}	
 	}
 
@@ -168,20 +172,22 @@ export class Game{
 	*/
 	capturePiece(capturedPieceXPosition, capturedPieceYPosition) {
 		var capturedPiece = this.mainboard.getPieceAt(capturedPieceXPosition, capturedPieceYPosition);
-		console.log("capturedPiece ", capturedPiece);
-		var capturedPieceColor = capturedPiece.color;
-		
-		console.log("capturedPieceXPosition " + capturedPieceXPosition);
-		console.log("capturedPieceYPosition " + capturedPieceYPosition);
-
-		if (capturedPieceColor == 0) {
-			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
-			this.boards[1].push(capturedPiece);
-		}
-		else if (capturedPieceColor == 1) {
-			console.log("Captured black");
-			this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
-			this.boards[2].push(capturedPiece);
+		if (capturedPiece != null) {
+			console.log("capturedPiece ", capturedPiece);
+			var capturedPieceColor = capturedPiece.color;
+			
+			console.log("capturedPieceXPosition " + capturedPieceXPosition);
+			console.log("capturedPieceYPosition " + capturedPieceYPosition);
+	
+			if (capturedPieceColor == 0) {
+				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+				this.boards[1].push(capturedPiece);
+			}
+			else if (capturedPieceColor == 1) {
+				console.log("Captured black");
+				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
+				this.boards[2].push(capturedPiece);
+			}
 		}
 	}
 
@@ -205,19 +211,6 @@ export class Game{
 	pieceHasBeenPicked(pickedPiece) {
 		this.makeAllTilesUnpickable();
 		this.makeAvailableTilesForPickedPiecePickable(pickedPiece);
-	}
-	
-	/**
-	* @method makeAllTilesUnpickable
-	* Makes every tile in the this.mainboard unpickable
-	*/
-	makeAllTilesUnpickable() {	 
-		for(var i = 0; i < 8; i++) {
-			for(var j = 0; j < 8; j++) {
-				var tile = this.mainboard.getTile(i, j)
-				tile.setPickable(false);
-			}
-		}
 	}
 	
 	/**

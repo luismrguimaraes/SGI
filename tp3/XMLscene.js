@@ -1,5 +1,6 @@
 import { CGFappearance, CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
+import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 import { Game } from './objects/Game.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
 
@@ -128,8 +129,8 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(updatePeriod);
         this.startTime = null;
 		
-		// Add initialization of Game instance
-		this.game = new Game(this);
+        // Don't initialize Game yet
+		this.game = null
     }
 
     /**
@@ -150,9 +151,18 @@ export class XMLscene extends CGFscene {
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
         this.loadIdentity();
-
+        
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
+        
+        // Apply Camera animation
+        if (this.interface.cameraAnimation !== null){
+            this.interface.cameraAnimation.apply()
+        }
+        if (this.camera.id === "Game_camera_p0" || this.camera.id === "Game_camera_p1"){
+            // Move scene to align with these cameras
+            this.translate(-70,0,-70)
+        }
 
         this.pushMatrix();
         //this.axis.display();
@@ -194,8 +204,16 @@ export class XMLscene extends CGFscene {
     update(time) {
         if (this.sceneInited) {
             if (this.startTime === null) this.startTime = time;
+            // components
             this.graph.components_graph.computeAnimations(time - this.startTime)
+
+            // boards
             this.graph.boards[0].computeAnimations(time - this.startTime)
+            this.graph.boards[1].computeAnimations(time - this.startTime)
+            this.graph.boards[2].computeAnimations(time - this.startTime)
+
+            // interface (for camera)
+            this.interface.computeAnimation(time - this.startTime)
         }
     }
 
@@ -211,35 +229,61 @@ export class XMLscene extends CGFscene {
 						var customId = this.pickResults[i][1];
 
 						console.log("Pick ID: " + customId);
-                        var split_id = obj.parent.id.split(' ')
+                        if (obj.id)
+                            var split_id = obj.id.split(' ')
+                        else{
+                            // Not Piece or Tile
+                            // If component is "checkers" (the board), Start the game.
+                            if(obj["ID"] === "checkers"){
+                                console.log("Starting Game")
+                                // Add initialization of Game instance
+                                this.game = new Game(this);
+                                // Init MainBoard pieces
+                                this.graph.boards[0].initPieces()
+                            }
+                            continue
+                        }
                         // If a piece is picked
                         if (split_id[0] === 'piece'){
-                            console.log("picked piece " + split_id[1] + " at " + obj.parent.getBoardPosition())
+                            console.log("picked piece " + split_id[1] + " at " + obj.getBoardPosition())
                             // (mainboard is at boards[0])
-                            this.graph.boards[0].pickPiece(obj.parent.id)  
-                            this.pickedPiece = obj.parent
+                            this.graph.boards[0].pickPiece(obj.id)  
+                            this.pickedPiece = obj
 							this.game.pieceHasBeenPicked(this.pickedPiece);
                         }
-                        // If a tile is picked, move the picked piece 
-                        // and set this.pickedPiece.isPicked to false and this.pickedPiece to null
-                        // movePiece calls this.game.pieceHasBeenMoved after the move and capture
-                        // animations finish
+                        /* 
+                            If a tile is picked, call move on the picked piece 
+                            and set this.pickedPiece to null
+                            this.game.pieceHasBeenMoved is either called by movePiece, after the move animation 
+                            or after the capture animation, whichever executes last
+                        */
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
-								var originalBoardPosition = this.pickedPiece.getBoardPosition();
-                                obj.parent.board.movePiece(this.pickedPiece.id, obj.parent.board_x, obj.parent.board_y)
-								var newBoardPosition = this.pickedPiece.getBoardPosition();
-								//this.game.set_lastMovedPiece(this.pickedPiece);
-                                //this.pickedPiece.setPicked(false);
+                                obj.board.movePiece(this.pickedPiece.id, obj.board_x, obj.board_y)
                                 this.pickedPiece = null;
-								//this.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
                             }
                         }
 					}
-                    else
+                    // If game has started, warn about invalid Pick
+                    else if (this.game !== null)
                     {
                         console.warn("Invalid Pick")
+                        // If InGame
+                        // shake the whole board (mainboard, auxiliar 0 and 1) after an invalid pick
+                        if (this.graph.boards[0].invalidPickAnimation === null){
+                            if (this.graph.components["checkers"]){
+                                var startTime = (Date.now() - this.startTime)/1000
+                                var mainboard = this.graph.boards[0]
+                                this.graph.components["checkers"]["Animation"][0] = new MyKeyframeAnimation([ 
+                                    [[0,0,0], 0, 0, 0, [1,1,1]], 
+                                    [[(Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
+                                    [[- (Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, - (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
+                                    [[0,0,0], 0, 0, 0, [1,1,1]],
+                                    ], 
+                                    [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.3], this)        
+                                }
+                        }
                     }
 				}
 				this.pickResults.splice(0,this.pickResults.length);
