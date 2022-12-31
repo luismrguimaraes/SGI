@@ -164,6 +164,7 @@ export class Game{
 			this.makeAllPiecesNotMovedThisTurn();
 			this.setLockMoveToCaptureOnly(false);
 			this.setPlayerTurn(!(this.playerTurn));
+			this.set_lastMovedPiece(null);
 			this.startTurn();
 		}
 		else {
