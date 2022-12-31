@@ -159,8 +159,10 @@ export class XMLscene extends CGFscene {
         if (this.interface.cameraAnimation !== null){
             this.interface.cameraAnimation.apply()
         }
-        if (this.camera.id === "Game_camera_p0" || this.camera.id === "Game_camera_p1")
+        if (this.camera.id === "Game_camera_p0" || this.camera.id === "Game_camera_p1"){
+            // Move scene to align with these cameras
             this.translate(-70,0,-70)
+        }
 
         this.pushMatrix();
         //this.axis.display();

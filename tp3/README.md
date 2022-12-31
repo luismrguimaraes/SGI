@@ -18,6 +18,7 @@
 - Camera names for player 1 and 2 must be:
 	- 1: "Game_camera_p0"
 	- 2: "Game_camera_p1"
+- Game cameras must be defined to point at axis center, and then compensated for in [XMLscene.js](./XMLscene.js), depending on the Game Board position. This is because its animation depends on rotating around the scene's y axis.
 - Component with boards must have ID "checkers"
 - The start button is the game board (before the game has started)
 
