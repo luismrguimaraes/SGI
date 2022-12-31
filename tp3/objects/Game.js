@@ -11,6 +11,7 @@ export class Game{
 		this.boards = scene.graph.boards;
 		this.lastMovedPiece = null;
 		this.lockMoveToCaptureOnly = false;
+		this.playerTurn = 0;
     }
 
 
@@ -20,6 +21,11 @@ export class Game{
 	
 	setLockMoveToCaptureOnly(value){
         this.lockMoveToCaptureOnly = value;
+    }
+	
+	// '0' for player 1 and '1' for player 2
+	setPlayerTurn(value){
+        this.playerTurn = value;
     }
 	
 	// -------------------------- COMMON LOGIC --------------------------
