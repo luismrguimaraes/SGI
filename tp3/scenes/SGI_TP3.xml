@@ -15,12 +15,12 @@
             <to x="-40" y="66.8" z="-20" />
         </perspective>
         <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
-            <from x="70" y="8.5" z="73" />
-            <to x="70" y="2.5" z="70.05" />
+            <from x="0" y="8.5" z="3" />
+            <to x="0" y="2.5" z="0.05" />
         </perspective>
         <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
-            <from x="70" y="8.5" z="67" />
-            <to x="70" y="2.5" z="69.95" />
+            <from x="0" y="8.5" z="-3" />
+            <to x="0" y="2.5" z="-0.05" />
         </perspective>
         <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
             <from x="70.1" y="11.5" z="70" />

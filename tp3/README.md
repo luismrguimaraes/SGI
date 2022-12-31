@@ -23,3 +23,4 @@
 
 ## Issues/Bugs:
 - Clicking on pieces' corners, when a tile is visible and close to the mouse cursor, results in different ids being picked than the one expected.
+- The use of camel case vs underscore in naming is not as consistent as desired.
