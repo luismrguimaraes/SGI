@@ -758,7 +758,9 @@
             <texture id="inherit" length_s="1" length_t="1"/>
             <children>
                 <componentref id="boards_wood_interior_1"/>
+
                 <componentref id="boards_wood_interior_2"/>
+                
             </children>
         </component>
 
@@ -766,7 +768,19 @@
             <transformation>
                 <rotate axis="z" angle="0"/>
                 <translate x="1.05" y="0" z="-0.05"/>
-                <rotate axis="y" angle="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_interior_1.0"/>
+                <componentref id="boards_wood_interior_aux_1"/>
+                <componentref id="boards_wood_interior_aux_2"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_1.0">
+            <transformation>
                 <scale x="0.05" y="1" z="1"/>
             </transformation>
             <materials>
@@ -777,28 +791,54 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
-
+        <component id="boards_wood_interior_aux_1">
+            <transformation>
+                <translate x="0" y="1" z="-0.025"/>
+                <rotate axis="x" angle="-90"/>
+                <rotate axis="z" angle="-90"/>
+                <scale x="0.025" y="0.05" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_aux_2">
+            <transformation>
+                <translate x="0" y="-1" z="-0.025"/>
+                <rotate axis="x" angle="90"/>
+                <rotate axis="z" angle="-90"/>
+                <scale x="0.025" y="0.05" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
 
         <component id="boards_wood_interior_2">
             <transformation>
                 <rotate axis="z" angle="180"/>
                 <translate x="1.05" y="0" z="-0.05"/>
-                <rotate axis="y" angle="0"/>
-                <scale x="0.05" y="1" z="1"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="Rectangle_1"/>
+                <componentref id="boards_wood_interior_2.0"/>
+                <componentref id="boards_wood_interior_aux_1"/>
+                <componentref id="boards_wood_interior_aux_2"/>
             </children>
         </component>
-        <component id="boards_wood_interior_3">
+        <component id="boards_wood_interior_2.0">
             <transformation>
-                <rotate axis="z" angle="180"/>
-                <translate x="1.1" y="0" z="-0.05"/>
-                <rotate axis="y" angle="-90"/>
                 <scale x="0.05" y="1" z="1"/>
             </transformation>
             <materials>
@@ -809,6 +849,7 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
+
         <component id="boards_wood_interior_4">
             <transformation>
                 <rotate axis="z" angle="180"/>
