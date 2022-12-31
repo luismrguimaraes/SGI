@@ -99,7 +99,7 @@ export class MyInterface extends CGFinterface {
             [[0, 0, 0], 0, 0, 0, [1,1,1]],
             [[0, 0, 0], 0, Math.PI, 0, [1,1,1]],
             ], 
-            [startTime, startTime + 10], this.scene)
+            [startTime, startTime + 2], this.scene)
     }
     cameraAnimationOnEnd(){
         if (this.cameraFrom === 3) this.setCamera(4)
