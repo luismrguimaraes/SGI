@@ -79,13 +79,11 @@ export class Tile{
         else if (this.isPickable){
             if (this.color === 0){
                 appearance.setEmission(0,1,0, 1)
-                appearance.setDiffuse(129/256, 256/256, 29/256,1)
-                appearance.setSpecular(0,0,0, 1)
+                appearance.setDiffuse(0,1,0,1)
             }
             else {
                 appearance.setEmission(0,1,0, 1)
-                appearance.setDiffuse(118/256, 162/236, 29/236,1)
-                appearance.setSpecular(0,0,0, 1)
+                appearance.setDiffuse(0,1,0,1)
             }
             appearance.apply()
 
