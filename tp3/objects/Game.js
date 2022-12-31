@@ -136,7 +136,7 @@ export class Game{
 	* Creates all player 1 alive pieces
 	*/
 	initializePlayer2Pieces() {
-		for(var i = 13; i < 24; i++) {
+		for(var i = 12; i < 24; i++) {
 			this.scene.player2.addPieceAlivePieces(this.mainboard.pieces[i]);
 		}
 	}
