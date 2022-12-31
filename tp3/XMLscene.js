@@ -151,9 +151,16 @@ export class XMLscene extends CGFscene {
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
         this.loadIdentity();
-
+        
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
+        
+        // Apply Camera animation
+        if (this.interface.cameraAnimation !== null){
+            this.interface.cameraAnimation.apply()
+        }
+        if (this.camera.id === "Game_camera_p0" || this.camera.id === "Game_camera_p1")
+            this.translate(-70,0,-70)
 
         this.pushMatrix();
         //this.axis.display();
@@ -202,6 +209,9 @@ export class XMLscene extends CGFscene {
             this.graph.boards[0].computeAnimations(time - this.startTime)
             this.graph.boards[1].computeAnimations(time - this.startTime)
             this.graph.boards[2].computeAnimations(time - this.startTime)
+
+            // interface (for camera)
+            this.interface.computeAnimation(time - this.startTime)
         }
     }
 

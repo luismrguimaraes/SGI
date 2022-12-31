@@ -1,4 +1,5 @@
 import { CGFinterface, CGFapplication, dat } from '../lib/CGF.js';
+import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 
 /**
 * MyInterface class, creating a GUI interface.
@@ -27,6 +28,7 @@ export class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
 
         this.activeCameraName = ""
+        this.cameraAnimation = null
         this.initKeys();
 
         return true;
@@ -41,23 +43,26 @@ export class MyInterface extends CGFinterface {
         this.activeKeys={};
     }
 
+    
     processKeyDown(event) {
         if(event.code == "Digit1"){
-            // TEST - pop from white auxiliar board and add to Tile (0,0)
-            if (!this.scene.graph.boards[0].getPieceAt(0, 0)){
-                var poppedPiece = this.scene.graph.boards[1].pop()
-                if (poppedPiece) this.scene.graph.boards[0].addPiece(poppedPiece, 0, 0)
-                console.log(poppedPiece)
-            }else{
-                console.log("mainboard 0 0 occupied")
-            }
+            // Change Turn to Player 1 (p0) (whites)
+            this.setCamera(4)
+            this.cameraFrom = 4
+            this.triggerCameraChangeAnimation()
+        }
+        if(event.code == "Digit2"){
+            // Change Turn to Player 2 (p1) (blacks)
+            this.setCamera(3)
+            this.cameraFrom = 3
+            this.triggerCameraChangeAnimation()
         }
         if(event.code == "Escape"){
             if (this.scene.pickedPiece !== null){
                 // "Unpick"
                 this.scene.pickedPiece.setPicked(false)
                 this.scene.pickedPiece = null
-
+                
                 //this.game.setLockMoveToCaptureOnly(false);
                 
                 // update pickables
@@ -69,15 +74,12 @@ export class MyInterface extends CGFinterface {
             }
         }
         if (event.code == "KeyM"){
-            console.log("M pressed")
             this.scene.graph.components_graph.increment_materialIndex()
         }
         if (event.code == "ArrowRight"){
-            console.log("Right arrow pressed")
             this.camera_next()
         }         
         if (event.code == "ArrowLeft"){
-            console.log("Left arrow pressed")
             this.camera_previous()
         }  
         this.activeKeys[event.code]=true;
@@ -91,54 +93,67 @@ export class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
     
+    triggerCameraChangeAnimation(){
+        var startTime = (Date.now() - this.scene.startTime)/1000
+        this.cameraAnimation = new MyKeyframeAnimation([ 
+            [[0, 0, 0], 0, 0, 0, [1,1,1]],
+            [[0, 0, 0], 0, Math.PI, 0, [1,1,1]],
+            ], 
+            [startTime, startTime + 10], this.scene)
+    }
+    cameraAnimationOnEnd(){
+        if (this.cameraFrom === 3) this.setCamera(4)
+        else if (this.cameraFrom === 4) this.setCamera(3)
+        this.cameraAnimation = null
+    }
+
+    computeAnimation(ellapsedTime){
+        if (this.cameraAnimation !== null){
+            var res = this.cameraAnimation.update(ellapsedTime)
+            if (res === "animation over"){
+                // Camera animation finished
+                console.log("Camera animation over")
+                this.cameraAnimationOnEnd()
+            }
+        }
+    }
+
+    setCamera(cameraIndex){
+        this.camera_index = cameraIndex
+        this.scene.camera = this.scene.graph.cameras[cameraIndex]
+        if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
+        this.setActiveCamera(this.scene.camera)
+        this.activeCameraName = this.activeCamera.id
+        
+        this.scene.updateProjectionMatrix()
+        this.scene.loadIdentity()
+        
+        this.scene.applyViewMatrix()
+        
+        console.log("New Camera: " + this.scene.camera.id)
+        console.log(this.scene.camera)
+    }
+    
     camera_next(){
         if (this.camera_index +1 < this.scene.graph.cameras.length)
             this.camera_index++
         else return
 
-        this.scene.camera = this.scene.graph.cameras[this.camera_index]
-        if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
-            this.setActiveCamera(this.scene.camera)
-        this.activeCameraName = this.activeCamera.id
-
-        this.scene.updateProjectionMatrix()
-        this.scene.loadIdentity()
-
-        this.scene.applyViewMatrix()
-        
-
-        console.log(this.activeCameraName)
-
+        this.setCamera(this.camera_index)
     }
     camera_previous(){
         if (this.camera_index -1 >= 0)
             this.camera_index--
         else return
 
-        this.scene.camera = this.scene.graph.cameras[this.camera_index]
-        if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
-            this.setActiveCamera(this.scene.camera)
-        this.activeCameraName = this.activeCamera.id
-
-        this.scene.updateProjectionMatrix()
-        this.scene.loadIdentity()
-
-        this.scene.applyViewMatrix()
+        this.setCamera(this.camera_index)
     }
     
     camera_method(value){
         for (var i = 0; i < this.scene.graph.cameras.length; ++i)
             if (this.scene.graph.cameras[i].id == value){
                 console.log(value)
-                this.scene.camera = this.scene.graph.cameras[i]
-                if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
-                    this.setActiveCamera(this.scene.camera)
-                this.activeCameraName = this.activeCamera.id
-
-                this.scene.updateProjectionMatrix()
-                this.scene.loadIdentity()
-
-                this.scene.applyViewMatrix()
+                this.setCamera(i)
             }
     }
 
@@ -166,12 +181,13 @@ export class MyInterface extends CGFinterface {
                 break
             }
         }
+        if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
+            this.setActiveCamera(this.scene.camera)
+
         this.scene.updateProjectionMatrix()
         this.scene.loadIdentity()
 
         this.scene.applyViewMatrix()
-        if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
-            this.setActiveCamera(this.scene.camera)
     }    
 	
 	addLightsGroup(lights) {

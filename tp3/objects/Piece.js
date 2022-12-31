@@ -254,7 +254,6 @@ export class Piece{
      * Callback for computing object animations
      * @param {*} ellapsedTime 
      */
-
     computeAnimation(ellapsedTime){
         if (this.captureAnimation !== null){
             var res = this.captureAnimation.update(ellapsedTime)
