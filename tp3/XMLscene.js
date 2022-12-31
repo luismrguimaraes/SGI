@@ -239,10 +239,10 @@ export class XMLscene extends CGFscene {
                             this.pickedPiece = obj
 							this.game.pieceHasBeenPicked(this.pickedPiece);
                         }
-                        // If a tile is picked, move the picked piece 
-                        // and set this.pickedPiece.isPicked to false and this.pickedPiece to null
-                        // movePiece calls this.game.pieceHasBeenMoved after the move and capture
-                        // animations finish
+                        // If a tile is picked, call move on the picked piece 
+                        // and set this.pickedPiece to null
+                        // this.game.pieceHasBeenMoved is either called by movePiece, after the move animation 
+                        // or after the capture animation, whichever executes last
                         else if (split_id[0] === 'mainboard'){
                             console.log("picked tile " + split_id[1] + ' ' + split_id[2])
                             if (this.pickedPiece !== null){
