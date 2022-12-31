@@ -185,7 +185,7 @@
         <material id="boards_wood" shininess="10">
             <emission r="0" g="0" b="0" a="1" />
             <ambient r="0.2" g="0.2" b="0.2" a="1" />
-            <diffuse r="0.578125" g="0.3203125" b="0.23046875" a="1" />
+            <diffuse r="0.778125" g="0.5203125" b="0.43046875" a="1" />
             <specular r="0" g="0" b="0" a="1" />
         </material>
     </materials>
@@ -611,12 +611,17 @@
             <children>
                 <componentref id="boards_wood_bottom"/>
                 <componentref id="boards_wood_side_1"/>
+                <componentref id="boards_wood_side_2"/>
+                <componentref id="boards_wood_side_3"/>
+                <componentref id="boards_wood_side_4"/>
+                <componentref id="boards_wood_interiors"/>
             </children>
         </component>
         <component id="boards_wood_bottom">
             <transformation>
                 <!-- z here represents board_wood width-->
                 <translate x="0" y="0" z="-0.1"/>
+                <scale x="1.3" y="1" z="1"/>
             </transformation>
             <materials>
                 <material id="boards_wood" />
@@ -653,6 +658,21 @@
         <component id="boards_wood_side_1">
             <transformation>
                 <rotate axis="z" angle="0"/>
+                <translate x="1.3" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_side_2">
+            <transformation>
+                <rotate axis="z" angle="90"/>
                 <translate x="1" y="0" z="-0.05"/>
                 <rotate axis="y" angle="90"/>
                 <scale x="0.05" y="1" z="1"/>
@@ -665,7 +685,113 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
-        
+        <component id="boards_wood_side_3">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1.3" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_side_4">
+            <transformation>
+                <rotate axis="z" angle="270"/>
+                <translate x="1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_interiors">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_interior_1"/>
+                <componentref id="boards_wood_interior_2"/>
+                <componentref id="boards_wood_interior_3"/>
+                <componentref id="boards_wood_interior_4"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_interior_1">
+            <transformation>
+                <rotate axis="z" angle="0"/>
+                <translate x="1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_2">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_3">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1.1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="-90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+        <component id="boards_wood_interior_4">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1.1" y="0" z="-0.05"/>
+                <rotate axis="y" angle="-90"/>
+                <scale x="0.05" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="Rectangle_1"/>
+            </children>
+        </component>
+
 
         <component id="everything_but_the_spaceship">
             <transformation>
