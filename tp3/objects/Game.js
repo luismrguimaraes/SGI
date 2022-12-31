@@ -11,15 +11,20 @@ export class Game{
 		this.boards = scene.graph.boards;
 		this.lastMovedPiece = null;
 		this.lockMoveToCaptureOnly = false;
+		this.hasStarted = false;
     }
 
 
 	set_lastMovedPiece(value){
-        this.lastMovedPiece = value
+        this.lastMovedPiece = value;
     }
 	
 	setLockMoveToCaptureOnly(value){
-        this.lockMoveToCaptureOnly = value
+        this.lockMoveToCaptureOnly = value;
+    }
+	
+	setHasStarted(value){
+        this.hasStarted = value;
     }
 	
 	// -------------------------- COMMON LOGIC --------------------------
@@ -82,7 +87,6 @@ export class Game{
 	* Ends player turn
 	*/
 	endTurn() {	
-		console.log("lastMovedPiece id", this.lastMovedPiece.id);
 		if (this.lastMovedPiece != null) {
 			console.log("Ending turn");
 			this.makeAllPiecesNotMovedThisTurn();
