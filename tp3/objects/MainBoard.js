@@ -49,7 +49,7 @@ export class MainBoard extends Board{
             }
             else{ 
                 this.pieces[i].setPicked(false)
-                this.pieces[i].setPickable(true)
+                //this.pieces[i].setPickable(true)
             }
         }
     }

@@ -62,16 +62,6 @@ export class Game{
 			this.mainboard.pieces[i].setPickable(false)
 		}
 	}
-
-	/**
-	* @method makeAllPiecesNotMovedThisTurn
-	* Makes every piece in the this.mainboard unmoved on this turn
-	*/
-	makeAllPiecesNotMovedThisTurn() {	 
-		for(var i = 0; i < this.mainboard.pieces.length; i++) {
-			this.mainboard.pieces[i].set_hasMovedThisTurn(false);
-		}
-	}
 	
 	/**
 	* @method makeAllPiecesPickable
@@ -91,16 +81,19 @@ export class Game{
 	makePlayerPiecesPickable(value) {
 		var pieces = [];
 		if (this.playerTurn == 0) {
+			this.makeAllPiecesUnpickable();
 			pieces = this.scene.player1.alivePieces;
 			console.log(pieces);
 			this.makePiecesPickable(pieces)
 		}
 		else if (this.playerTurn == 1) {
+			this.makeAllPiecesUnpickable();
 			pieces = this.scene.player2.alivePieces;
+			console.log(pieces);
 			this.makePiecesPickable(pieces)
 		}
 	}
-	
+
 	/**
 	* @method makePiecesPickable
 	* Makes given array of pieces pickable
@@ -108,6 +101,16 @@ export class Game{
 	makePiecesPickable(pieceArray) {	 
 		for (const piece of pieceArray) {
 			piece.setPickable(true);
+		}
+	}
+
+	/**
+	* @method makeAllPiecesNotMovedThisTurn
+	* Makes every piece in the this.mainboard unmoved on this turn
+	*/
+	makeAllPiecesNotMovedThisTurn() {	 
+		for(var i = 0; i < this.mainboard.pieces.length; i++) {
+			this.mainboard.pieces[i].set_hasMovedThisTurn(false);
 		}
 	}
 	
@@ -136,7 +139,7 @@ export class Game{
 	* Creates all player 1 alive pieces
 	*/
 	initializePlayer2Pieces() {
-		for(var i = 12; i < 24; i++) {
+		for(var i = 12; i < 23; i++) {
 			this.scene.player2.addPieceAlivePieces(this.mainboard.pieces[i]);
 		}
 	}
