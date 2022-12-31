@@ -15,16 +15,16 @@
             <to x="-40" y="66.8" z="-20" />
         </perspective>
         <perspective id="Game_camera_p0" near="0.1" far="700" angle="0.32">
-            <from x="70" y="8" z="73" />
-            <to x="70" y="2" z="70.05" />
+            <from x="70" y="8.5" z="73" />
+            <to x="70" y="2.5" z="70.05" />
         </perspective>
         <perspective id="Game_camera_p1" near="0.1" far="700" angle="0.32">
-            <from x="70" y="8" z="67" />
-            <to x="70" y="2" z="69.95" />
+            <from x="70" y="8.5" z="67" />
+            <to x="70" y="2.5" z="69.95" />
         </perspective>
         <perspective id="Game_camera_debug" near="0.1" far="700" angle="0.32">
-            <from x="70.1" y="10" z="70" />
-            <to x="70" y="2" z="70" />
+            <from x="70.1" y="11.5" z="70" />
+            <to x="70" y="2.5" z="70" />
         </perspective>
         <perspective id="Game_camera_debug_capture" near="0.1" far="700" angle="0.32">
             <from x="1" y="7" z="0" />
@@ -574,7 +574,7 @@
 
         <component id="checkers">
             <transformation>
-                <translate x="70" y="2" z="70"/>
+                <translate x="70" y="2.5" z="70"/>
                 <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
@@ -850,22 +850,6 @@
             </children>
         </component>
 
-        <component id="boards_wood_interior_4">
-            <transformation>
-                <rotate axis="z" angle="180"/>
-                <translate x="1.1" y="0" z="-0.05"/>
-                <rotate axis="y" angle="-90"/>
-                <scale x="0.05" y="1" z="1"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="inherit" length_s="1" length_t="1"/>
-            <children>
-                <primitiveref id="Rectangle_1"/>
-            </children>
-        </component>
-
 
         <component id="everything_but_the_spaceship">
             <transformation>
@@ -885,7 +869,6 @@
                 <componentref id="barrels"/>
 
                 <componentref id="checkers"/>
-                <componentref id="barrels"/>
 
             </children>
             <animation id="ground_shake"/>
@@ -1022,14 +1005,16 @@
             <texture id="inherit"/>
             <children>
                 <componentref id="NurbBarrel_1"/>
-                <componentref id="NurbBarrel_2"/>
+                <componentref id="BoardStand"/>
+                <componentref id="BoardChair_1"/>
+                <componentref id="BoardChair_2"/>
             </children>
         </component>
-        <component id="NurbBarrel_2">
+        <component id="BoardStand">
             <transformation>
-                <translate x="70" y="2.05" z="65.6"/>
+                <translate x="70" y="1.55" z="70"/>
                 <rotate angle="90" axis="x"/>
-                <scale x="0.6" y="0.6" z="0.3"/>
+                <scale x="0.5" y="0.5" z="0.3"/>
             </transformation>
             <materials>
                 <material id="grey" />
@@ -1037,6 +1022,44 @@
             <texture id="barrel" length_s="1" length_t="1"/>
             <children>
                 <componentref id="NurbBarrel"/>
+            </children>
+        </component>
+        <component id="BoardChair">
+            <transformation>
+                <rotate angle="180" axis="x"/>
+                <rotate angle="90" axis="y"/>
+                <scale x="0.5" y="0.5" z="0.3"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="NurbBarrel"/>
+            </children>
+        </component>
+        <component id="BoardChair_1">
+            <transformation>
+                <translate x="70" y="1.45" z="68"/>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="barrel" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="BoardChair"/>
+            </children>
+        </component>
+        <component id="BoardChair_2">
+            <transformation>
+                <translate x="70" y="1.45" z="72"/>
+            </transformation>
+            <materials>
+                <material id="grey" />
+            </materials>
+            <texture id="barrel" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="BoardChair"/>
             </children>
         </component>
         <component id="NurbBarrel_1">
