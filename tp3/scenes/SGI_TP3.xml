@@ -598,11 +598,11 @@
             <texture id="trunk" length_s="1" length_t="1"/>
             <children>
                 <componentref id="boards_wood_bottom"/>
-                <componentref id="boards_wood_side_1"/>
-                <componentref id="boards_wood_side_2"/>
-                <componentref id="boards_wood_side_3"/>
-                <componentref id="boards_wood_side_4"/>
-                <componentref id="boards_wood_interiors"/>
+                <componentref id="boards_wood_mainboard_sides"/>
+                <componentref id="boards_wood_auxiliar_0_sides"/>
+                <componentref id="boards_wood_auxiliar_1_sides"/>
+
+                <!--componentref id="boards_wood_interiors"-->
             </children>
         </component>
         <component id="boards_wood_bottom">
@@ -616,7 +616,7 @@
             </materials>
             <texture id="trunk" length_s="1" length_t="1"/>
             <children>
-                <componentref id="boards_wood_bottom_1"/>
+                <!--componentref id="boards_wood_bottom_1"-->
                 <componentref id="boards_wood_bottom_2"/>
             </children>
         </component>
@@ -643,10 +643,25 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
-        <component id="boards_wood_side_1">
+
+        <component id="boards_wood_mainboard_sides">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_mainboard_side_1"/>
+                <componentref id="boards_wood_mainboard_side_2"/>
+                <componentref id="boards_wood_mainboard_side_3"/>
+                <componentref id="boards_wood_mainboard_side_4"/>
+            </children>
+        </component>
+        <component id="boards_wood_mainboard_side_1">
             <transformation>
                 <rotate axis="z" angle="0"/>
-                <translate x="1.3" y="0" z="-0.05"/>
+                <translate x="1" y="0" z="-0.05"/>
                 <rotate axis="y" angle="90"/>
                 <scale x="0.05" y="1" z="1"/>
             </transformation>
@@ -658,7 +673,7 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
-        <component id="boards_wood_side_2">
+        <component id="boards_wood_mainboard_side_2">
             <transformation>
                 <rotate axis="z" angle="90"/>
                 <translate x="1" y="0" z="-0.05"/>
@@ -673,10 +688,10 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
-        <component id="boards_wood_side_3">
+        <component id="boards_wood_mainboard_side_3">
             <transformation>
                 <rotate axis="z" angle="180"/>
-                <translate x="1.3" y="0" z="-0.05"/>
+                <translate x="1" y="0" z="-0.05"/>
                 <rotate axis="y" angle="90"/>
                 <scale x="0.05" y="1" z="1"/>
             </transformation>
@@ -688,7 +703,7 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
-        <component id="boards_wood_side_4">
+        <component id="boards_wood_mainboard_side_4">
             <transformation>
                 <rotate axis="z" angle="270"/>
                 <translate x="1" y="0" z="-0.05"/>
@@ -703,6 +718,38 @@
                 <primitiveref id="Rectangle_1"/>
             </children>
         </component>
+
+        <component id="boards_wood_auxiliar_0_sides">
+            <transformation>
+                <rotate axis="z" angle="0"/>
+                <translate x="1.2" y="0" z="0"/>
+                <scale x="0.1" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_mainboard_sides"/>
+            </children>
+        </component>
+
+        <component id="boards_wood_auxiliar_1_sides">
+            <transformation>
+                <rotate axis="z" angle="180"/>
+                <translate x="1.2" y="0" z="0"/>
+                <scale x="0.1" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1"/>
+            <children>
+                <componentref id="boards_wood_mainboard_sides"/>
+            </children>
+        </component>
+
+
 
         <component id="boards_wood_interiors">
             <transformation>
