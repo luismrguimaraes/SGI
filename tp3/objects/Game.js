@@ -152,6 +152,26 @@ export class Game{
 	startTurn() {
 		console.log("Player with id " + this.playerTurn + " turn");
 		this.makePlayerPiecesPickable(this.playerTurn);
+		this.toogleCamera(this.playerTurn);
+	}
+	
+	/**
+	* @method toogleCamera
+	* Changes camera to player perspective
+	*/
+	toogleCamera(player) {
+		if(player == 0){
+            // Change Turn to Player 1 (p0) (whites)
+            this.scene.interface.setCamera(4);
+            this.scene.interface.cameraFrom = 4;
+            this.scene.interface.triggerCameraChangeAnimation();
+        }
+        if(player == 1){
+            // Change Turn to Player 2 (p1) (blacks)
+            this.scene.interface.setCamera(3);
+            this.scene.interface.cameraFrom = 3;
+            this.scene.interface.triggerCameraChangeAnimation();
+        }
 	}
 
 	/**
