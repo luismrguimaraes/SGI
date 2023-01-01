@@ -121,7 +121,7 @@ export class Game{
 	startGame() {
 		this.initializePlayer1Pieces();
 		this.initializePlayer2Pieces();
-		this.startTurn();
+		this.startTurn(true);
 	}
 	
 	/**
@@ -139,7 +139,7 @@ export class Game{
 	* Creates all player 1 alive pieces
 	*/
 	initializePlayer2Pieces() {
-		for(var i = 12; i < 23; i++) {
+		for(var i = 12; i < 24; i++) {
 			this.scene.player2.addPieceAlivePiece(this.mainboard.pieces[i]);
 		}
 	}
@@ -149,17 +149,21 @@ export class Game{
 	* Start player turn
 	* Starts at player 1 by default (passes value 0 at first run)
 	*/
-	startTurn() {
+	startTurn(startingGame = false) {
 		console.log("Player with id " + this.playerTurn + " turn");
 		this.makePlayerPiecesPickable(this.playerTurn);
-		this.toogleCamera(this.playerTurn);
+		this.toogleCamera(this.playerTurn, startingGame);
 	}
 	
 	/**
 	* @method toogleCamera
 	* Changes camera to player perspective
 	*/
-	toogleCamera(player) {
+	toogleCamera(player, startingGame = false) {
+		if (startingGame){
+            this.scene.interface.setCamera(3);
+			return
+		}
 		if(player == 0){
             // Change Turn to Player 1 (p0) (whites)
             this.scene.interface.setCamera(4);
@@ -189,10 +193,8 @@ export class Game{
 		}
 		else {
 			console.log("No piece has been moved. Cannot end turn!");
-			this.setLockMoveToCaptureOnly(false);
 			this.setPlayerTurn((this.playerTurn));
-			this.set_lastMovedPiece(null);
-			this.startTurn();
+			this.makePlayerPiecesPickable(this.playerTurn);
 		}
 	}
 	
@@ -238,6 +240,7 @@ export class Game{
 				this.makeTilesPickable(availableCaptureTileArray);
 			}
 			else {
+				console.log(this.lastMovedPiece)
 				this.endTurn();
 			}
 		}

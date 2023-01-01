@@ -38,9 +38,9 @@ export class MainBoard extends Board{
         this.pieces = pieces
 
         // TEST
-        var piece_19 = this.getPiece("piece 19")
-        this.removePiece("piece 19")
-        this.pieces[20].set_isKing(true, piece_19)
+        //var piece_19 = this.getPiece("piece 19")
+        //this.removePiece("piece 19")
+        //this.pieces[20].set_isKing(true, piece_19)
     }
 
     pickPiece(piece_id){
