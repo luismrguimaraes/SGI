@@ -29,6 +29,7 @@
 - Camera names for player 1 and 2 must be:
 	- 1: "Game_camera_p0"
 	- 2: "Game_camera_p1"
+- They must also be on positions 4th and 5th cameras, respectively
 - Component with boards must have ID "checkers"
 - The start button is the game board (only works as such before the game has started)
 
@@ -40,6 +41,7 @@
 ### Game
 - Clicking on pieces' corners, when a tile is visible and close to the mouse cursor, results in different ids being picked than the one expected.
 - Collision detection could be improved. At the moment, it is not truly collision detection since we are only checking if a piece's center is approximate to another piece's center from the scene camera (`scene.camera`) perspective.
+- Captures on more than one tile away are not accounted for which means kings are not forced to capture, and are left unpickable whenever there are captures available.
 ### Game Visuals
 - Camera "blinks" on turn end, before it starts the rotation animation. This, however, is not observed when pressing down on the keys with codes "Digit1" and "Digit2" to switch cameras (by calling exactly the same function as in `endTurn()` in Game.js).
 ### Documentation

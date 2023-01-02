@@ -52,18 +52,20 @@ export class MyInterface extends CGFinterface {
             this.changeCameraToBlacks()
         }
         if(event.code == "Escape"){
-            if (this.scene.pickedPiece !== null){
-                // "Unpick"
-                this.scene.pickedPiece.setPicked(false)
-                this.scene.pickedPiece = null
-                
-                this.scene.game.setLockMoveToCaptureOnly(false);
+            if (this.scene.game){
 
-                this.scene.game.makeAllTilesUnpickable()
-            }else{
-                // Run end turn
-                this.scene.game.setLockMoveToCaptureOnly(false);
-			    this.scene.game.endTurn();
+                if (this.scene.pickedPiece !== null){
+                    // "Unpick"
+                    this.scene.pickedPiece.setPicked(false)
+                    this.scene.pickedPiece = null
+                
+                    this.scene.game.setLockMoveToCaptureOnly(false);
+                    this.scene.game.makeAllTilesUnpickable()
+                }else{
+                    // Run end turn
+                    this.scene.game.setLockMoveToCaptureOnly(false);
+                    this.scene.game.endTurn();
+                }
             }
         }
         if (event.code == "KeyM"){
@@ -101,7 +103,7 @@ export class MyInterface extends CGFinterface {
 
     triggerCameraChangeAnimation(){
         var startTime = (Date.now() - this.scene.startTime)/1000
-		if (this.scene.game.playerTurn){
+		if (this.scene.game && this.scene.game.playerTurn){
             this.cameraAnimation = new MyKeyframeAnimation([ 
                 [[0, 0, 0], 0, 0, 0, [1,1,1]],
                 [[0, 0, 0], 0, Math.PI, 0, [1,1,1]],

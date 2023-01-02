@@ -79,17 +79,29 @@ export class Game{
 	* Then gets the player alivePieces and calls function to set those pickable
 	*/
 	makePlayerPiecesPickable(value) {
-		var pieces = [];
+		var pickablePieces = [];
+		this.makeAllPiecesUnpickable();
 		if (this.playerTurn == 0) {
-			this.makeAllPiecesUnpickable();
-			pieces = this.scene.player1.alivePieces;
-			this.makePiecesPickable(pieces)
+			for (const playerPiece of this.scene.player1.alivePieces) {
+				let captureTiles = this.checkIfCaptureMovementIsPossible(playerPiece.getBoardPosition())
+				if (captureTiles.length != 0)
+					pickablePieces.push(playerPiece)
+			}
+			if (pickablePieces.length === 0){
+				pickablePieces = this.scene.player1.alivePieces;
+			}
 		}
 		else if (this.playerTurn == 1) {
-			this.makeAllPiecesUnpickable();
-			pieces = this.scene.player2.alivePieces;
-			this.makePiecesPickable(pieces)
+			for (const playerPiece of this.scene.player2.alivePieces) {
+				let captureTiles = this.checkIfCaptureMovementIsPossible(playerPiece.getBoardPosition())
+				if (captureTiles.length != 0)
+					pickablePieces.push(playerPiece)
+			}
+			if (pickablePieces.length === 0){
+				pickablePieces = this.scene.player2.alivePieces;
+			}
 		}
+		this.makePiecesPickable(pickablePieces)
 	}
 
 	/**
@@ -184,6 +196,7 @@ export class Game{
 		}
 		else {
 			console.log("No piece has been moved. Cannot end turn!");
+			this.scene.triggerInvalidPickAnimation()
 			this.setPlayerTurn((this.playerTurn));
 			this.makePlayerPiecesPickable(this.playerTurn);
 		}
@@ -215,9 +228,10 @@ export class Game{
 			this.lastMovedPiece.set_hasMovedThisTurn(true);
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
-			if (availableCaptureTileArray.length != 0) {
+			if (availableCaptureTileArray.length != 0 && this.lastMovedPiece.hasCapturedThisTurn) {
 				this.makeAllPiecesUnpickable();
 				this.lastMovedPiece.setPicked(true);
+				this.lastMovedPiece.setPickable(true);
 				this.scene.pickedPiece = this.lastMovedPiece;
 				this.setLockMoveToCaptureOnly(true);
 				this.makeTilesPickable(availableCaptureTileArray);
@@ -722,22 +736,21 @@ export class Game{
 	* Then it will get the available tiles where the piece is allowed to move and make them pickable
 	*/
 	pieceHasBeenPicked(pickedPiece) {
-		if(this.lockMoveToCaptureOnly == false) {
-			this.makeAllTilesUnpickable();
-			
-			var pieceBoardPosition = pickedPiece.getBoardPosition();
-			var availableCaptureTileArray = [];
-			availableCaptureTileArray = this.checkIfCaptureMovementIsPossible(pieceBoardPosition);
-			if (availableCaptureTileArray.length != 0) {
-				this.makeAllPiecesUnpickable();
-				pickedPiece.setPickable(true);
-				this.setLockMoveToCaptureOnly(true);
-				this.makeTilesPickable(availableCaptureTileArray);
-			}
-			else {
-				this.setLockMoveToCaptureOnly(false);
-				this.makeAvailableTilesForPickedPiecePickable(pickedPiece);
-			}
+		this.makeAllTilesUnpickable();
+		
+		var pieceBoardPosition = pickedPiece.getBoardPosition();
+		console.log(pieceBoardPosition)
+		var availableCaptureTileArray = [];
+		availableCaptureTileArray = this.checkIfCaptureMovementIsPossible(pieceBoardPosition);
+		if (availableCaptureTileArray.length != 0) {
+			//this.makeAllPiecesUnpickable();
+			//pickedPiece.setPickable(true);
+			this.setLockMoveToCaptureOnly(true);
+			this.makeTilesPickable(availableCaptureTileArray);
+		}
+		else {
+			this.setLockMoveToCaptureOnly(false);
+			this.makeAvailableTilesForPickedPiecePickable(pickedPiece);
 		}
 	}
 	
