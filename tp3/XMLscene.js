@@ -2,7 +2,9 @@ import { CGFappearance, CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
 import { MyKeyframeAnimation } from './animations/MyKeyframeAnimation.js';
 import { Game } from './objects/Game.js';
+import { Player } from './objects/Player.js';
 import { MyRectangle } from './primitives/MyRectangle.js';
+
 
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -217,6 +219,24 @@ export class XMLscene extends CGFscene {
         }
     }
 
+    triggerInvalidPickAnimation(){
+         // If InGame
+        // shake the whole board (mainboard, auxiliar 0 and 1) after an invalid pick
+        if (this.graph.boards[0].invalidPickAnimation === null){
+            if (this.graph.components["checkers"]){
+                var startTime = (Date.now() - this.startTime)/1000
+                var mainboard = this.graph.boards[0]
+                this.graph.components["checkers"]["Animation"][0] = new MyKeyframeAnimation([ 
+                    [[0,0,0], 0, 0, 0, [1,1,1]], 
+                    [[(Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
+                    [[- (Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, - (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
+                    [[0,0,0], 0, 0, 0, [1,1,1]],
+                    ], 
+                    [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.3], this)        
+                }
+        }
+    }
+
     logPicking()
 	{
 		if (this.pickMode == false) {
@@ -228,7 +248,6 @@ export class XMLscene extends CGFscene {
 					{
 						var customId = this.pickResults[i][1];
 
-						console.log("Pick ID: " + customId);
                         if (obj.id)
                             var split_id = obj.id.split(' ')
                         else{
@@ -236,10 +255,15 @@ export class XMLscene extends CGFscene {
                             // If component is "checkers" (the board), Start the game.
                             if(obj["ID"] === "checkers"){
                                 console.log("Starting Game")
-                                // Add initialization of Game instance
+                                // Add initialization of Game instance, players, and starts new game
                                 this.game = new Game(this);
                                 // Init MainBoard pieces
                                 this.graph.boards[0].initPieces()
+								// Init players
+								this.player1 = new Player(this, 0);
+								this.player2 = new Player(this, 1);
+								// Start game
+								this.game.startGame();
                             }
                             continue
                         }
@@ -268,22 +292,7 @@ export class XMLscene extends CGFscene {
                     // If game has started, warn about invalid Pick
                     else if (this.game !== null)
                     {
-                        console.warn("Invalid Pick")
-                        // If InGame
-                        // shake the whole board (mainboard, auxiliar 0 and 1) after an invalid pick
-                        if (this.graph.boards[0].invalidPickAnimation === null){
-                            if (this.graph.components["checkers"]){
-                                var startTime = (Date.now() - this.startTime)/1000
-                                var mainboard = this.graph.boards[0]
-                                this.graph.components["checkers"]["Animation"][0] = new MyKeyframeAnimation([ 
-                                    [[0,0,0], 0, 0, 0, [1,1,1]], 
-                                    [[(Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
-                                    [[- (Math.abs(mainboard.x1) + Math.abs(mainboard.x2))/50, 0, - (Math.abs(mainboard.y1) + Math.abs(mainboard.y2))/50], 0, 0, 0, [1,1,1]],
-                                    [[0,0,0], 0, 0, 0, [1,1,1]],
-                                    ], 
-                                    [startTime, startTime + 0.1, startTime + 0.2, startTime + 0.3], this)        
-                                }
-                        }
+                        this.triggerInvalidPickAnimation()
                     }
 				}
 				this.pickResults.splice(0,this.pickResults.length);

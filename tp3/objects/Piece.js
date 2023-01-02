@@ -168,7 +168,6 @@ export class Piece{
             this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
         }
         else if (this.hasCollided && this.collidedPiece.captureAnimationHasFinished){
-            console.log("On move animation end")
             // Reset capture animation
             this.collidedPiece.captureAnimation = null
             this.collidedPiece.set_captureAnimationHasFinished(false)
@@ -180,10 +179,6 @@ export class Piece{
             this.collidedPiece.set_hasCollided(false)
             this.set_hasCollided(false)
         }
-        
-        //TEST
-        for (let i = 0; i < this.board.pieces.length; i++)
-            this.board.pieces[i].setPickable(true) 
     }
 
     triggerPickAnimation(){
@@ -236,7 +231,6 @@ export class Piece{
         // Otherwise this task is to be done by the other piece
         // (on moveAnimationOnEnd())
         if (this.collidedPiece.moveAnimation === null){
-            console.log("On capture animation end")
             // Reset capture animation
             this.captureAnimation = null
             this.set_captureAnimationHasFinished(false)
@@ -260,7 +254,6 @@ export class Piece{
             if (res === "animation over"){
                 // Capture animation finished
                 this.set_captureAnimationHasFinished(true)
-                console.log("Capture animation over")
                 this.captureAnimationOnEnd()
             }
         }
@@ -269,7 +262,6 @@ export class Piece{
             if (res === "animation over"){
                 // Pick animation finished
                 this.pickAnimation = null
-                console.log("Pick animation over")
             }
         }
         if (this.moveAnimation !== null){
@@ -277,7 +269,6 @@ export class Piece{
             if (res === "animation over"){
                 // Move animation finished
                 this.moveAnimation = null
-                console.log("Move animation over")
                 this.moveAnimationOnEnd()
             }
         }

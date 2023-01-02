@@ -46,30 +46,25 @@ export class MyInterface extends CGFinterface {
     
     processKeyDown(event) {
         if(event.code == "Digit1"){
-            // Change Turn to Player 1 (p0) (whites)
-            this.setCamera(4)
-            this.cameraFrom = 4
-            this.triggerCameraChangeAnimation()
+            this.changeCameraToWhites()
         }
         if(event.code == "Digit2"){
-            // Change Turn to Player 2 (p1) (blacks)
-            this.setCamera(3)
-            this.cameraFrom = 3
-            this.triggerCameraChangeAnimation()
+            this.changeCameraToBlacks()
         }
         if(event.code == "Escape"){
-            if (this.scene.pickedPiece !== null){
-                // "Unpick"
-                this.scene.pickedPiece.setPicked(false)
-                this.scene.pickedPiece = null
+            if (this.scene.game){
+
+                if (this.scene.pickedPiece !== null){
+                    // "Unpick"
+                    this.scene.pickedPiece.setPicked(false)
+                    this.scene.pickedPiece = null
                 
-                //this.game.setLockMoveToCaptureOnly(false);
-                
-                // update pickables
-                for (let i = 0; i < 8; i++){
-                    for (let j = 0; j < 8; j++){
-                        this.scene.graph.boards[0].getTile(j, i).setPickable(false)
-                    }
+                    this.scene.game.setLockMoveToCaptureOnly(false);
+                    this.scene.game.makeAllTilesUnpickable()
+                }else{
+                    // Run end turn
+                    this.scene.game.setLockMoveToCaptureOnly(false);
+                    this.scene.game.endTurn();
                 }
             }
         }
@@ -93,13 +88,34 @@ export class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
     
+    changeCameraToWhites(){
+        // Change Camera to Player 1 (p0) (whites)
+        this.setCamera(4)
+        this.cameraFrom = 4
+        this.triggerCameraChangeAnimation()
+    }
+    changeCameraToBlacks(){
+        // Change Camera to Player 2 (p1) (blacks)
+        this.setCamera(3)
+        this.cameraFrom = 3
+        this.triggerCameraChangeAnimation()
+    }
+
     triggerCameraChangeAnimation(){
         var startTime = (Date.now() - this.scene.startTime)/1000
-        this.cameraAnimation = new MyKeyframeAnimation([ 
-            [[0, 0, 0], 0, 0, 0, [1,1,1]],
-            [[0, 0, 0], 0, Math.PI, 0, [1,1,1]],
-            ], 
-            [startTime, startTime + 2], this.scene)
+		if (this.scene.game && this.scene.game.playerTurn){
+            this.cameraAnimation = new MyKeyframeAnimation([ 
+                [[0, 0, 0], 0, 0, 0, [1,1,1]],
+                [[0, 0, 0], 0, Math.PI, 0, [1,1,1]],
+                ], 
+                [startTime, startTime + 0.7], this.scene)
+        }else{
+            this.cameraAnimation = new MyKeyframeAnimation([ 
+                [[0, 0, 0], 0, 0, 0, [1,1,1]],
+                [[0, 0, 0], 0, -Math.PI, 0, [1,1,1]],
+                ], 
+                [startTime, startTime + 0.7], this.scene)
+        }
     }
     cameraAnimationOnEnd(){
         if (this.cameraFrom === 3) this.setCamera(4)
@@ -122,7 +138,7 @@ export class MyInterface extends CGFinterface {
         this.camera_index = cameraIndex
         this.scene.camera = this.scene.graph.cameras[cameraIndex]
         if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
-        this.setActiveCamera(this.scene.camera)
+            this.setActiveCamera(this.scene.camera)
         this.activeCameraName = this.activeCamera.id
         
         this.scene.updateProjectionMatrix()
@@ -131,7 +147,6 @@ export class MyInterface extends CGFinterface {
         this.scene.applyViewMatrix()
         
         console.log("New Camera: " + this.scene.camera.id)
-        console.log(this.scene.camera)
     }
     
     camera_next(){
@@ -152,7 +167,6 @@ export class MyInterface extends CGFinterface {
     camera_method(value){
         for (var i = 0; i < this.scene.graph.cameras.length; ++i)
             if (this.scene.graph.cameras[i].id == value){
-                console.log(value)
                 this.setCamera(i)
             }
     }

@@ -8,22 +8,16 @@
 
 ----
 
-## Projects
+## Project Stages
 
 ### [TP1 - Scene Graph](tp1)
-
-- (Items briefly describing main strong points)
-- Scene
-  - (Brief description of the created scene)
-  - (relative link to the scene)
-
 -----
 
-### [TP2 - ...](tp2)
-- (items briefly describing main strong points)
-
+### [TP2 - Animations](tp2)
 ----
 
-### [TP3 - ...](tp3)
-- (items briefly describing main strong points)
+### [TP3 - Checkers Game](tp3)
 
+## Instructions
+
+### [User Manual](./docs/User%20Manual.pdf)

@@ -30,17 +30,7 @@ export class MainBoard extends Board{
             }
         }
 
-        //TEST
-        for (let i = 0; i < pieces.length; i++)
-            pieces[i].setPickable(true)
-        pieces[9].set_isKing(true)
-
         this.pieces = pieces
-
-        // TEST
-        var piece_19 = this.getPiece("piece 19")
-        this.removePiece("piece 19")
-        this.pieces[20].set_isKing(true, piece_19)
     }
 
     pickPiece(piece_id){
@@ -48,11 +38,9 @@ export class MainBoard extends Board{
             if (this.pieces[i].id === piece_id){
                 this.pieces[i].setPicked(true)
                 this.pieces[i].triggerPickAnimation()
-                //this.pieces[i].setPickable(false)
             }
             else{ 
                 this.pieces[i].setPicked(false)
-                this.pieces[i].setPickable(true)
             }
         }
     }
