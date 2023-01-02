@@ -18,3 +18,6 @@
 
 ### [TP3 - Checkers Game](tp3)
 
+## Instructions
+
+### [User Manual](./docs/User%20Manual.pdf)

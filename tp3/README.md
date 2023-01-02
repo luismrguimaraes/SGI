@@ -36,12 +36,11 @@
 ## Issues/Bugs:
 ### Features
 - Spotlights are not working properly.
-- Shader support was not implemented.
 - The scene file in commit [3e31997a31d0f21be9b27000c8ee427276bd7ebe](https://git.fe.up.pt/sgi-meic/sgi-2022-2023/t06/sgi-t06-g09/-/commit/3e31997a31d0f21be9b27000c8ee427276bd7ebe) reproduces a bug with inheritance: One of the tents inherits the texture of the spaceship component which is not one of its parents.
 ### Game
 - Clicking on pieces' corners, when a tile is visible and close to the mouse cursor, results in different ids being picked than the one expected.
 - Collision detection could be improved. At the moment, it is not truly collision detection since we are only checking if a piece's center is approximate to another piece's center from the scene camera (`scene.camera`) perspective.
-- Captures on more than one tile away are not accounted for which means kings are not forced to capture, and are left unpickable whenever there are captures available.
+- Captures on more than one tile away are not accounted for which means kings are not forced to capture, and are left unpickable whenever there are captures available with other pieces.
 ### Game Visuals
 - Camera "blinks" on turn end, before it starts the rotation animation. This, however, is not observed when pressing down on the keys with codes "Digit1" and "Digit2" to switch cameras (by calling exactly the same function as in `endTurn()` in Game.js).
 ### Documentation
