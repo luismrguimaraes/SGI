@@ -394,10 +394,7 @@ export class Game{
 			var targetedYDownPosition = pieceNewYPosition - 1;
 			var targetedXLeftPosition = pieceNewXPosition - 1;
 			var targetedXRightPosition = pieceNewXPosition + 1;
-			var targetedYUpPositionForCapture = pieceNewYPosition + 2;
-			var targetedYDownPositionForCapture = pieceNewYPosition - 2;
-			var targetedXLeftPositionForCapture = pieceNewXPosition - 2;
-			var targetedXRightPositionForCapture = pieceNewXPosition + 2;
+			
 			var canGoDownLeft = false;
 			var canGoUpLeft = false;
 			var canGoDownRight = false;
@@ -408,93 +405,105 @@ export class Game{
 			var targetedRightFreeTile = null;
 			var leftTilePieceColor = null;
 			var rightTilePieceColor = null;
-			
-			// Down check
-			// Left
-			if (targetedYDownPosition > -1 && targetedXLeftPosition > -1) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
+			while (targetedYUpPosition < 8 || targetedYDownPosition > -1 
+				|| targetedXLeftPosition > -1 || targetedXRightPosition < 8) {
+				
+				var targetedYUpPositionForCapture = targetedYUpPosition + 1;
+				var targetedYDownPositionForCapture = targetedYDownPosition - 1;
+				var targetedXLeftPositionForCapture = targetedXLeftPosition - 1;
+				var targetedXRightPositionForCapture = targetedXRightPosition + 1;
+				// Down check
+				// Left
+				if (targetedYDownPosition > -1 && targetedXLeftPosition > -1) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
+					if (leftTilePiece != null) {
+						canGoDownLeft = true;					
+					}
+				}
+				
 				if (leftTilePiece != null) {
-					canGoDownLeft = true;					
+					leftTilePieceColor = leftTilePiece.color;
 				}
-			}
-			
-			if (leftTilePiece != null) {
-				leftTilePieceColor = leftTilePiece.color;
-			}
 
-			if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-				if (leftTilePiece == null) {
-					// If the tile is free
-					targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-					availableTiles.push(targetedLeftFreeTile);
+				if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+					if (leftTilePiece == null) {
+						// If the tile is free
+						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+						availableTiles.push(targetedLeftFreeTile);
+					}
 				}
-			}
 
-			// Down check
-			// Right
-			if (targetedYDownPosition > -1 && targetedXRightPosition < 8) {
-				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition);
+				// Down check
+				// Right
+				if (targetedYDownPosition > -1 && targetedXRightPosition < 8) {
+					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition);
+					if (rightTilePiece != null) {
+						canGoDownRight = true;					
+					}
+				}
+				
 				if (rightTilePiece != null) {
-					canGoDownRight = true;					
+					rightTilePieceColor = rightTilePiece.color;
 				}
-			}
-			
-			if (rightTilePiece != null) {
-				rightTilePieceColor = rightTilePiece.color;
-			}
-			
-			if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
-				var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-				if (rightTilePiece == null) {
-					// If the tile is free
-					targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-					availableTiles.push(targetedRightFreeTile);
+				
+				if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+					if (rightTilePiece == null) {
+						// If the tile is free
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+						availableTiles.push(targetedRightFreeTile);
+					}
 				}
-			}
-			
-			// Up check
-			// Left
-			if (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
+				
+				// Up check
+				// Left
+				if (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
+					if (leftTilePiece != null) {
+						canGoUpLeft = true;					
+					}
+				}
+
 				if (leftTilePiece != null) {
-					canGoUpLeft = true;					
+					leftTilePieceColor = leftTilePiece.color;
+				}	
+				
+				if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+					if (leftTilePiece == null) {
+						// If the tile is free
+						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+						availableTiles.push(targetedLeftFreeTile);
+					}
 				}
-			}
 
-			if (leftTilePiece != null) {
-				leftTilePieceColor = leftTilePiece.color;
-			}	
-			
-			if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-				if (leftTilePiece == null) {
-					// If the tile is free
-					targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-					availableTiles.push(targetedLeftFreeTile);
+				// Up check
+				// Right
+				if (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
+					rightTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
+					if (rightTilePiece != null) {
+						canGoUpRight = true;					
+					}
 				}
-			}
-
-			// Up check
-			// Right
-			if (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
-				rightTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
+				
 				if (rightTilePiece != null) {
-					canGoUpRight = true;					
+					rightTilePieceColor = rightTilePiece.color;
 				}
-			}
-			
-			if (rightTilePiece != null) {
-				rightTilePieceColor = rightTilePiece.color;
-			}
 
-			if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
-				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-				if (rightTilePiece == null) {
-					// If the tile is free
-					targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-					availableTiles.push(targetedRightFreeTile);
+				if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
+					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+					if (rightTilePiece == null) {
+						// If the tile is free
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+						availableTiles.push(targetedRightFreeTile);
+					}
 				}
+
+				targetedYUpPosition = targetedYUpPosition + 1;
+				targetedYDownPosition = targetedYDownPosition - 1;
+				targetedXLeftPosition = targetedXLeftPosition - 1;
+				targetedXRightPosition = targetedXRightPosition + 1;
 			}
 		}
 		// Check for black king
@@ -503,10 +512,7 @@ export class Game{
 			var targetedYDownPosition = pieceNewYPosition - 1;
 			var targetedXLeftPosition = pieceNewXPosition + 1;
 			var targetedXRightPosition = pieceNewXPosition - 1;
-			var targetedYUpPositionForCapture = pieceNewYPosition + 2;
-			var targetedYDownPositionForCapture = pieceNewYPosition - 2;
-			var targetedXLeftPositionForCapture = pieceNewXPosition + 2;
-			var targetedXRightPositionForCapture = pieceNewXPosition - 2;
+			
 			var canGoDownLeft = false;
 			var canGoUpLeft = false;
 			var canGoDownRight = false;
@@ -518,94 +524,105 @@ export class Game{
 			var leftTilePieceColor = null;
 			var rightTilePieceColor = null;
 			
-			// Down check
-			// Left
-			if (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
+			while (targetedYUpPosition < 8 || targetedYDownPosition > -1
+				|| targetedXLeftPosition < 8 || targetedXRightPosition > -1){
+				var targetedYUpPositionForCapture = targetedYUpPosition + 1;
+				var targetedYDownPositionForCapture = targetedYDownPosition - 1;
+				var targetedXLeftPositionForCapture = targetedXLeftPosition + 1;
+				var targetedXRightPositionForCapture = targetedXRightPosition - 1;
+
+				// Down check
+				// Left
+				if (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
+					if (leftTilePiece != null) {
+						canGoDownLeft = true;					
+					}
+				}
+				
 				if (leftTilePiece != null) {
-					canGoDownLeft = true;					
+					leftTilePieceColor = leftTilePiece.color;
 				}
-			}
-			
-			if (leftTilePiece != null) {
-				leftTilePieceColor = leftTilePiece.color;
-			}
 
-			if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-				if (leftTilePiece == null) {
-					// If the tile is free
-					targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-					availableTiles.push(targetedLeftFreeTile);
+				if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+					if (leftTilePiece == null) {
+						// If the tile is free
+						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+						availableTiles.push(targetedLeftFreeTile);
+					}
 				}
-			}
 
-			// Down check
-			// Right
-			if (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
-				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition);
+				// Down check
+				// Right
+				if (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
+					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition);
+					if (rightTilePiece != null) {
+						canGoDownRight = true;					
+					}
+				}
+
 				if (rightTilePiece != null) {
-					canGoDownRight = true;					
+					rightTilePieceColor = rightTilePiece.color;
 				}
-			}
+				
+				if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
+					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+					if (rightTilePiece == null) {
+						// If the tile is free
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+						availableTiles.push(targetedRightFreeTile);
+					}
+				}
+				
+				// Up check
+				// Left
+				if (targetedYUpPosition < 8 && targetedXLeftPosition < 8) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
+					if (leftTilePiece != null) {
+						canGoUpLeft = true;					
+					}
+				}
 
-			if (rightTilePiece != null) {
-				rightTilePieceColor = rightTilePiece.color;
-			}
-			
-			if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
-				var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-				if (rightTilePiece == null) {
-					// If the tile is free
-					targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-					availableTiles.push(targetedRightFreeTile);
-				}
-			}
-			
-			// Up check
-			// Left
-			if (targetedYUpPosition < 8 && targetedXLeftPosition < 8) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
 				if (leftTilePiece != null) {
-					canGoUpLeft = true;					
+					leftTilePieceColor = leftTilePiece.color;
+				}	
+				
+				if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
+					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+					if (leftTilePiece == null) {
+						// If the tile is free
+						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+						availableTiles.push(targetedLeftFreeTile);
+					}
 				}
-			}
+				
+				// Up check
+				// Right
+				if (targetedYUpPosition < 8 && targetedXRightPosition > -1) {
+					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition);
+					if (rightTilePiece != null) {
+						canGoUpRight = true;					
+					}
+				}
 
-			if (leftTilePiece != null) {
-				leftTilePieceColor = leftTilePiece.color;
-			}	
-			
-			if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
-				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-				if (leftTilePiece == null) {
-					// If the tile is free
-					targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-					availableTiles.push(targetedLeftFreeTile);
-				}
-			}
-			
-			// Up check
-			// Right
-			if (targetedYUpPosition < 8 && targetedXRightPosition > -1) {
-				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition);
 				if (rightTilePiece != null) {
-					canGoUpRight = true;					
+					rightTilePieceColor = rightTilePiece.color;
 				}
-			}
 
-			if (rightTilePiece != null) {
-				rightTilePieceColor = rightTilePiece.color;
-			}
-
-			if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
-				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-				if (rightTilePiece == null) {
-					// If the tile is free
-					targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-					availableTiles.push(targetedRightFreeTile);
+				if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
+					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+					if (rightTilePiece == null) {
+						// If the tile is free
+						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+						availableTiles.push(targetedRightFreeTile);
+					}
 				}
+				var targetedYUpPosition = targetedYUpPosition + 1;
+				var targetedYDownPosition = targetedYDownPosition - 1;
+				var targetedXLeftPosition = targetedXLeftPosition + 1;
+				var targetedXRightPosition = targetedXRightPosition - 1;
 			}
-			
 		}
 		// Check for normal white
 		else if (pieceColor == 0 && !pieceIsKing) {
