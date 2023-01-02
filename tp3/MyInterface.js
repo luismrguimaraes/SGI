@@ -46,16 +46,10 @@ export class MyInterface extends CGFinterface {
     
     processKeyDown(event) {
         if(event.code == "Digit1"){
-            // Change Turn to Player 1 (p0) (whites)
-            this.setCamera(4)
-            this.cameraFrom = 4
-            this.triggerCameraChangeAnimation()
+            this.changeCameraToWhites()
         }
         if(event.code == "Digit2"){
-            // Change Turn to Player 2 (p1) (blacks)
-            this.setCamera(3)
-            this.cameraFrom = 3
-            this.triggerCameraChangeAnimation()
+            this.changeCameraToBlacks()
         }
         if(event.code == "Escape"){
             if (this.scene.pickedPiece !== null){
@@ -92,6 +86,19 @@ export class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
     
+    changeCameraToWhites(){
+        // Change Camera to Player 1 (p0) (whites)
+        this.setCamera(4)
+        this.cameraFrom = 4
+        this.triggerCameraChangeAnimation()
+    }
+    changeCameraToBlacks(){
+        // Change Camera to Player 2 (p1) (blacks)
+        this.setCamera(3)
+        this.cameraFrom = 3
+        this.triggerCameraChangeAnimation()
+    }
+
     triggerCameraChangeAnimation(){
         var startTime = (Date.now() - this.scene.startTime)/1000
 		if (this.scene.game.playerTurn){
@@ -129,7 +136,7 @@ export class MyInterface extends CGFinterface {
         this.camera_index = cameraIndex
         this.scene.camera = this.scene.graph.cameras[cameraIndex]
         if (!(this.scene.camera.id === "Game_camera_p0" || this.scene.camera.id === "Game_camera_p1"))
-        this.setActiveCamera(this.scene.camera)
+            this.setActiveCamera(this.scene.camera)
         this.activeCameraName = this.activeCamera.id
         
         this.scene.updateProjectionMatrix()

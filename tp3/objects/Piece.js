@@ -168,7 +168,6 @@ export class Piece{
             this.scene.game.pieceHasBeenMoved(originalBoardPosition, newBoardPosition);
         }
         else if (this.hasCollided && this.collidedPiece.captureAnimationHasFinished){
-            console.log("On move animation end")
             // Reset capture animation
             this.collidedPiece.captureAnimation = null
             this.collidedPiece.set_captureAnimationHasFinished(false)
@@ -236,7 +235,6 @@ export class Piece{
         // Otherwise this task is to be done by the other piece
         // (on moveAnimationOnEnd())
         if (this.collidedPiece.moveAnimation === null){
-            console.log("On capture animation end")
             // Reset capture animation
             this.captureAnimation = null
             this.set_captureAnimationHasFinished(false)

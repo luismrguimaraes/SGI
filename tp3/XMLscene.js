@@ -228,7 +228,6 @@ export class XMLscene extends CGFscene {
 					{
 						var customId = this.pickResults[i][1];
 
-						console.log("Pick ID: " + customId);
                         if (obj.id)
                             var split_id = obj.id.split(' ')
                         else{

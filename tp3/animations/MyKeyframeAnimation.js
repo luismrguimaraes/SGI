@@ -33,7 +33,6 @@ export class MyKeyframeAnimation extends MyAnimation{
                 var end_index = start_index +1
                 var t_total = this.instants[end_index] - this.instants[start_index]
                 var exec_ratio = (t_seconds - this.instants[start_index]) / t_total
-                //console.log(exec_ratio, this.instants[start_index], this.instants[end_index])
 
                 var interpolating = true
             }

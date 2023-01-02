@@ -83,13 +83,11 @@ export class Game{
 		if (this.playerTurn == 0) {
 			this.makeAllPiecesUnpickable();
 			pieces = this.scene.player1.alivePieces;
-			console.log(pieces);
 			this.makePiecesPickable(pieces)
 		}
 		else if (this.playerTurn == 1) {
 			this.makeAllPiecesUnpickable();
 			pieces = this.scene.player2.alivePieces;
-			console.log(pieces);
 			this.makePiecesPickable(pieces)
 		}
 	}
@@ -150,31 +148,24 @@ export class Game{
 	* Starts at player 1 by default (passes value 0 at first run)
 	*/
 	startTurn(startingGame = false) {
-		console.log("Player with id " + this.playerTurn + " turn");
 		this.makePlayerPiecesPickable(this.playerTurn);
-		this.toogleCamera(this.playerTurn, startingGame);
+		this.toggleCamera(this.playerTurn, startingGame);
 	}
 	
 	/**
-	* @method toogleCamera
+	* @method toggleCamera
 	* Changes camera to player perspective
 	*/
-	toogleCamera(player, startingGame = false) {
+	toggleCamera(player, startingGame = false) {
 		if (startingGame){
             this.scene.interface.setCamera(3);
 			return
 		}
-		if(player == 0){
-            // Change Turn to Player 1 (p0) (whites)
-            this.scene.interface.setCamera(4);
-            this.scene.interface.cameraFrom = 4;
-            this.scene.interface.triggerCameraChangeAnimation();
+		else if(player == 0){
+			this.scene.interface.changeCameraToWhites()
         }
-        if(player == 1){
-            // Change Turn to Player 2 (p1) (blacks)
-            this.scene.interface.setCamera(3);
-            this.scene.interface.cameraFrom = 3;
-            this.scene.interface.triggerCameraChangeAnimation();
+        else if(player == 1){
+            this.scene.interface.changeCameraToBlacks();
         }
 	}
 
@@ -218,29 +209,20 @@ export class Game{
 		if (shouldThePieceBeKing) {
 			this.setPieceAsKing(this.lastMovedPiece);
 		}
-		
-		console.log("lastMovedPiece", this.lastMovedPiece);
-		console.log("hasCapturedThisTurn", this.lastMovedPiece.hasCapturedThisTurn);	
-		console.log("hasMovedThisTurn", this.lastMovedPiece.hasMovedThisTurn);
 
 		if (this.lastMovedPiece.hasCapturedThisTurn || !this.lastMovedPiece.hasMovedThisTurn) {
 			this.lastMovedPiece.set_hasCapturedThisTurn(false);
 			this.lastMovedPiece.set_hasMovedThisTurn(true);
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureAvailable(originalBoardPosition, newBoardPosition);
-			console.log("availableCaptureTileArray", availableCaptureTileArray);
 			if (availableCaptureTileArray.length != 0) {
-				console.log("YOU SHOULD CAPTURE STUFF");
-				console.log(availableCaptureTileArray);
 				this.makeAllPiecesUnpickable();
 				this.lastMovedPiece.setPicked(true);
 				this.scene.pickedPiece = this.lastMovedPiece;
 				this.setLockMoveToCaptureOnly(true);
-				console.log("Picked piece id: ", this.lastMovedPiece.id);
 				this.makeTilesPickable(availableCaptureTileArray);
 			}
 			else {
-				console.log(this.lastMovedPiece)
 				this.endTurn();
 			}
 		}
@@ -312,9 +294,6 @@ export class Game{
 		var xDifference = pieceNewXPosition - pieceOriginalXPosition;
 		var yDifference = pieceNewYPosition - pieceOriginalYPosition;
 		
-		console.log("xDifference " + xDifference);
-		console.log("yDifference " + yDifference);
-		
 		var availableTiles = [];
 
 		// For up-left
@@ -362,9 +341,6 @@ export class Game{
 		if (capturedPiece != null) {
 			console.log("Piece captured! Captured piece is ", capturedPiece);
 			var capturedPieceColor = capturedPiece.color;
-			
-			console.log("capturedPieceXPosition " + capturedPieceXPosition);
-			console.log("capturedPieceYPosition " + capturedPieceYPosition);
 	
 			if (capturedPieceColor == 0) {
 				this.mainboard.removePieceAt(capturedPieceXPosition, capturedPieceYPosition);
@@ -426,17 +402,10 @@ export class Game{
 				if (leftTilePiece != null) {
 					canGoDownLeft = true;					
 				}
-				
-				console.log(targetedYDownPosition);
-				console.log(targetedXLeftPosition);
 			}
 			
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoDownLeft: " + canGoDownLeft);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}
 
 			if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
@@ -455,16 +424,10 @@ export class Game{
 				if (rightTilePiece != null) {
 					canGoDownRight = true;					
 				}
-				console.log(targetedYDownPosition);
-				console.log(targetedXRightPosition);
 			}
 			
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoDownRight: " + canGoDownRight);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 			
 			if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
@@ -483,16 +446,10 @@ export class Game{
 				if (leftTilePiece != null) {
 					canGoUpLeft = true;					
 				}
-				console.log(targetedYUpPosition);
-				console.log(targetedXLeftPosition);
 			}
 
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoUpLeft: " + canGoUpLeft);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}	
 			
 			if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
@@ -511,16 +468,10 @@ export class Game{
 				if (rightTilePiece != null) {
 					canGoUpRight = true;					
 				}
-				console.log(targetedYUpPosition);
-				console.log(targetedXLeftPosition);
 			}
 			
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoUpRight: " + canGoUpRight);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 
 			if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
@@ -560,16 +511,10 @@ export class Game{
 				if (leftTilePiece != null) {
 					canGoDownLeft = true;					
 				}
-				console.log(targetedYDownPosition);
-				console.log(targetedXLeftPosition);
 			}
 			
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoDownLeft: " + canGoDownLeft);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}
 
 			if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
@@ -588,16 +533,10 @@ export class Game{
 				if (rightTilePiece != null) {
 					canGoDownRight = true;					
 				}
-				console.log(targetedYDownPosition);
-				console.log(targetedXRightPosition);
 			}
 
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoDownRight: " + canGoDownRight);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 			
 			if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
@@ -616,16 +555,10 @@ export class Game{
 				if (leftTilePiece != null) {
 					canGoUpLeft = true;					
 				}
-				console.log(targetedYUpPosition);
-				console.log(targetedXLeftPosition);
 			}
 
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoUpLeft: " + canGoUpLeft);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}	
 			
 			if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
@@ -644,20 +577,13 @@ export class Game{
 				if (rightTilePiece != null) {
 					canGoUpRight = true;					
 				}
-				console.log(targetedYUpPosition);
-				console.log(targetedXRightPosition);
 			}
 
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoUpRight: " + canGoUpRight);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 
 			if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
-				console.log("I'm inside right mate");
 				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
 				if (rightTilePiece == null) {
 					// If the tile is free
@@ -689,8 +615,6 @@ export class Game{
 				if (leftTilePiece != null) {
 					canGoLeft = true;					
 				}
-				console.log(targetedYUpPosition);
-				console.log(targetedXLeftPosition);
 			}
 			
 			if (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
@@ -698,20 +622,13 @@ export class Game{
 				if (rightTilePiece != null) {
 					canGoRight = true;					
 				}
-				console.log(targetedYUpPosition);
-				console.log(targetedXRightPosition);
 			}
 
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoLeft: " + canGoLeft);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}	
 			
 			if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
-				console.log("I'm inside left mate");
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
 				if (leftTilePiece == null) {
 					// If the tile is free
@@ -722,14 +639,9 @@ export class Game{
 
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoRight: " + canGoRight);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 
 			if (rightTilePieceColor != pieceColor && canGoRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
-				console.log("I'm inside right mate");
 				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
 				if (rightTilePiece == null) {
 					// If the tile is free
@@ -760,8 +672,6 @@ export class Game{
 				if (leftTilePiece != null) {
 					canGoLeft = true;					
 				}
-				console.log(targetedYDownPosition);
-				console.log(targetedXLeftPosition);
 			}
 			
 			if (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
@@ -769,20 +679,13 @@ export class Game{
 				if (rightTilePiece != null) {
 					canGoRight = true;					
 				}
-				console.log(targetedYDownPosition);
-				console.log(targetedXRightPosition);
 			}
 			
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoLeft: " + canGoLeft);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}
 
 			if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
-				console.log("I'm inside left mate");
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
 				if (leftTilePiece == null) {
 					// If the tile is free
@@ -793,14 +696,9 @@ export class Game{
 
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoRight: " + canGoRight);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 			
 			if (rightTilePieceColor != pieceColor && canGoRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
-				console.log("I'm inside right mate");
 				var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
 				if (rightTilePiece == null) {
 					// If the tile is free
@@ -831,12 +729,9 @@ export class Game{
 			var availableCaptureTileArray = [];
 			availableCaptureTileArray = this.checkIfCaptureMovementIsPossible(pieceBoardPosition);
 			if (availableCaptureTileArray.length != 0) {
-				console.log("YOU SHOULD CAPTURE STUFF");
-				console.log(availableCaptureTileArray);
 				this.makeAllPiecesUnpickable();
 				pickedPiece.setPickable(true);
 				this.setLockMoveToCaptureOnly(true);
-				console.log("Picked piece id: ", pickedPiece.id);
 				this.makeTilesPickable(availableCaptureTileArray);
 			}
 			else {
@@ -874,8 +769,6 @@ export class Game{
 		
 		var pieceIsKing = pickedPiece.isKing;
 		
-		console.log("Piece color is " + pieceColor);
-		
 		var availableTiles = [];
 		
 		// King check
@@ -897,15 +790,9 @@ export class Game{
 				var targetedYDownPositionForCapture = null;
 				var targetedXLeftPositionForCapture = null;
 				var targetedXRightPositionForCapture = null;
-
-				console.log(targetedYUpPosition + "YUp");
-				console.log(targetedYDownPosition + "YDown");
-				console.log(targetedXLeftPosition + "XLeft");
-				console.log(targetedXRightPosition + "XRight");
 				
 				// Check up-left (northeast) diagonal
 				while (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
-					console.log("Im up-left");
 					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -922,12 +809,9 @@ export class Game{
 							break;
 						}
 						else {
-							console.log("OLA?");
 							targetedYUpPositionForCapture = targetedYUpPosition + 1;
 							targetedXLeftPositionForCapture = targetedXLeftPosition - 1;
 							if (targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
-								console.log("up " + targetedYUpPositionForCapture);
-								console.log("left " + targetedXLeftPositionForCapture);
 								leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
 								if (leftTilePiece == null) {
 									// If the tile is free
@@ -953,7 +837,6 @@ export class Game{
 				
 				// Check up-right (northwest) diagonal
 				while (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
-					console.log("Im up-right");
 					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
@@ -998,7 +881,6 @@ export class Game{
 				
 				// Check down-left (southeast) diagonal
 				while (targetedYDownPosition > -1 && targetedXLeftPosition > -1) {
-					console.log("Im down-left");
 					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -1043,12 +925,9 @@ export class Game{
 				
 				// Check down-right (southwest) diagonal
 				while (targetedYDownPosition > -1 && targetedXRightPosition < 8) {
-					console.log("Im down-right");
 					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
-						console.log("X" + targetedXRightPosition);
-						console.log("Y" + targetedYDownPosition);
 						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPosition, targetedYDownPosition);
 						availableTiles.push(targetedRightFreeTile);
 					}
@@ -1100,15 +979,9 @@ export class Game{
 				var targetedYDownPositionForCapture = null;
 				var targetedXLeftPositionForCapture = null;
 				var targetedXRightPositionForCapture = null;
-
-				console.log(targetedYUpPosition + "YUp");
-				console.log(targetedYDownPosition + "YDown");
-				console.log(targetedXLeftPosition + "XLeft");
-				console.log(targetedXRightPosition + "XRight");
 				
 				// Check up-left (northeast) diagonal
 				while (targetedYUpPosition < 8 && targetedXLeftPosition < 8) {
-					console.log("Im up-left");
 					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition)
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -1153,7 +1026,6 @@ export class Game{
 				
 				// Check up-right (northwest) diagonal
 				while (targetedYUpPosition < 8 && targetedXRightPosition > -1) {
-					console.log("Im up-right");
 					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
@@ -1198,7 +1070,6 @@ export class Game{
 				
 				// Check down-left (southeast) diagonal
 				while (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
-					console.log("Im down-left");
 					var leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -1243,7 +1114,6 @@ export class Game{
 				
 				// Check down-right (southwest) diagonal
 				while (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
-					console.log("Im down-right");
 					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition)
 					if (rightTilePiece == null) {
 						// If the tile is free
@@ -1299,23 +1169,15 @@ export class Game{
 			if (targetedYUpPosition < 8 && targetedXLeftPosition > -1) {
 				canGoLeft = true;
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
-				console.log(targetedYUpPosition);
-				console.log(targetedXLeftPosition);
 			}
 			
 			if (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
 				canGoRight = true;
 				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition);
-				console.log(targetedYUpPosition);
-				console.log(targetedXRightPosition);
 			}
 
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoLeft: " + canGoLeft);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}	
 			
 			if (leftTilePiece == null && canGoLeft) {
@@ -1324,7 +1186,6 @@ export class Game{
 			}
 
 			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
-				console.log("I'm inside left mate");
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
 				if (leftTilePiece == null) {
 					// If the tile is free
@@ -1335,10 +1196,6 @@ export class Game{
 
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoRight: " + canGoRight);
-				console.log("targetedYUpPositionForCapture: " + targetedYUpPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 			
 			if(rightTilePiece == null && canGoRight) {
@@ -1347,7 +1204,6 @@ export class Game{
 			}
 
 			else if (rightTilePieceColor != pieceColor && canGoRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
-				console.log("I'm inside right mate");
 				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
 				if (rightTilePiece == null) {
 					// If the tile is free
@@ -1374,23 +1230,15 @@ export class Game{
 			if (targetedYDownPosition > -1 && targetedXLeftPosition < 8) {
 				canGoLeft = true;
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYDownPosition);
-				console.log(targetedYDownPosition);
-				console.log(targetedXLeftPosition);
 			}
 			
 			if (targetedYDownPosition > -1 && targetedXRightPosition > -1) {
 				canGoRight = true;
 				rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYDownPosition);
-				console.log(targetedYDownPosition);
-				console.log(targetedXRightPosition);
 			}
 			
 			if (leftTilePiece != null) {
 				leftTilePieceColor = leftTilePiece.color;
-				console.log("There is a piece! Its color is: " + leftTilePieceColor);
-				console.log("canGoLeft: " + canGoLeft);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXLeftPositionForCapture: " + targetedXLeftPositionForCapture);
 			}
 
 			if (leftTilePiece == null && canGoLeft) {
@@ -1398,7 +1246,6 @@ export class Game{
 				availableTiles.push(targetedLeftFreeTile);
 			}
 			else if (leftTilePieceColor != pieceColor && canGoLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
-				console.log("I'm inside left mate");
 				leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
 				if (leftTilePiece == null) {
 					// If the tile is free
@@ -1409,10 +1256,6 @@ export class Game{
 
 			if (rightTilePiece != null) {
 				rightTilePieceColor = rightTilePiece.color;
-				console.log("There is a piece! Its color is: " + rightTilePieceColor);
-				console.log("canGoRight: " + canGoRight);
-				console.log("targetedYDownPositionForCapture: " + targetedYDownPositionForCapture);
-				console.log("targetedXRightPositionForCapture: " + targetedXRightPositionForCapture);
 			}
 			
 			if(rightTilePiece == null && canGoRight) {
@@ -1420,7 +1263,6 @@ export class Game{
 				availableTiles.push(targetedRightFreeTile);
 			}
 			else if (rightTilePieceColor != pieceColor && canGoRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
-				console.log("I'm inside right mate");
 				var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
 				if (rightTilePiece == null) {
 					// If the tile is free

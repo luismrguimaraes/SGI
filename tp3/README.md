@@ -9,9 +9,10 @@
 ----
 ## Project information
 
-Changes:
+### Changes
 - Added a checkers game which follows [these rules](https://www.ultraboardgames.com/checkers/game-rules.php). The game starts after clicking on the game board.
 
+### Scene Description
 - The scene is a desert which features: 
   - an oasis composed by water surrounded by cactuses.
   - tents, barrels and a game board which makes the scene look inhabited.
