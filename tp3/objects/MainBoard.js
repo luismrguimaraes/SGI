@@ -31,6 +31,10 @@ export class MainBoard extends Board{
         }
 
         this.pieces = pieces
+
+        // TEST
+        //this.pieces[10].set_isKing(true) // white king
+        //this.pieces[21].set_isKing(true) // black king
     }
 
     pickPiece(piece_id){

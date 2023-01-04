@@ -405,6 +405,14 @@ export class Game{
 			var targetedRightFreeTile = null;
 			var leftTilePieceColor = null;
 			var rightTilePieceColor = null;
+
+			var stillSearchingDownLeft = true
+			var stillSearchingDownRight = true
+			var stillSearchingUpLeft = true
+			var stillSearchingUpRight = true
+
+
+
 			while (targetedYUpPosition < 8 || targetedYDownPosition > -1 
 				|| targetedXLeftPosition > -1 || targetedXRightPosition < 8) {
 				
@@ -425,7 +433,8 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}
 
-				if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
+				if (stillSearchingDownLeft && leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
+					stillSearchingDownLeft = false
 					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -447,7 +456,8 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 				
-				if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
+				if (stillSearchingDownRight && rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
+					stillSearchingDownRight = false
 					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
 					if (rightTilePiece == null) {
 						// If the tile is free
@@ -469,7 +479,8 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}	
 				
-				if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
+				if (stillSearchingUpLeft && leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
+					stillSearchingUpLeft = false
 					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -481,7 +492,7 @@ export class Game{
 				// Up check
 				// Right
 				if (targetedYUpPosition < 8 && targetedXRightPosition < 8) {
-					rightTilePiece = this.mainboard.getPieceAt(targetedXLeftPosition, targetedYUpPosition);
+					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPosition, targetedYUpPosition);
 					if (rightTilePiece != null) {
 						canGoUpRight = true;					
 					}
@@ -491,7 +502,8 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 
-				if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
+				if (stillSearchingUpRight && rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
+					stillSearchingUpRight = false
 					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
 					if (rightTilePiece == null) {
 						// If the tile is free
@@ -499,7 +511,6 @@ export class Game{
 						availableTiles.push(targetedRightFreeTile);
 					}
 				}
-
 				targetedYUpPosition = targetedYUpPosition + 1;
 				targetedYDownPosition = targetedYDownPosition - 1;
 				targetedXLeftPosition = targetedXLeftPosition - 1;
@@ -523,6 +534,11 @@ export class Game{
 			var targetedRightFreeTile = null;
 			var leftTilePieceColor = null;
 			var rightTilePieceColor = null;
+
+			var stillSearchingDownLeft = true
+			var stillSearchingDownRight = true
+			var stillSearchingUpLeft = true
+			var stillSearchingUpRight = true
 			
 			while (targetedYUpPosition < 8 || targetedYDownPosition > -1
 				|| targetedXLeftPosition < 8 || targetedXRightPosition > -1){
@@ -544,7 +560,8 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}
 
-				if (leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
+				if (stillSearchingDownLeft && leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
+					stillSearchingDownLeft = false
 					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -566,7 +583,8 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 				
-				if (rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
+				if (stillSearchingDownRight && rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
+					stillSearchingDownRight = false
 					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
 					if (rightTilePiece == null) {
 						// If the tile is free
@@ -588,7 +606,8 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}	
 				
-				if (leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
+				if (stillSearchingUpLeft && leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
+					stillSearchingUpLeft = false
 					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
 					if (leftTilePiece == null) {
 						// If the tile is free
@@ -610,7 +629,8 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 
-				if (rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
+				if (stillSearchingUpRight && rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
+					stillSearchingUpRight = false
 					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
 					if (rightTilePiece == null) {
 						// If the tile is free
