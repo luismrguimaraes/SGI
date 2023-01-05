@@ -82,6 +82,9 @@ export class Game{
 		var pickablePieces = [];
 		this.makeAllPiecesUnpickable();
 		if (this.playerTurn == 0) {
+			if (this.scene.player1.alivePieces.length === 0){
+				console.log("Player 2 won")
+			}
 			for (const playerPiece of this.scene.player1.alivePieces) {
 				let captureTiles = this.checkIfCaptureMovementIsPossible(playerPiece.getBoardPosition())
 				if (captureTiles.length != 0)
@@ -92,6 +95,9 @@ export class Game{
 			}
 		}
 		else if (this.playerTurn == 1) {
+			if (this.scene.player2.alivePieces.length === 0){
+				console.log("Player 1 won")
+			}
 			for (const playerPiece of this.scene.player2.alivePieces) {
 				let captureTiles = this.checkIfCaptureMovementIsPossible(playerPiece.getBoardPosition())
 				if (captureTiles.length != 0)
