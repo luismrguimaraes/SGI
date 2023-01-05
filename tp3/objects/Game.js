@@ -433,13 +433,15 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}
 
-				if (stillSearchingDownLeft && leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
+				if (stillSearchingDownLeft && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture > -1) {
 					stillSearchingDownLeft = false
-					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-					if (leftTilePiece == null) {
-						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-						availableTiles.push(targetedLeftFreeTile);
+					if (leftTilePieceColor != pieceColor ){
+						leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+						if (leftTilePiece == null) {
+							// If the tile is free
+							targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+							availableTiles.push(targetedLeftFreeTile);
+						}
 					}
 				}
 
@@ -456,13 +458,15 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 				
-				if (stillSearchingDownRight && rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
+				if (stillSearchingDownRight && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture < 8) {
 					stillSearchingDownRight = false
-					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-					if (rightTilePiece == null) {
-						// If the tile is free
-						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-						availableTiles.push(targetedRightFreeTile);
+					if (rightTilePieceColor != pieceColor){
+						var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+						if (rightTilePiece == null) {
+							// If the tile is free
+							targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+							availableTiles.push(targetedRightFreeTile);
+						}
 					}
 				}
 				
@@ -479,13 +483,15 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}	
 				
-				if (stillSearchingUpLeft && leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
+				if (stillSearchingUpLeft && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture > -1) {
 					stillSearchingUpLeft = false
-					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-					if (leftTilePiece == null) {
-						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-						availableTiles.push(targetedLeftFreeTile);
+					if (leftTilePieceColor != pieceColor){
+						leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+						if (leftTilePiece == null) {
+							// If the tile is free
+							targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+							availableTiles.push(targetedLeftFreeTile);
+						}
 					}
 				}
 
@@ -502,13 +508,15 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 
-				if (stillSearchingUpRight && rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
+				if (stillSearchingUpRight && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture < 8) {
 					stillSearchingUpRight = false
-					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-					if (rightTilePiece == null) {
-						// If the tile is free
-						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-						availableTiles.push(targetedRightFreeTile);
+					if(rightTilePieceColor != pieceColor){
+						rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+						if (rightTilePiece == null) {
+							// If the tile is free
+							targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+							availableTiles.push(targetedRightFreeTile);
+						}
 					}
 				}
 				targetedYUpPosition = targetedYUpPosition + 1;
@@ -560,13 +568,15 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}
 
-				if (stillSearchingDownLeft && leftTilePieceColor != pieceColor && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
+				if (stillSearchingDownLeft && canGoDownLeft && targetedYDownPositionForCapture > -1 && targetedXLeftPositionForCapture < 8) {
 					stillSearchingDownLeft = false
-					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-					if (leftTilePiece == null) {
-						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
-						availableTiles.push(targetedLeftFreeTile);
+					if (leftTilePieceColor != pieceColor){
+						leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+						if (leftTilePiece == null) {
+							// If the tile is free
+							targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYDownPositionForCapture);
+							availableTiles.push(targetedLeftFreeTile);
+						}
 					}
 				}
 
@@ -583,13 +593,15 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 				
-				if (stillSearchingDownRight && rightTilePieceColor != pieceColor && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
+				if (stillSearchingDownRight && canGoDownRight && targetedYDownPositionForCapture > -1 && targetedXRightPositionForCapture > -1) {
 					stillSearchingDownRight = false
-					var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-					if (rightTilePiece == null) {
-						// If the tile is free
-						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
-						availableTiles.push(targetedRightFreeTile);
+					if (rightTilePieceColor != pieceColor){
+						var rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+						if (rightTilePiece == null) {
+							// If the tile is free
+							targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYDownPositionForCapture);
+							availableTiles.push(targetedRightFreeTile);
+						}
 					}
 				}
 				
@@ -606,13 +618,15 @@ export class Game{
 					leftTilePieceColor = leftTilePiece.color;
 				}	
 				
-				if (stillSearchingUpLeft && leftTilePieceColor != pieceColor && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
+				if (stillSearchingUpLeft && canGoUpLeft && targetedYUpPositionForCapture < 8 && targetedXLeftPositionForCapture < 8) {
 					stillSearchingUpLeft = false
-					leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-					if (leftTilePiece == null) {
-						// If the tile is free
-						targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
-						availableTiles.push(targetedLeftFreeTile);
+					if (leftTilePieceColor != pieceColor){
+						leftTilePiece = this.mainboard.getPieceAt(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+						if (leftTilePiece == null) {
+							// If the tile is free
+							targetedLeftFreeTile = this.mainboard.getTile(targetedXLeftPositionForCapture, targetedYUpPositionForCapture);
+							availableTiles.push(targetedLeftFreeTile);
+						}
 					}
 				}
 				
@@ -629,13 +643,15 @@ export class Game{
 					rightTilePieceColor = rightTilePiece.color;
 				}
 
-				if (stillSearchingUpRight && rightTilePieceColor != pieceColor && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
+				if (stillSearchingUpRight && canGoUpRight && targetedYUpPositionForCapture < 8 && targetedXRightPositionForCapture > -1) {
 					stillSearchingUpRight = false
-					rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-					if (rightTilePiece == null) {
-						// If the tile is free
-						targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
-						availableTiles.push(targetedRightFreeTile);
+					if (rightTilePieceColor != pieceColor){
+						rightTilePiece = this.mainboard.getPieceAt(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+						if (rightTilePiece == null) {
+							// If the tile is free
+							targetedRightFreeTile = this.mainboard.getTile(targetedXRightPositionForCapture, targetedYUpPositionForCapture);
+							availableTiles.push(targetedRightFreeTile);
+						}
 					}
 				}
 				var targetedYUpPosition = targetedYUpPosition + 1;
