@@ -1,4 +1,4 @@
-# SGI 2022/2023 - TP1
+# SGI 2022/2023 - TP2
 
 ## Group T06G09
 | Name             | Number    | E-Mail                    |
